@@ -1,0 +1,1 @@
+{"root":["./vite.config.ts","./src/app.tsx","./src/main.tsx","./src/components/footer.tsx","./src/components/navbar.tsx","./src/components/ui/loadingscreen.tsx","./src/components/ui/demo.tsx","./src/components/ui/hero-odyssey.tsx","./src/pages/juliuscaesarguide.tsx","./src/pages/landingpage.tsx","./src/pages/resourcelibrary.tsx"],"errors":true,"version":"6.0.3"}

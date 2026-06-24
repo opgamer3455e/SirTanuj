@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Tragedy of Julius Caesar – ICSE Study Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&display=swap');
+
+  :root {
+    --crimson:   #8B0000;
+    --gold:      #C9A84C;
+    --gold-lt:   #E8D08A;
+    --navy:      #0D1B3E;
+    --navy-lt:   #1A2F5E;
+    --parchment: #F5EDD6;
+    --parchment-dk: #EAD9B5;
+    --ink:       #1C1408;
+    --smoke:     #4A4035;
+    --white:     #FDFAF3;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(160deg, var(--navy) 0%, #2C1A00 60%, var(--crimson) 100%);
+    color: var(--parchment);
+    text-align: center;
+    padding: 64px 24px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 L35 20 L50 20 L38 29 L43 44 L30 35 L17 44 L22 29 L10 20 L25 20 Z' fill='none' stroke='%23C9A84C' stroke-width='0.4' opacity='0.15'/%3E%3C/svg%3E") repeat;
+    pointer-events: none;
+  }
+  .hero-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .hero h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 6vw, 4.2rem);
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1.1;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.6);
+    margin-bottom: 8px;
+  }
+  .hero-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--parchment);
+    opacity: 0.85;
+    margin-bottom: 20px;
+  }
+  .hero-meta {
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--gold-lt);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0.8;
+  }
+  .brand-tag {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    padding: 7px 20px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ── NAV TABS ── */
+  .tab-bar {
+    background: var(--navy);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: 2px solid var(--gold);
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--gold-lt);
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.25s;
+  }
+  .tab-btn:hover { color: var(--gold); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(201,168,76,0.08); }
+
+  /* ── SECTIONS ── */
+  .section { display: none; padding: 48px 20px; max-width: 980px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  .sec-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    color: var(--crimson);
+    border-left: 5px solid var(--gold);
+    padding-left: 16px;
+    margin-bottom: 32px;
+    line-height: 1.2;
+  }
+  .sec-intro {
+    background: var(--navy);
+    color: var(--parchment);
+    border-left: 4px solid var(--gold);
+    padding: 20px 24px;
+    margin-bottom: 36px;
+    font-style: italic;
+    font-size: 1.05rem;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* ACT CARDS */
+  .act-card {
+    background: var(--white);
+    border: 1px solid var(--parchment-dk);
+    border-top: 4px solid var(--crimson);
+    border-radius: 4px;
+    margin-bottom: 32px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .act-header {
+    background: linear-gradient(90deg, var(--navy) 0%, var(--navy-lt) 100%);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .act-number {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 900;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+  .act-toggle {
+    margin-left: auto;
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+  }
+  .act-header.open .act-toggle { transform: rotate(180deg); }
+  .act-body { display: none; padding: 28px 28px; }
+  .act-body.open { display: block; }
+
+  .scene-block {
+    border-left: 3px solid var(--gold);
+    padding-left: 20px;
+    margin-bottom: 28px;
+  }
+  .scene-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--crimson);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .scene-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+  .scene-body p { margin-bottom: 10px; }
+
+  .key-events { list-style: none; margin-top: 12px; }
+  .key-events li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    border-bottom: 1px dotted var(--parchment-dk);
+  }
+  .key-events li::before { content: '⚔'; position: absolute; left: 0; color: var(--crimson); font-size: 0.85rem; }
+
+  .significance-box {
+    background: linear-gradient(135deg, #FFF8E7 0%, var(--parchment) 100%);
+    border: 1px solid var(--gold-lt);
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin-top: 14px;
+    font-size: 0.95rem;
+  }
+  .significance-box strong { color: var(--crimson); }
+
+  /* CHARACTER CARDS */
+  .char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-bottom: 32px; }
+  .char-card {
+    background: var(--white);
+    border: 1px solid var(--parchment-dk);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+  .char-head {
+    background: var(--navy);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .char-icon { font-size: 1.8rem; }
+  .char-role { font-size: 0.75rem; color: var(--gold-lt); letter-spacing: 1.5px; text-transform: uppercase; }
+  .char-body { padding: 18px 20px; }
+  .char-trait {
+    display: inline-block;
+    background: var(--crimson);
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 9px;
+    border-radius: 2px;
+    margin: 3px 3px 3px 0;
+    text-transform: uppercase;
+  }
+  .char-trait.gold { background: var(--gold); color: var(--navy); }
+  .char-traits { margin-bottom: 12px; }
+  .char-analysis { font-size: 0.93rem; line-height: 1.65; }
+
+  /* QUOTES */
+  .quote-card {
+    background: var(--white);
+    border: 1px solid var(--parchment-dk);
+    border-left: 5px solid var(--crimson);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .quote-head { background: var(--navy); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+  .quote-speaker { font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--gold); }
+  .quote-ref { font-family: 'Lato', sans-serif; font-size: 11px; color: var(--gold-lt); letter-spacing: 1px; }
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--crimson);
+    line-height: 1.6;
+    padding: 18px 24px 12px;
+    border-bottom: 1px solid var(--parchment-dk);
+  }
+  .quote-explain { padding: 16px 24px; font-size: 0.93rem; line-height: 1.65; }
+  .quote-device {
+    margin-top: 10px;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    color: var(--smoke);
+    letter-spacing: 0.5px;
+  }
+  .device-tag {
+    display: inline-block;
+    background: var(--gold-lt);
+    color: var(--navy);
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-weight: 700;
+    margin-left: 6px;
+    font-size: 11px;
+  }
+
+  /* POETIC DEVICES */
+  .device-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .device-card {
+    background: var(--white);
+    border: 1px solid var(--parchment-dk);
+    border-top: 3px solid var(--gold);
+    border-radius: 4px;
+    padding: 20px;
+  }
+  .device-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .device-def { font-size: 0.88rem; color: var(--smoke); margin-bottom: 12px; font-style: italic; }
+  .device-example {
+    background: var(--parchment);
+    border-left: 3px solid var(--crimson);
+    padding: 10px 14px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.93rem;
+    color: var(--crimson);
+    margin-bottom: 8px;
+  }
+  .device-explain { font-size: 0.88rem; line-height: 1.6; }
+
+  /* WRITING STYLE */
+  .style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 32px; }
+  .style-card {
+    background: var(--white);
+    border: 1px solid var(--parchment-dk);
+    border-radius: 6px;
+    padding: 22px;
+    border-bottom: 4px solid var(--crimson);
+  }
+  .style-icon { font-size: 2rem; margin-bottom: 10px; }
+  .style-title { font-family: 'Cinzel', serif; font-size: 0.95rem; color: var(--navy); margin-bottom: 8px; }
+  .style-body { font-size: 0.9rem; line-height: 1.65; }
+
+  /* THEMES */
+  .theme-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    background: var(--white);
+    border: 1px solid var(--parchment-dk);
+    border-radius: 6px;
+    overflow: hidden;
+    align-items: stretch;
+  }
+  .theme-bar {
+    background: var(--crimson);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    padding: 16px 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .theme-content { padding: 18px 20px; font-size: 0.93rem; line-height: 1.65; }
+  .theme-content strong { color: var(--crimson); display: block; font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 6px; }
+
+  /* EXAM TIPS */
+  .tip-box {
+    background: linear-gradient(135deg, var(--navy) 0%, #1A3060 100%);
+    color: var(--parchment);
+    border-radius: 6px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    border-left: 5px solid var(--gold);
+  }
+  .tip-box h3 { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1rem; margin-bottom: 12px; }
+  .tip-box ul { padding-left: 20px; }
+  .tip-box li { margin-bottom: 7px; font-size: 0.93rem; }
+
+  .divider { border: none; border-top: 1px solid var(--parchment-dk); margin: 32px 0; }
+
+  .sub-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 28px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--gold-lt);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: var(--gold-lt);
+    text-align: center;
+    padding: 24px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-top: 2px solid var(--gold);
+  }
+
+  @media (max-width: 600px) {
+    .char-grid, .device-grid, .style-grid { grid-template-columns: 1fr; }
+    .theme-bar { writing-mode: horizontal-tb; transform: none; min-width: auto; padding: 10px 16px; }
+    .theme-row { flex-direction: column; }
+    .act-body { padding: 18px 16px; }
+    .quote-text { font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <span class="hero-badge">ICSE Class 9 &amp; 10 · Complete Study Guide</span>
+  <h1>The Tragedy of<br>Julius Caesar</h1>
+  <p class="hero-sub">William Shakespeare · c. 1599</p>
+  <p class="hero-meta">Acts · Scenes · Characters · Devices · Quotes · Themes</p>
+  <span class="brand-tag">Learn English with Tanuj Sir</span>
+</header>
+
+<!-- NAV -->
+<nav class="tab-bar" id="tabBar">
+  <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="showTab('acts')">Acts &amp; Scenes</button>
+  <button class="tab-btn" onclick="showTab('characters')">Characters</button>
+  <button class="tab-btn" onclick="showTab('quotes')">Key Quotes</button>
+  <button class="tab-btn" onclick="showTab('devices')">Poetic Devices</button>
+  <button class="tab-btn" onclick="showTab('style')">Writing Style</button>
+  <button class="tab-btn" onclick="showTab('themes')">Themes</button>
+  <button class="tab-btn" onclick="showTab('exam')">Exam Tips</button>
+</nav>
+
+<!-- ══════════ OVERVIEW ══════════ -->
+<section class="section active" id="tab-overview">
+  <h2 class="sec-title">Overview &amp; Background</h2>
+  <div class="sec-intro">"The fault, dear Brutus, is not in our stars, but in ourselves, that we are underlings." — This one line captures the entire moral heart of Shakespeare's Roman masterpiece.</div>
+
+  <div class="style-grid">
+    <div class="style-card">
+      <div class="style-icon">📜</div>
+      <div class="style-title">Genre &amp; Period</div>
+      <div class="style-body">A <strong>political tragedy</strong> written c. 1599. It belongs to Shakespeare's Roman Plays trilogy alongside <em>Antony and Cleopatra</em> and <em>Coriolanus</em>. Set in 44 BC Rome, it is based on Plutarch's <em>Lives</em>.</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🏛️</div>
+      <div class="style-title">Historical Context</div>
+      <div class="style-body">Julius Caesar was a Roman general-turned-dictator whose assassination on the Ides of March (15 March 44 BC) triggered a civil war. Shakespeare uses this to explore Elizabethan anxieties about succession, power, and rebellion.</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">⚖️</div>
+      <div class="style-title">Central Conflict</div>
+      <div class="style-body">The play pits <strong>republicanism vs. tyranny</strong>. Is Caesar a dangerous tyrant or a great leader? Is Brutus a noble patriot or a treacherous friend? Shakespeare deliberately leaves both questions open.</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🎭</div>
+      <div class="style-title">Tragic Hero</div>
+      <div class="style-body">Surprisingly, the true tragic hero is <strong>Brutus</strong>, not Caesar. Caesar dies in Act III; Brutus drives the remaining two acts. His fatal flaw (<em>hamartia</em>) is his idealism — he is too noble for the world of real politics.</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">📚</div>
+      <div class="style-title">For ICSE Students</div>
+      <div class="style-body">The play is prescribed for ICSE Classes 9 &amp; 10. Questions typically focus on: character analysis, extract-based questions, thematic essays, speech analyses (especially Brutus's and Antony's funeral orations), and poetic devices.</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🌟</div>
+      <div class="style-title">Why It Still Matters</div>
+      <div class="style-body">From political manipulation to mob psychology and the corrupting influence of ambition — every theme in this play remains urgently relevant. It teaches students to think critically about <em>who</em> holds power and <em>how</em>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ACTS & SCENES ══════════ -->
+<section class="section" id="tab-acts">
+  <h2 class="sec-title">Acts &amp; Scenes — Summary &amp; Analysis</h2>
+  <div class="sec-intro">Click each Act header to expand. Study every scene's setting, events, significance, and how it advances plot or character.</div>
+
+  <!-- ACT I -->
+  <div class="act-card">
+    <div class="act-header" onclick="toggleAct(this)">
+      <span class="act-number">ACT I</span>
+      <span>The Seeds of Conspiracy</span>
+      <span class="act-toggle">▼</span>
+    </div>
+    <div class="act-body">
+      <div class="scene-block">
+        <div class="scene-label">Scene 1</div>
+        <div class="scene-title">A Street in Rome — The Tribunes and the Commoners</div>
+        <div class="scene-body">
+          <p>Flavius and Murellus, tribunes (elected officials), scold the commoners for celebrating Caesar's triumph over Pompey's sons. They tear down decorations from Caesar's statues.</p>
+          <ul class="key-events">
+            <li>Establishes the <strong>political tension</strong> — not all Romans adore Caesar.</li>
+            <li>The cobbler's wordplay introduces Shakespeare's use of <strong>prose vs. verse</strong>: commoners speak prose, nobles speak verse.</li>
+            <li>Flavius fears Caesar will "soar above the view of men" — an early image of dangerous ambition.</li>
+          </ul>
+          <div class="significance-box"><strong>Significance:</strong> The opening scene immediately frames Caesar's power as controversial. It also introduces the mob as a fickle, manipulable force — a theme developed powerfully in Act III.</div>
+        </div>
+      </div>
+      <div class="scene-block">
+        <div class="scene-label">Scene 2</div>
+        <div class="scene-title">A Public Place — The Lupercalia; Cassius Tempts Brutus</div>
+        <div class="scene-body">
+          <p>During the feast of Lupercalia, the Soothsayer warns Caesar: <em>"Beware the Ides of March."</em> Caesar dismisses him as a dreamer. Cassius cleverly draws Brutus into his confidence, planting seeds of doubt about Caesar's fitness to rule. Casca reports that Antony thrice offered Caesar the crown, and Caesar thrice (reluctantly?) refused it.</p>
+          <ul class="key-events">
+            <li>The <strong>Soothsayer's warning</strong> — dramatic irony: the audience knows Caesar will die.</li>
+            <li>Cassius's manipulation of Brutus — he exploits Brutus's love of honour.</li>
+            <li>Cassius says: <em>"The fault, dear Brutus, is not in our stars..."</em></li>
+            <li>Caesar privately tells Antony he doesn't trust Cassius — "He thinks too much."</li>
+          </ul>
+          <div class="significance-box"><strong>Significance:</strong> The longest and most important scene in Act I. It establishes the conspiracy's foundation and contrasts Cassius's <em>pragmatic cynicism</em> with Brutus's <em>honourable idealism</em>.</div>
+        </div>
+      </div>
+      <div class="scene-block">
+        <div class="scene-label">Scene 3</div>
+        <div class="scene-title">A Street — Omens and Thunder; The Conspiracy Solidifies</div>
+        <div class="scene-body">
+          <p>A violent storm shakes Rome. Casca is terrified by supernatural omens — a lion in the Capitol, men on fire, an owl hooting at noon. Cassius interprets these omens as signs against Caesar's tyranny. He recruits Casca to the conspiracy and reveals Brutus is almost won over.</p>
+          <ul class="key-events">
+            <li>Storm imagery mirrors political disorder — <strong>pathetic fallacy</strong>.</li>
+            <li>Cassius courts danger fearlessly, unbuttoning his shirt to lightning — symbolic of his recklessness.</li>
+            <li>Cinna is tasked with placing forged letters to Brutus to push him over the edge.</li>
+          </ul>
+          <div class="significance-box"><strong>Significance:</strong> The natural world mirrors the political world. Omens will recur throughout the play as Shakespeare's way of signalling impending doom.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACT II -->
+  <div class="act-card">
+    <div class="act-header" onclick="toggleAct(this)">
+      <span class="act-number">ACT II</span>
+      <span>The Night of Decision</span>
+      <span class="act-toggle">▼</span>
+    </div>
+    <div class="act-body">
+      <div class="scene-block">
+        <div class="scene-label">Scene 1</div>
+        <div class="scene-title">Brutus's Orchard — The Decision to Kill</div>
+        <div class="scene-body">
+          <p>Brutus, alone in his garden at night, wrestles with his conscience in a famous soliloquy. He decides Caesar must die — not for what he is, but for what he <em>might become</em>. The conspirators meet secretly; Brutus rejects the oath (noble men need no oath), rejects killing Antony, and rejects seeking Cicero's help. Portia pleads with Brutus to share his troubles.</p>
+          <ul class="key-events">
+            <li><em>"It must be by his death"</em> — Brutus's fatal soliloquy.</li>
+            <li>Brutus overrules Cassius on killing Antony — a tragic error.</li>
+            <li>Brutus refuses an oath: <em>"every drop of blood / That every Roman bears..."</em></li>
+            <li>Portia wounds herself in the thigh to prove her strength — showing her loyalty and courage.</li>
+          </ul>
+          <div class="significance-box"><strong>Significance:</strong> This is the moral and dramatic heart of Act II. Brutus's reasoning — killing Caesar to prevent a future wrong — reveals his idealistic but flawed logic. His misjudgement of Antony will cost him everything.</div>
+        </div>
+      </div>
+      <div class="scene-block">
+        <div class="scene-label">Scene 2</div>
+        <div class="scene-title">Caesar's House — Calpurnia's Dream</div>
+        <div class="scene-body">
+          <p>Calpurnia, Caesar's wife, has dreamed of his murder. She begs him not to go to the Senate. Caesar initially agrees, but Decius (Decimus Brutus) cleverly reinterprets her dream as a good omen — and flatters Caesar's pride. Caesar goes.</p>
+          <ul class="key-events">
+            <li>Calpurnia's dream: Romans bathing their hands in Caesar's blood from his statue — <strong>prophetic imagery</strong>.</li>
+            <li>Decius's reinterpretation: the blood is life-giving, not deadly.</li>
+            <li>Caesar's fatal flaw: <strong>hubris</strong> — he cannot appear cowardly, especially to the Senate.</li>
+          </ul>
+          <div class="significance-box"><strong>Significance:</strong> This scene shows Caesar's tragic flaw — he values public image over personal safety. Decius's flattery is a masterclass in manipulation.</div>
+        </div>
+      </div>
+      <div class="scene-block">
+        <div class="scene-label">Scenes 3–4</div>
+        <div class="scene-title">The Street — Last-Minute Warnings Ignored</div>
+        <div class="scene-body">
+          <p>Artemidorus has written a letter naming all the conspirators and warning Caesar. Portia sends her servant Lucius to observe what's happening, wracked with anxiety.</p>
+          <div class="significance-box"><strong>Significance:</strong> The tension mounts. Caesar has multiple chances to avoid death; he ignores every one. This builds to an almost unbearable dramatic irony.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACT III -->
+  <div class="act-card">
+    <div class="act-header" onclick="toggleAct(this)">
+      <span class="act-number">ACT III</span>
+      <span>The Assassination &amp; Its Aftermath</span>
+      <span class="act-toggle">▼</span>
+    </div>
+    <div class="act-body">
+      <div class="scene-block">
+        <div class="scene-label">Scene 1</div>
+        <div class="scene-title">The Capitol — "Et tu, Bruté?"</div>
+        <div class="scene-body">
+          <p>At the Capitol, Caesar dismisses Artemidorus's letter without reading it. The conspirators surround him under the pretence of pleading for Metellus Cimber's banished brother. As Caesar refuses, the conspirators stab him. Caesar's last words — upon seeing Brutus — are <em>"Et tu, Bruté? Then fall, Caesar!"</em> Brutus allows Antony to speak at the funeral, overriding Cassius's objections — a catastrophic error.</p>
+          <ul class="key-events">
+            <li>Caesar stabs: Casca first, Brutus last — the most painful blow.</li>
+            <li>Brutus: <em>"Liberty! Freedom! Tyranny is dead!"</em></li>
+            <li>Antony's servant comes; Antony cleverly secures permission to speak.</li>
+            <li>Antony alone with Caesar's body: <em>"O, pardon me, thou bleeding piece of earth..."</em> — foretells civil war.</li>
+          </ul>
+          <div class="significance-box"><strong>Significance:</strong> The climax of the play. Caesar's death is not the end — it is the beginning. Every decision made here (allowing Antony to speak, speaking before Antony) seals the conspirators' fate.</div>
+        </div>
+      </div>
+      <div class="scene-block">
+        <div class="scene-label">Scene 2</div>
+        <div class="scene-title">The Forum — The Two Greatest Speeches in Literature</div>
+        <div class="scene-body">
+          <p>Brutus addresses the crowd in calm, logical <strong>prose</strong>. The crowd cheers him. Then Antony speaks in passionate, ironic <strong>verse</strong>, using repetition of "Brutus is an honourable man" with increasing sarcasm each time. He shows Caesar's wounds, reads Caesar's will (leaving money to every citizen), and turns the mob against the conspirators.</p>
+          <ul class="key-events">
+            <li>Brutus's speech: appeals to <em>reason</em> — "Not that I loved Caesar less..."</li>
+            <li>Antony's speech: appeals to <em>emotion</em> — "Friends, Romans, countrymen, lend me your ears..."</li>
+            <li>Antony's use of <strong>repetition, irony, rhetorical questions</strong> is masterful rhetoric.</li>
+            <li>The mob becomes a violent force that hunts down the conspirators.</li>
+          </ul>
+          <div class="significance-box"><strong>Significance:</strong> Perhaps the most important scene for ICSE. The two speeches are contrasted on every level — prose vs. verse, reason vs. emotion, abstract principle vs. concrete fact. This scene shows how easily the public can be manipulated.</div>
+        </div>
+      </div>
+      <div class="scene-block">
+        <div class="scene-label">Scene 3</div>
+        <div class="scene-title">Cinna the Poet — Mob Violence</div>
+        <div class="scene-body">
+          <p>An innocent poet named Cinna (not Cinna the conspirator) is caught by the mob. Even after clarifying his identity, the mob tears him apart because they dislike his name.</p>
+          <div class="significance-box"><strong>Significance:</strong> A chilling illustration of mob rule. The mob's irrationality — killing an innocent man because of a name — shows the terrifying consequences of Antony's rhetoric.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACT IV -->
+  <div class="act-card">
+    <div class="act-header" onclick="toggleAct(this)">
+      <span class="act-number">ACT IV</span>
+      <span>Crumbling Alliances</span>
+      <span class="act-toggle">▼</span>
+    </div>
+    <div class="act-body">
+      <div class="scene-block">
+        <div class="scene-label">Scene 1</div>
+        <div class="scene-title">Antony, Octavius, and Lepidus Form the Triumvirate</div>
+        <div class="scene-body">
+          <p>The three men coldly mark names for execution — even Lepidus's own brother. Antony dismisses Lepidus as a mere "property" useful for carrying burdens. The scene reveals Antony's ruthlessness beneath his public charisma.</p>
+          <div class="significance-box"><strong>Significance:</strong> Shows the dark side of the victors. The men who defeated the "tyrant" Caesar now behave far more tyrannically.</div>
+        </div>
+      </div>
+      <div class="scene-block">
+        <div class="scene-label">Scene 2–3</div>
+        <div class="scene-title">Sardis — The Quarrel Scene</div>
+        <div class="scene-body">
+          <p>Brutus and Cassius quarrel bitterly over Cassius's corrupt practices. After reconciling, Brutus reveals Portia has died. The Ghost of Caesar visits Brutus: <em>"Thou shalt see me at Philippi."</em> Brutus decides to march to Philippi against Cassius's advice — another fatal error.</p>
+          <ul class="key-events">
+            <li>Brutus: <em>"I did not think you could have been so angry."</em></li>
+            <li>Portia's death — Brutus internalizes grief, showing Stoic philosophy.</li>
+            <li>Caesar's Ghost — signals Brutus's doom.</li>
+          </ul>
+          <div class="significance-box"><strong>Significance:</strong> The Quarrel Scene humanises both Brutus and Cassius. Caesar's ghost signals the play's final movement — revenge and retribution.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACT V -->
+  <div class="act-card">
+    <div class="act-header" onclick="toggleAct(this)">
+      <span class="act-number">ACT V</span>
+      <span>The Battle of Philippi — Tragedy Completed</span>
+      <span class="act-toggle">▼</span>
+    </div>
+    <div class="act-body">
+      <div class="scene-block">
+        <div class="scene-label">Scenes 1–3</div>
+        <div class="scene-title">Philippi — The Final Battle</div>
+        <div class="scene-body">
+          <p>Brutus and Cassius exchange last farewells. On the battlefield, Cassius, believing mistakenly that Brutus is defeated, orders his freedman Pindarus to kill him. He dies on the same sword he used to kill Caesar — poetic justice. Titinus, discovering Cassius dead, kills himself.</p>
+          <div class="significance-box"><strong>Significance:</strong> Cassius dies from a misunderstanding — the consequences of his impulsiveness and poor communication. The sword that killed Caesar now kills those who wielded it.</div>
+        </div>
+      </div>
+      <div class="scene-block">
+        <div class="scene-label">Scenes 4–5</div>
+        <div class="scene-title">Brutus's Death — "This Was the Noblest Roman of Them All"</div>
+        <div class="scene-body">
+          <p>Brutus's forces are overwhelmed. His friends refuse to help him die; finally Strato holds the sword while Brutus runs onto it. Antony and Octavius arrive. Antony delivers the famous final eulogy: Brutus was the only conspirator who acted out of genuine love for Rome; all others acted from jealousy.</p>
+          <ul class="key-events">
+            <li>Brutus: <em>"Caesar, now be still: / I killed not thee with half so good a will."</em></li>
+            <li>Antony: <em>"This was the noblest Roman of them all."</em></li>
+            <li>Octavius: Brutus shall be buried as a soldier with full honours.</li>
+          </ul>
+          <div class="significance-box"><strong>Significance:</strong> The play ends not with a celebration of victory but with a recognition of Brutus's genuine nobility. This tragic ending asks: can good intentions justify terrible deeds?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CHARACTERS ══════════ -->
+<section class="section" id="tab-characters">
+  <h2 class="sec-title">Character Sketches &amp; Analysis</h2>
+  <div class="sec-intro">For ICSE exams, know each character's traits, role in the plot, relationship with others, and their fatal flaw or defining quality.</div>
+
+  <div class="char-grid">
+    <div class="char-card">
+      <div class="char-head">
+        <span class="char-icon">🏛️</span>
+        <div><div>Marcus Brutus</div><div class="char-role">Tragic Hero · Conspirator</div></div>
+      </div>
+      <div class="char-body">
+        <div class="char-traits">
+          <span class="char-trait gold">Honourable</span><span class="char-trait">Idealistic</span><span class="char-trait">Stoic</span><span class="char-trait">Naive</span>
+        </div>
+        <div class="char-analysis">The true tragic hero of the play. Brutus loves Caesar personally but loves Rome more — or so he believes. His fatal flaw (<em>hamartia</em>) is his <strong>idealism and political naivety</strong>. He trusts that others share his noble motives, underestimates Antony's power, and refuses to act ruthlessly even when survival demands it. He is "the noblest Roman of them all" — and that very nobility destroys him. Contrast: his private warmth (with Portia, with Lucius) vs. his cold public decisions.</div>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-head">
+        <span class="char-icon">⚔️</span>
+        <div><div>Caius Cassius</div><div class="char-role">Chief Conspirator · Pragmatist</div></div>
+      </div>
+      <div class="char-body">
+        <div class="char-traits">
+          <span class="char-trait">Manipulative</span><span class="char-trait gold">Shrewd</span><span class="char-trait">Envious</span><span class="char-trait">Loyal (to Brutus)</span>
+        </div>
+        <div class="char-analysis">Cassius is the engine of the conspiracy. Driven partly by genuine republicanism, partly by personal jealousy of Caesar's power. He is a masterful manipulator — he knows exactly how to exploit Brutus's sense of honour. Caesar says he has a "lean and hungry look." Unlike Brutus, Cassius is pragmatic — he correctly advises killing Antony and opposing the march to Philippi — but Brutus overrules him each time. His death by misunderstanding mirrors his flawed perception throughout.</div>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-head">
+        <span class="char-icon">👑</span>
+        <div><div>Julius Caesar</div><div class="char-role">Ruler · Symbol of Power</div></div>
+      </div>
+      <div class="char-body">
+        <div class="char-traits">
+          <span class="char-trait gold">Powerful</span><span class="char-trait">Superstitious</span><span class="char-trait">Proud</span><span class="char-trait">Generous</span>
+        </div>
+        <div class="char-analysis">Caesar is physically present for only a fraction of the play, yet his spirit dominates every scene. His fatal flaw is <strong>hubris</strong> — an excessive pride that makes him dismiss warnings, ignore omens, and value public image above wisdom. He is simultaneously a great man (admired by his troops, loved by the public) and a dangerous one (refuses the crown thrice, but perhaps with hesitation). His ghost haunts the second half — literally and symbolically.</div>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-head">
+        <span class="char-icon">🗣️</span>
+        <div><div>Mark Antony</div><div class="char-role">Caesar's Ally · Master Orator</div></div>
+      </div>
+      <div class="char-body">
+        <div class="char-traits">
+          <span class="char-trait gold">Charismatic</span><span class="char-trait">Cunning</span><span class="char-trait">Loyal</span><span class="char-trait">Ruthless</span>
+        </div>
+        <div class="char-analysis">Antony is one of literature's greatest rhetoricians. The conspirators dismiss him as "a limb of Caesar" who is fond of "sports, wildness, and much company" — a fatal underestimation. His funeral oration is a masterpiece of irony, emotional manipulation, and strategic rhetoric. Yet Act IV reveals his cold political ruthlessness — he marks even family members for death. He is simultaneously the most admirable and most frightening character.</div>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-head">
+        <span class="char-icon">🌹</span>
+        <div><div>Portia</div><div class="char-role">Brutus's Wife · Voice of Conscience</div></div>
+      </div>
+      <div class="char-body">
+        <div class="char-traits">
+          <span class="char-trait gold">Courageous</span><span class="char-trait">Devoted</span><span class="char-trait">Perceptive</span><span class="char-trait">Tragic</span>
+        </div>
+        <div class="char-analysis">Portia is one of Shakespeare's strongest female characters. She wounds herself to prove she can bear Brutus's secrets — an extraordinary act of will. She alone sees that something is tearing Brutus apart and demands to be treated as an equal partner, not merely a wife. Her death (swallowing burning coals) mirrors the violent, consuming world the men have created. She represents the personal cost of political ambition.</div>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-head">
+        <span class="char-icon">🔮</span>
+        <div><div>Calpurnia</div><div class="char-role">Caesar's Wife · Prophetess</div></div>
+      </div>
+      <div class="char-body">
+        <div class="char-traits">
+          <span class="char-trait">Intuitive</span><span class="char-trait">Fearful</span><span class="char-trait gold">Prophetic</span><span class="char-trait">Devoted</span>
+        </div>
+        <div class="char-analysis">Calpurnia represents the intuitive, emotional wisdom that Caesar ignores. Her dream — Caesar's statue spouting blood — is accurate prophecy, not mere superstition. Unlike Portia, she fails to change her husband's course; Caesar's pride overrides her pleas. She contrasts with Portia: where Portia demands to know Brutus's secrets, Calpurnia only begs Caesar to stay safe.</div>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-head">
+        <span class="char-icon">⚡</span>
+        <div><div>Casca</div><div class="char-role">Conspirator · Blunt Cynic</div></div>
+      </div>
+      <div class="char-body">
+        <div class="char-traits">
+          <span class="char-trait">Cynical</span><span class="char-trait gold">Plain-spoken</span><span class="char-trait">Superstitious</span>
+        </div>
+        <div class="char-analysis">Casca is the first to strike Caesar — a role that highlights his willingness to act. In Act I, his blunt, sardonic account of Antony's crown-offering contrasts with Cassius's rhetorical polish. In Act III Scene 1, he strikes first but seemingly needs the others' courage to follow through — suggesting that beneath his cynical exterior lies some cowardice.</div>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-head">
+        <span class="char-icon">🏺</span>
+        <div><div>Octavius Caesar</div><div class="char-role">Caesar's Heir · Future Emperor</div></div>
+      </div>
+      <div class="char-body">
+        <div class="char-traits">
+          <span class="char-trait gold">Calculated</span><span class="char-trait">Cold</span><span class="char-trait">Decisive</span>
+        </div>
+        <div class="char-analysis">Octavius appears in only the final two acts but is quietly dominant. He is Caesar's legacy made flesh — already asserting his will over Antony. The play ends with Octavius giving orders. Historically, he becomes Augustus Caesar, Rome's first emperor — a chilling irony: the conspiracy that tried to prevent tyranny ensures its ultimate arrival.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ QUOTES ══════════ -->
+<section class="section" id="tab-quotes">
+  <h2 class="sec-title">Key Quotes with Detailed Explanation</h2>
+  <div class="sec-intro">These are the most frequently asked quotes in ICSE exams. Understand the context, meaning, literary devices, and significance of each.</div>
+
+  <div class="quote-card">
+    <div class="quote-head"><span class="quote-speaker">Cassius</span><span class="quote-ref">Act I, Scene 2</span></div>
+    <div class="quote-text">"The fault, dear Brutus, is not in our stars,<br>But in ourselves, that we are underlings."</div>
+    <div class="quote-explain">Cassius argues that their low status is not fated by the stars (astrology was widely believed in) but is a result of their own passivity and weakness. He uses this to convince Brutus that taking action against Caesar is not only possible but is an act of self-determination. The irony: Cassius himself is driven by <em>jealousy</em>, not noble philosophy. It is a brilliant piece of manipulation disguised as stoic wisdom.
+      <div class="quote-device">Devices: <span class="device-tag">Allusion (stars/fate)</span><span class="device-tag">Antithesis</span><span class="device-tag">Direct Address</span><span class="device-tag">Irony</span></div>
+    </div>
+  </div>
+
+  <div class="quote-card">
+    <div class="quote-head"><span class="quote-speaker">Soothsayer</span><span class="quote-ref">Act I, Scene 2</span></div>
+    <div class="quote-text">"Beware the Ides of March."</div>
+    <div class="quote-explain">The Ides of March is 15 March — the day of Caesar's assassination. The Soothsayer's warning is the play's most famous line. Caesar dismisses him as "a dreamer" — a perfect example of his <em>hubris</em>. The line is a masterpiece of <em>dramatic irony</em>: the audience knows the date is fatal; Caesar does not heed the warning. It also introduces the theme of <em>fate vs. free will</em>.
+      <div class="quote-device">Devices: <span class="device-tag">Dramatic Irony</span><span class="device-tag">Foreshadowing</span><span class="device-tag">Allusion</span></div>
+    </div>
+  </div>
+
+  <div class="quote-card">
+    <div class="quote-head"><span class="quote-speaker">Brutus</span><span class="quote-ref">Act II, Scene 1</span></div>
+    <div class="quote-text">"It must be by his death: and for my part,<br>I know no personal cause to spurn at him,<br>But for the general."</div>
+    <div class="quote-explain">Brutus's key soliloquy reveals his moral reasoning — and its fatal flaw. He admits he has <em>no personal grievance</em> against Caesar; he acts entirely for the public good. But his logic is circular: Caesar hasn't done anything wrong yet; Brutus is killing him for what he <em>might</em> do. This is the play's moral and philosophical crux: is pre-emptive killing of a potential tyrant ever justified?
+      <div class="quote-device">Devices: <span class="device-tag">Soliloquy</span><span class="device-tag">Antithesis (personal vs. general)</span><span class="device-tag">Moral Reasoning</span></div>
+    </div>
+  </div>
+
+  <div class="quote-card">
+    <div class="quote-head"><span class="quote-speaker">Caesar</span><span class="quote-ref">Act III, Scene 1</span></div>
+    <div class="quote-text">"Et tu, Bruté? Then fall, Caesar!"</div>
+    <div class="quote-explain">Caesar's last words. <em>Et tu, Bruté</em> is Latin for "And you, Brutus?" — expressing shocked betrayal that his closest friend is among the assassins. The moment is not just about physical death; it is the death of Caesar's trust, his friendship, his belief in Roman honour. His resignation ("Then fall, Caesar!") suggests he accepts death the moment Brutus strikes — as if there is nothing left to live for. This line defines <em>the ultimate betrayal</em>.
+      <div class="quote-device">Devices: <span class="device-tag">Latin (Code-switching)</span><span class="device-tag">Dramatic Climax</span><span class="device-tag">Pathos</span><span class="device-tag">Third Person Self-Reference</span></div>
+    </div>
+  </div>
+
+  <div class="quote-card">
+    <div class="quote-head"><span class="quote-speaker">Antony</span><span class="quote-ref">Act III, Scene 1</span></div>
+    <div class="quote-text">"O, pardon me, thou bleeding piece of earth,<br>That I am meek and gentle with these butchers!"</div>
+    <div class="quote-explain">Antony, alone with Caesar's body, drops all pretence of diplomacy and reveals his true feelings. "Bleeding piece of earth" is a powerful, jarring metaphor — Caesar is reduced to raw, wounded matter, yet elevated as part of the earth itself. "Butchers" strips the conspirators of all nobility — they are not honourable patriots but slaughterhouse killers. This speech signals that a terrible revenge is coming.
+      <div class="quote-device">Devices: <span class="device-tag">Apostrophe</span><span class="device-tag">Metaphor</span><span class="device-tag">Irony (meek/gentle)</span><span class="device-tag">Foreshadowing</span></div>
+    </div>
+  </div>
+
+  <div class="quote-card">
+    <div class="quote-head"><span class="quote-speaker">Antony</span><span class="quote-ref">Act III, Scene 2</span></div>
+    <div class="quote-text">"Friends, Romans, countrymen, lend me your ears;<br>I come to bury Caesar, not to praise him."</div>
+    <div class="quote-explain">The opening of Antony's funeral oration — the most famous speech in the play. The order "Friends, Romans, countrymen" moves from <em>personal</em> to <em>political</em> to <em>national</em>, instantly building connection. "Lend me your ears" is metaphorical — he asks for attention, not just hearing. "I come to bury Caesar, not to praise him" is pure irony: the entire speech is an extended act of praise designed to look like objectivity. This is rhetorical genius.
+      <div class="quote-device">Devices: <span class="device-tag">Tricolon</span><span class="device-tag">Verbal Irony</span><span class="device-tag">Metaphor (ears)</span><span class="device-tag">Antithesis</span></div>
+    </div>
+  </div>
+
+  <div class="quote-card">
+    <div class="quote-head"><span class="quote-speaker">Antony (repeated)</span><span class="quote-ref">Act III, Scene 2</span></div>
+    <div class="quote-text">"Yet Brutus says he was ambitious;<br>And Brutus is an honourable man."</div>
+    <div class="quote-explain">Antony's most powerful rhetorical weapon. He repeats "Brutus is an honourable man" six times throughout the speech, each time immediately after presenting evidence that Brutus's reasons for killing Caesar were wrong. The word "honourable" is gradually drained of meaning through repetition until it becomes sarcastic. By the end, "honourable" means its opposite. This technique is called <em>sustained irony</em> and is one of the most brilliant uses of rhetoric in all literature.
+      <div class="quote-device">Devices: <span class="device-tag">Anaphora / Repetition</span><span class="device-tag">Sustained Irony</span><span class="device-tag">Antithesis</span><span class="device-tag">Rhetoric</span></div>
+    </div>
+  </div>
+
+  <div class="quote-card">
+    <div class="quote-head"><span class="quote-speaker">Antony</span><span class="quote-ref">Act V, Scene 5</span></div>
+    <div class="quote-text">"This was the noblest Roman of them all."</div>
+    <div class="quote-explain">Antony's eulogy for Brutus at the play's end. Coming from the man who destroyed Brutus, this tribute is extraordinary — and wholly sincere. Antony acknowledges that Brutus acted from genuine principle, not jealousy. The play ends not with the triumph of the victors but with a recognition of Brutus's tragic nobility. It is one of the most powerful closings in Shakespeare: the enemy acknowledges the fallen hero's worth.
+      <div class="quote-device">Devices: <span class="device-tag">Superlative</span><span class="device-tag">Irony (enemy as eulogist)</span><span class="device-tag">Pathos</span></div>
+    </div>
+  </div>
+
+  <div class="quote-card">
+    <div class="quote-head"><span class="quote-speaker">Brutus</span><span class="quote-ref">Act V, Scene 5</span></div>
+    <div class="quote-text">"Caesar, now be still:<br>I killed not thee with half so good a will."</div>
+    <div class="quote-explain">Brutus's last words as he falls on his sword. In death, he addresses Caesar directly — suggesting the ghost of Caesar has haunted his conscience all along. He killed Caesar reluctantly; he accepts his own death willingly. The word "will" carries a double meaning: desire and testament/legacy. This is Shakespeare's ultimate irony — Brutus, who killed Caesar to free Rome, dies to free himself from guilt.
+      <div class="quote-device">Devices: <span class="device-tag">Apostrophe</span><span class="device-tag">Antithesis</span><span class="device-tag">Pun (will)</span><span class="device-tag">Dramatic Irony</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ POETIC DEVICES ══════════ -->
+<section class="section" id="tab-devices">
+  <h2 class="sec-title">Poetic Devices in Julius Caesar</h2>
+  <div class="sec-intro">Shakespeare uses a rich arsenal of literary devices. For ICSE exams, identify the device, quote the line, and explain its effect on meaning or character.</div>
+
+  <div class="device-grid">
+    <div class="device-card">
+      <div class="device-name">Dramatic Irony</div>
+      <div class="device-def">When the audience knows something a character does not.</div>
+      <div class="device-example">"Beware the Ides of March."<br>— Caesar dismisses the Soothsayer as a dreamer.</div>
+      <div class="device-explain">We know Caesar will be killed on 15 March. Caesar does not heed the warning. This creates unbearable tension throughout Acts I–III.</div>
+    </div>
+
+    <div class="device-card">
+      <div class="device-name">Anaphora</div>
+      <div class="device-def">Repetition of a word or phrase at the start of successive clauses for emphasis.</div>
+      <div class="device-example">"And Brutus is an honourable man."<br>— Repeated six times in Antony's oration.</div>
+      <div class="device-explain">Each repetition of "honourable" becomes more ironic as Antony provides counter-evidence. Anaphora builds rhythm and emotional force, turning the crowd against Brutus.</div>
+    </div>
+
+    <div class="device-card">
+      <div class="device-name">Metaphor</div>
+      <div class="device-def">A direct comparison that describes one thing as another.</div>
+      <div class="device-example">"O, pardon me, thou bleeding piece of earth..."<br>— Antony over Caesar's body.</div>
+      <div class="device-explain">Caesar's body is compared to wounded earth — simultaneously reducing him to matter and elevating him as part of Rome itself. The metaphor expresses grief and rage simultaneously.</div>
+    </div>
+
+    <div class="device-card">
+      <div class="device-name">Simile</div>
+      <div class="device-def">A comparison using "like" or "as."</div>
+      <div class="device-example">"He doth bestride the narrow world / Like a Colossus..."<br>— Cassius, Act I, Scene 2.</div>
+      <div class="device-explain">Caesar is compared to the Colossus of Rhodes (a giant statue). The simile emphasises Caesar's oversized power and the smallness of ordinary men beneath him — which is precisely what Cassius resents.</div>
+    </div>
+
+    <div class="device-card">
+      <div class="device-name">Apostrophe</div>
+      <div class="device-def">Directly addressing an absent person, abstract idea, or inanimate object.</div>
+      <div class="device-example">"O Julius Caesar, thou art mighty yet!"<br>— Brutus, Act V.</div>
+      <div class="device-explain">Brutus addresses the dead Caesar directly. This device conveys overwhelming emotion and the sense that Caesar's spirit truly haunts the survivors — his power extends beyond death.</div>
+    </div>
+
+    <div class="device-card">
+      <div class="device-name">Soliloquy</div>
+      <div class="device-def">A speech in which a character reveals inner thoughts, alone on stage.</div>
+      <div class="device-example">"It must be by his death..."<br>— Brutus, Act II, Scene 1.</div>
+      <div class="device-explain">Brutus's soliloquy exposes his moral reasoning — and its flaws. The soliloquy is Shakespeare's primary tool for giving the audience direct access to a character's inner life, creating intimacy and dramatic irony.</div>
+    </div>
+
+    <div class="device-card">
+      <div class="device-name">Pathetic Fallacy</div>
+      <div class="device-def">Using weather or nature to reflect the emotional or moral state of events.</div>
+      <div class="device-example">"A tempest dropping fire..." — Casca describing the storm, Act I, Scene 3.</div>
+      <div class="device-explain">The violent storm mirrors Rome's political disorder. Shakespeare uses unnatural weather (fire falling from sky, ghost walking, lions in streets) to signal that the natural order of things is about to be catastrophically disrupted.</div>
+    </div>
+
+    <div class="device-card">
+      <div class="device-name">Antithesis</div>
+      <div class="device-def">Placing contrasting ideas side-by-side for emphasis.</div>
+      <div class="device-example">"Not that I loved Caesar less, but that I loved Rome more."<br>— Brutus, Act III.</div>
+      <div class="device-explain">Brutus's speech is built on antitheses: personal love vs. public duty; Caesar vs. Rome; grief vs. necessity. Antithesis gives his argument a neat, logical appearance — but Antony systematically dismantles each contrast.</div>
+    </div>
+
+    <div class="device-card">
+      <div class="device-name">Verbal Irony / Sarcasm</div>
+      <div class="device-def">Saying the opposite of what one means.</div>
+      <div class="device-example">"Brutus is an honourable man."<br>— Antony (with increasing sarcasm).</div>
+      <div class="device-explain">The surface meaning is positive; the intended meaning (by the sixth repetition) is its opposite. Antony uses the conspirators' own claim (that they are honourable) to destroy them — a brilliant rhetorical judo throw.</div>
+    </div>
+
+    <div class="device-card">
+      <div class="device-name">Foreshadowing</div>
+      <div class="device-def">Hints or clues that anticipate future events.</div>
+      <div class="device-example">"Thou shalt see me at Philippi."<br>— Caesar's Ghost, Act IV.</div>
+      <div class="device-explain">The ghost's promise foreshadows Brutus's defeat and death at Philippi. Throughout the play, omens, dreams, and prophetic speeches function as Shakespeare's mechanism of fate — even as characters exercise free will.</div>
+    </div>
+
+    <div class="device-card">
+      <div class="device-name">Tricolon</div>
+      <div class="device-def">A series of three parallel items for rhetorical effect.</div>
+      <div class="device-example">"Friends, Romans, countrymen, lend me your ears."</div>
+      <div class="device-explain">The three nouns build from intimate (friends) to civic (Romans) to national (countrymen), encompassing Antony's entire audience. The tricolon creates a memorable rhythm and is one reason the line has echoed for over 400 years.</div>
+    </div>
+
+    <div class="device-card">
+      <div class="device-name">Blank Verse (Iambic Pentameter)</div>
+      <div class="device-def">Unrhymed verse with 10 syllables per line (5 da-DUM feet).</div>
+      <div class="device-example">"The EV-il THAT men DO lives AF-ter THEM."</div>
+      <div class="device-explain">Noble characters speak in blank verse; commoners speak in prose. When a character breaks the rhythm, it signals emotional disturbance. Antony switches between both to manipulate different audiences — a sign of his rhetorical genius.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ WRITING STYLE ══════════ -->
+<section class="section" id="tab-style">
+  <h2 class="sec-title">Shakespeare's Writing Style in Julius Caesar</h2>
+  <div class="sec-intro">Understanding <em>how</em> Shakespeare writes is as important as <em>what</em> he writes. These features define his craft in this particular play.</div>
+
+  <div class="style-grid">
+    <div class="style-card">
+      <div class="style-icon">📖</div>
+      <div class="style-title">Prose vs. Verse as Class Marker</div>
+      <div class="style-body">Shakespeare uses <strong>verse (blank verse)</strong> for noble characters and serious scenes, and <strong>prose</strong> for commoners and comic moments. Brutus's funeral oration is in prose — deliberately, to appear plain and democratic. Antony's response is in verse — elevated, emotional, poetic. This contrast is itself a comment on their differing approaches to power.</div>
+    </div>
+
+    <div class="style-card">
+      <div class="style-icon">🎭</div>
+      <div class="style-title">The Soliloquy as Inner Theatre</div>
+      <div class="style-body">Shakespeare gives us direct access to characters' minds through soliloquies. Brutus's Act II soliloquy is not a decision made in company — it is a one-man moral trial. This technique creates intimacy, irony (we see what others cannot), and empathy even for flawed characters. We understand Brutus even when we disagree with him.</div>
+    </div>
+
+    <div class="style-card">
+      <div class="style-icon">⚖️</div>
+      <div class="style-title">Deliberate Moral Ambiguity</div>
+      <div class="style-body">Shakespeare never tells us who is right. Is Caesar a dangerous tyrant or a great leader? Is Brutus a hero or a murderer? Is Antony a loyal friend or a calculating avenger? The play presents every character from multiple perspectives, forcing the audience to judge. This ambiguity is what makes <em>Julius Caesar</em> eternally relevant.</div>
+    </div>
+
+    <div class="style-card">
+      <div class="style-icon">🌩️</div>
+      <div class="style-title">Omens, Superstition &amp; the Supernatural</div>
+      <div class="style-body">Shakespeare populates the play with prophecies, dreams, omens, and Caesar's ghost. This is not mere superstition — it reflects the Elizabethan worldview that the natural and supernatural are intertwined, and that great political events disturb the cosmic order. Omens also function as Shakespeare's structural tool: they create suspense and signal turning points.</div>
+    </div>
+
+    <div class="style-card">
+      <div class="style-icon">🗣️</div>
+      <div class="style-title">The Power of the Public Speech</div>
+      <div class="style-body">No other Shakespeare play examines the mechanics of rhetoric so carefully. The two funeral orations are a masterclass: Brutus uses logical argument, abstract principle, and prose to appeal to reason; Antony uses emotional appeal, concrete evidence (Caesar's wounds, his will), irony, and verse. Shakespeare shows that emotion beats reason in the arena of popular politics.</div>
+    </div>
+
+    <div class="style-card">
+      <div class="style-icon">🔁</div>
+      <div class="style-title">Structural Symmetry &amp; Poetic Justice</div>
+      <div class="style-body">The play has a near-perfect structural symmetry: the same sword that killed Caesar kills Cassius; the same city that cheered the conspirators hunts them down; the man who misjudged Antony's harmlessness dies partly because of it. Shakespeare builds a world where actions have consequences that mirror their causes — poetic justice made structural.</div>
+    </div>
+
+    <div class="style-card">
+      <div class="style-icon">🌺</div>
+      <div class="style-title">Nature Imagery</div>
+      <div class="style-body">Caesar's body is "a bleeding piece of earth." Cassius is compared to a Colossus. The conspirators are called "butchers." Nature imagery in <em>Julius Caesar</em> tends to be violent, earthy, and physical — grounding abstract political questions in bodily reality. Blood, wounds, and physical suffering dominate the second half of the play.</div>
+    </div>
+
+    <div class="style-card">
+      <div class="style-icon">🪞</div>
+      <div class="style-title">Contrast as a Structural Principle</div>
+      <div class="style-body">The entire play is built on contrasts: Brutus vs. Cassius, Brutus vs. Antony, reason vs. emotion, private loyalty vs. public duty, omens ignored vs. omens heeded, Caesar living vs. Caesar dead. Shakespeare uses these contrasts to explore every political and moral question from multiple angles simultaneously.</div>
+    </div>
+  </div>
+
+  <div class="sec-intro" style="margin-top: 16px;">🎓 <strong>For exams:</strong> When asked about Shakespeare's style, mention at least THREE features — prose vs. verse, use of soliloquy, and moral ambiguity — and support each with a specific quotation.</div>
+</section>
+
+<!-- ══════════ THEMES ══════════ -->
+<section class="section" id="tab-themes">
+  <h2 class="sec-title">Major Themes</h2>
+  <div class="sec-intro">Themes are the big ideas the play explores. For ICSE essays, always connect the theme to specific characters, scenes, and quotations.</div>
+
+  <div class="theme-row">
+    <div class="theme-bar">Ambition &amp; Power</div>
+    <div class="theme-content">
+      <strong>The Corruption of Ambition</strong>
+      Caesar's rise is both admired and feared. Cassius claims Caesar is ambitious; Caesar's three refusals of the crown suggest otherwise — or do they? Shakespeare deliberately obscures whether Caesar is a genuine tyrant. More clearly, the play shows how the pursuit of power corrupts everyone: the conspirators use murder, Antony uses mob manipulation, Octavius coldly marks family members for death. Power is shown to be inherently corrupting.
+    </div>
+  </div>
+
+  <div class="theme-row">
+    <div class="theme-bar">Loyalty &amp; Betrayal</div>
+    <div class="theme-content">
+      <strong>The Conflict Between Private &amp; Public Loyalty</strong>
+      Brutus loves Caesar as a friend but kills him as a patriot. His tragedy is the impossibility of reconciling private affection with public duty. Every major character faces a version of this conflict: Cassius between friendship and jealousy, Portia between wife and observer, Antony between grief and political survival. "Et tu, Bruté?" is the play's defining moment precisely because it makes the betrayal feel personal, not political.
+    </div>
+  </div>
+
+  <div class="theme-row">
+    <div class="theme-bar">Fate vs. Free Will</div>
+    <div class="theme-content">
+      <strong>Do We Control Our Destiny?</strong>
+      Cassius insists: "The fault is not in our stars, but in ourselves." Yet the play is saturated with omens, prophecies, and dreams — all of which come true. Caesar ignores the Soothsayer; he dies on the Ides of March. Calpurnia dreams accurately; Caesar dismisses her. The ghost says "At Philippi"; Brutus dies at Philippi. The play never resolves this tension — perhaps both are true: fate provides the shape, free will provides the details.
+    </div>
+  </div>
+
+  <div class="theme-row">
+    <div class="theme-bar">Rhetoric &amp; Manipulation</div>
+    <div class="theme-content">
+      <strong>The Dangerous Power of Words</strong>
+      Words — not swords — determine the outcome of the play. Cassius's rhetoric recruits Brutus. Antony's rhetoric destroys the conspirators. Decius's rhetoric sends Caesar to his death. The mob is moved to murderous frenzy by a speech. Shakespeare is asking: if language can manipulate a crowd so completely, how can democracy — which depends on public deliberation — ever be truly rational?
+    </div>
+  </div>
+
+  <div class="theme-row">
+    <div class="theme-bar">Honour &amp; Integrity</div>
+    <div class="theme-content">
+      <strong>"Honourable Men"</strong>
+      The word "honourable" is the play's most charged — and most ironic — term. Brutus acts from genuine honour and is destroyed by it. The conspirators claim honour but act from jealousy. Antony weaponises the word until it collapses. The play asks: what does honour mean when it can be claimed by anyone and verified by no one? Is integrity enough, without political intelligence?
+    </div>
+  </div>
+
+  <div class="theme-row">
+    <div class="theme-bar">Order &amp; Disorder</div>
+    <div class="theme-content">
+      <strong>Political and Natural Chaos</strong>
+      The assassination throws Rome into civil war. The natural world reflects this: storm, ghosts, lions in the streets. Shakespeare shows that disrupting political order — even to prevent tyranny — creates worse disorder. The conspiracy against Caesar produces not a restored Republic but a brutal Triumvirate. The play is deeply conservative in one sense: the disruption of legitimate authority always makes things worse.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ EXAM TIPS ══════════ -->
+<section class="section" id="tab-exam">
+  <h2 class="sec-title">ICSE Exam Preparation — Tips &amp; Strategies</h2>
+  <div class="sec-intro">Targeted guidance for ICSE Class 9 and 10 students preparing for board-level questions on Julius Caesar.</div>
+
+  <div class="tip-box">
+    <h3>📌 Types of Questions to Expect</h3>
+    <ul>
+      <li><strong>Extract-based questions:</strong> A passage is given; identify speaker, occasion, explain lines, identify devices.</li>
+      <li><strong>Character analysis essays:</strong> "Analyse Brutus as a tragic hero." "How does Antony use rhetoric in his funeral oration?"</li>
+      <li><strong>Thematic essays:</strong> "Discuss the role of honour in the play." "How does Shakespeare present ambition?"</li>
+      <li><strong>Comparative questions:</strong> "Compare the speeches of Brutus and Antony." "Compare Caesar and Brutus as leaders."</li>
+      <li><strong>Short answer questions:</strong> Context, meaning of key lines, identification of devices.</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <h3>🎯 The 5 Scenes You Must Know Perfectly</h3>
+    <ul>
+      <li><strong>Act I, Scene 2:</strong> Cassius manipulates Brutus; Soothsayer's warning; Caesar's character revealed.</li>
+      <li><strong>Act II, Scene 1:</strong> Brutus's soliloquy; conspiracy meeting; Portia's wound.</li>
+      <li><strong>Act II, Scene 2:</strong> Calpurnia's dream; Decius's manipulation; Caesar's hubris.</li>
+      <li><strong>Act III, Scenes 1–2:</strong> The assassination; "Et tu, Bruté?"; both funeral orations.</li>
+      <li><strong>Act V, Scene 5:</strong> Brutus's death; Antony's final eulogy.</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <h3>✍️ How to Answer Extract Questions (Step-by-Step)</h3>
+    <ul>
+      <li><strong>Who speaks?</strong> Identify the speaker immediately.</li>
+      <li><strong>To whom?</strong> Identify the addressee (character, crowd, or absent person via apostrophe).</li>
+      <li><strong>Context:</strong> Where and when in the play does this occur? What has just happened?</li>
+      <li><strong>Meaning:</strong> Explain each line in your own words.</li>
+      <li><strong>Device:</strong> Name the literary device and explain its effect — don't just label it.</li>
+      <li><strong>Significance:</strong> How does this moment advance plot, reveal character, or develop a theme?</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <h3>📝 Essay-Writing Formula for Character Questions</h3>
+    <ul>
+      <li><strong>Introduction:</strong> Name the character, their role, and your central argument in one sentence.</li>
+      <li><strong>Paragraph 1:</strong> Key character trait + evidence (quotation) + analysis.</li>
+      <li><strong>Paragraph 2:</strong> Second trait or development in the play + evidence.</li>
+      <li><strong>Paragraph 3:</strong> The character's fatal flaw or turning point + evidence.</li>
+      <li><strong>Paragraph 4:</strong> Their fate and what it says about the play's themes.</li>
+      <li><strong>Conclusion:</strong> Re-state your argument; link to Shakespeare's overall purpose.</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <h3>⚡ Quick Revision — 10 Things to Remember</h3>
+    <ul>
+      <li>Brutus is the <em>tragic hero</em>, not Caesar.</li>
+      <li>Brutus's fatal flaw: idealism / political naivety.</li>
+      <li>Cassius's motivation: partly jealousy, partly genuine republicanism.</li>
+      <li>The Ides of March = 15 March 44 BC.</li>
+      <li>Brutus speaks in <em>prose</em>; Antony speaks in <em>verse</em> — deliberate contrast.</li>
+      <li>"Honourable man" is repeated with increasing irony — <em>anaphora + verbal irony</em>.</li>
+      <li>Portia wounds herself in the thigh to prove loyalty.</li>
+      <li>Caesar's ghost appears at Sardis and promises Philippi.</li>
+      <li>Cassius dies by the same sword used to kill Caesar — poetic justice.</li>
+      <li>The play ends with Octavius in power — irony: the conspiracy produced a worse autocrat.</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <h3>🏆 Quotations to Memorise for Exams</h3>
+    <ul>
+      <li>"The fault, dear Brutus, is not in our stars, but in ourselves." — Cassius</li>
+      <li>"Beware the Ides of March." — Soothsayer</li>
+      <li>"Et tu, Bruté? Then fall, Caesar!" — Caesar</li>
+      <li>"Friends, Romans, countrymen, lend me your ears." — Antony</li>
+      <li>"Brutus is an honourable man." — Antony (ironic)</li>
+      <li>"Not that I loved Caesar less, but that I loved Rome more." — Brutus</li>
+      <li>"This was the noblest Roman of them all." — Antony</li>
+      <li>"He doth bestride the narrow world like a Colossus." — Cassius</li>
+      <li>"Cowards die many times before their deaths..." — Caesar</li>
+      <li>"The evil that men do lives after them." — Antony</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  Learn English with Tanuj Sir &nbsp;·&nbsp; ICSE Class 9 &amp; 10 &nbsp;·&nbsp; Julius Caesar Complete Study Guide
+</footer>
+
+<script>
+  function showTab(name) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    const btns = document.querySelectorAll('.tab-btn');
+    btns.forEach(b => { if(b.getAttribute('onclick').includes("'" + name + "'")) b.classList.add('active'); });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleAct(header) {
+    const body = header.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    document.querySelectorAll('.act-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.act-header').forEach(h => h.classList.remove('open'));
+    if (!isOpen) {
+      body.classList.add('open');
+      header.classList.add('open');
+    }
+  }
+
+  // Open first act by default
+  document.querySelector('.act-header').click();
+</script>
+</body>
+</html>
