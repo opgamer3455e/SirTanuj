@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import LoadingScreen from './components/ui/LoadingScreen';
+import LoadScreen from './components/ui/LoadScreen';
 import './App.css';
 
 const LandingPage = lazy(() => import('./pages/LandingPage'));
@@ -38,9 +38,9 @@ function App() {
         <main className="main-content">
           <AnimatePresence mode="wait">
             {initialLoading ? (
-              <LoadingScreen key="initial-loading" />
+              <LoadScreen key="initial-loading" />
             ) : (
-              <Suspense fallback={<LoadingScreen key="suspense-loading" />}>
+              <Suspense fallback={<LoadScreen key="suspense-loading" />}>
                 <AppRoutes />
               </Suspense>
             )}

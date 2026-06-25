@@ -13,7 +13,7 @@ type Props = {
     cornerRadius?: number
 }
 
-export default function LoadingScreen(props: Props) {
+export default function LoadScreen(props: Props) {
     const {
         fill = "rgb(255, 47, 0)",
         text = "Loading",
@@ -40,7 +40,6 @@ export default function LoadingScreen(props: Props) {
         <AnimatePresence>
             {visible && (
                 <motion.div
-                    className="loading-screen"
                     initial={{ opacity: 1 }}
                     exit={{
                         opacity: 0,
