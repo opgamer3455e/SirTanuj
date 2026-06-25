@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { BookOpen, FileText } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(1000);
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
@@ -15,6 +17,19 @@ export const HeroSection: React.FC = () => {
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      setContainerWidth(containerRef.current.getBoundingClientRect().width);
+    }
+    const handleResize = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.getBoundingClientRect().width);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     if (!isDragging || !sliderRef.current) return;
@@ -56,23 +71,40 @@ export const HeroSection: React.FC = () => {
           onTouchEnd={handleMouseUp}
         >
           {/* AFTER Image (Bottom Layer) */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center pointer-events-none"
-            style={{ backgroundImage: `url('/assets/rome_after.png')` }}
-          />
+          <div className="absolute inset-0 pointer-events-none z-10">
+            <div 
+              className="absolute inset-0 bg-cover bg-center opacity-15"
+              style={{ backgroundImage: `url('/assets/rome_after.png')` }}
+            />
+            <div 
+              className="absolute inset-0 bg-contain bg-no-repeat bg-center"
+              style={{ backgroundImage: `url('/assets/antony.png')` }}
+            />
+          </div>
           
           {/* BEFORE Image (Top Layer) */}
           <div 
-            className="absolute inset-0 bg-cover bg-center overflow-hidden pointer-events-none border-r-2 border-gold/50 shadow-[5px_0_15px_rgba(0,0,0,0.5)]"
-            style={{ 
-              backgroundImage: `url('/assets/rome_before.png')`,
-              width: `${sliderPosition}%` 
-            }}
-          />
+            className="absolute top-0 left-0 h-full overflow-hidden pointer-events-none border-r-2 border-[#C9A84C]/50 shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-20"
+            style={{ width: `${sliderPosition}%` }}
+          >
+            <div 
+              className="absolute top-0 left-0 h-full"
+              style={{ width: `${containerWidth}px` }}
+            >
+              <div 
+                className="absolute inset-0 bg-cover bg-center opacity-15"
+                style={{ backgroundImage: `url('/assets/rome_before.png')` }}
+              />
+              <div 
+                className="absolute inset-0 bg-contain bg-no-repeat bg-center"
+                style={{ backgroundImage: `url('/assets/caesar.png')` }}
+              />
+            </div>
+          </div>
 
           {/* Slider Handle */}
           <div 
-            className="absolute top-1/2 -mt-6 -ml-6 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.4)] z-10 pointer-events-none"
+            className="absolute top-1/2 -mt-6 -ml-6 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.4)] z-30 pointer-events-none"
             style={{ left: `${sliderPosition}%` }}
           >
             <div className="flex gap-1">
@@ -83,12 +115,12 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* Overlay Gradients for readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent pointer-events-none" />
-        <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent pointer-events-none z-30" />
+        <div className="absolute inset-0 bg-black/40 pointer-events-none z-30" />
       </motion.div>
 
       {/* Content */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center items-center text-center pt-20 pointer-events-none">
+      <div className="relative z-40 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center items-center text-center pt-20 pointer-events-none">
         
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -136,8 +168,8 @@ export const HeroSection: React.FC = () => {
       </div>
 
       {/* Decorative CSS Lighting Glow (Replaces WebGL) */}
-      <div className="absolute top-[-10%] left-1/2 transform -translate-x-1/2 w-[80%] h-[400px] bg-[#C9A84C] rounded-full blur-[150px] opacity-10 pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#8B0000] rounded-full blur-[150px] opacity-20 pointer-events-none mix-blend-screen" />
+      <div className="absolute top-[-10%] left-1/2 transform -translate-x-1/2 w-[80%] h-[400px] bg-[#C9A84C] rounded-full blur-[150px] opacity-10 pointer-events-none mix-blend-screen z-30" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#8B0000] rounded-full blur-[150px] opacity-20 pointer-events-none mix-blend-screen z-30" />
     </div>
   );
 };
