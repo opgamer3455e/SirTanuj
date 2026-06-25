@@ -1,5 +1,5 @@
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
 export default function LoadScreen() {
     const [visible, setVisible] = React.useState(true);
@@ -11,6 +11,25 @@ export default function LoadScreen() {
         }, 2000);
         return () => window.clearTimeout(timeout);
     }, []);
+
+    // Staggered curtain reveal animation
+    const containerVariants: Variants = {
+        hidden: {},
+        show: {
+            transition: {
+                delayChildren: 0.5,
+                staggerChildren: 0.15,
+            }
+        }
+    };
+
+    const columnVariants: Variants = {
+        hidden: { y: "0%" },
+        show: { 
+            y: "-100%", 
+            transition: { duration: 0.8, ease: "easeOut" } 
+        }
+    };
 
     return (
         <AnimatePresence>
@@ -24,38 +43,28 @@ export default function LoadScreen() {
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        backgroundColor: "#FF0000",
-                        zIndex: 90, // Under the navbar (which is 100)
+                        zIndex: 90, // Under the navbar
                         display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        overflow: "hidden"
+                        overflow: "hidden",
+                        pointerEvents: "none"
                     }}
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="show"
                 >
-                    {/* Grid Lines */}
-                    <div style={{ position: "absolute", inset: 0, display: "flex", justifyContent: "space-evenly", pointerEvents: "none" }}>
-                        <div style={{ width: "2px", backgroundColor: "rgba(180, 0, 0, 0.5)", height: "100%" }} />
-                        <div style={{ width: "2px", backgroundColor: "rgba(180, 0, 0, 0.5)", height: "100%" }} />
-                        <div style={{ width: "2px", backgroundColor: "rgba(180, 0, 0, 0.5)", height: "100%" }} />
-                        <div style={{ width: "2px", backgroundColor: "rgba(180, 0, 0, 0.5)", height: "100%" }} />
-                    </div>
-
-                    {/* Expanding White Square */}
-                    <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: [0, 0, 150] }}
-                        transition={{
-                            duration: 2,
-                            times: [0, 0.5, 1], // wait 1s, then expand over 1s
-                            ease: "easeInOut"
-                        }}
-                        style={{
-                            width: "2vw",
-                            height: "2vw",
-                            backgroundColor: "#FFFFFF",
-                            position: "absolute"
-                        }}
-                    />
+                    {/* 5 Columns for the curtain reveal */}
+                    {[0, 1, 2, 3, 4].map((i) => (
+                        <motion.div
+                            key={i}
+                            variants={columnVariants}
+                            style={{
+                                flex: 1,
+                                height: "100%",
+                                backgroundColor: "#6b21a8", // Purple to match the SiteSmiths logo/aesthetic
+                                borderRight: i < 4 ? "1px solid rgba(255, 255, 255, 0.05)" : "none"
+                            }}
+                        />
+                    ))}
                 </motion.div>
             )}
         </AnimatePresence>
