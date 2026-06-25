@@ -1,5 +1,5 @@
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 
 export default function LoadScreen() {
@@ -32,42 +32,38 @@ export default function LoadScreen() {
         }
     };
 
+    if (!visible) return null;
+
     return (
-        <AnimatePresence>
-            {visible && (
+        <motion.div
+            style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 90, // Under the navbar
+                display: "flex",
+                overflow: "hidden",
+                pointerEvents: "none"
+            }}
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+        >
+            {/* 5 Columns for the curtain reveal */}
+            {[0, 1, 2, 3, 4].map((i) => (
                 <motion.div
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.1 }}
+                    key={i}
+                    variants={columnVariants}
                     style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        zIndex: 90, // Under the navbar
-                        display: "flex",
-                        overflow: "hidden",
-                        pointerEvents: "none"
+                        flex: 1,
+                        height: "100%",
+                        backgroundColor: "#6b21a8", // Purple to match the SiteSmiths logo/aesthetic
+                        borderRight: i < 4 ? "1px solid rgba(255, 255, 255, 0.05)" : "none"
                     }}
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="show"
-                >
-                    {/* 5 Columns for the curtain reveal */}
-                    {[0, 1, 2, 3, 4].map((i) => (
-                        <motion.div
-                            key={i}
-                            variants={columnVariants}
-                            style={{
-                                flex: 1,
-                                height: "100%",
-                                backgroundColor: "#6b21a8", // Purple to match the SiteSmiths logo/aesthetic
-                                borderRight: i < 4 ? "1px solid rgba(255, 255, 255, 0.05)" : "none"
-                            }}
-                        />
-                    ))}
-                </motion.div>
-            )}
-        </AnimatePresence>
+                />
+            ))}
+        </motion.div>
     );
 }
