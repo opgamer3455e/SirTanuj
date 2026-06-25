@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { Twitter, Github, Linkedin, Mail, ArrowRight } from 'lucide-react';
+import { MessageCircle, Globe, Play, Mail, ArrowRight } from 'lucide-react';
 
 const Footer = memo(function Footer() {
   const currentYear = new Date().getFullYear();
@@ -18,7 +18,7 @@ const Footer = memo(function Footer() {
     visible: { 
       y: 0, 
       opacity: 1,
-      transition: { type: "spring", stiffness: 100 }
+      transition: { type: "spring" as const, stiffness: 100 }
     }
   };
 
@@ -101,7 +101,7 @@ const Footer = memo(function Footer() {
             © {currentYear} Nexus Edu. Developed for Excellence.
           </p>
           <div className="flex items-center gap-4">
-            {[Twitter, Github, Linkedin, Mail].map((Icon, i) => (
+            {[MessageCircle, Globe, Play, Mail].map((Icon, i) => (
               <a 
                 key={i} 
                 href="#" 
