@@ -1,5 +1,6 @@
 import * as React from "react";
-import { motion, AnimatePresence, Variants } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import type { Variants } from "framer-motion";
 
 export default function LoadScreen() {
     const [visible, setVisible] = React.useState(true);
