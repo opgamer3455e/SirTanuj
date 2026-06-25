@@ -34,16 +34,13 @@ export const HeroSection: React.FC = () => {
 
         {/* Lorenzo Interactive Portrait */}
         <div className="absolute inset-0 z-10 flex items-center justify-center">
-          <div className="w-full h-full max-w-4xl max-h-[80vh]">
+          <div className="w-full h-full max-w-4xl max-h-[80vh] flex items-center justify-center">
             <LorenzoInteractivePortrait 
-              baseImageUrl="/assets/caesar.png"
-              revealImageUrl="/assets/antony.png"
+              baseImage="/assets/caesar_circle.png"
+              revealImage="/assets/antony_circle.png"
               backgroundColor="transparent"
-              blobRadius={0.4}
-              blobFadeSpeed={2.0}
-              colorBgVec3="0.0, 0.0, 0.0"
-              colorSoftShapeVec3="0.05, 0.0, 0.0"
-              colorLineVec3="0.8, 0.6, 0.2"
+              blobSize={0.4}
+              fadeSpeed={0.2}
             />
           </div>
         </div>
