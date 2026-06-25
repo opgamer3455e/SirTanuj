@@ -40,7 +40,7 @@ function App() {
             {initialLoading ? (
               <LoadScreen key="initial-loading" />
             ) : (
-              <Suspense fallback={<LoadScreen key="suspense-loading" />}>
+              <Suspense fallback={<div className="w-full h-screen bg-[#0a0014]" />}>
                 <AppRoutes />
               </Suspense>
             )}
