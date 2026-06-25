@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { BookOpen, FileText } from 'lucide-react';
+import LorenzoInteractivePortrait from './LorenzoInteractivePortrait';
 
 export const HeroSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState(1000);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -14,103 +14,37 @@ export const HeroSection: React.FC = () => {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
-  const [sliderPosition, setSliderPosition] = useState(50);
-  const [isDragging, setIsDragging] = useState(false);
-  const sliderRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (containerRef.current) {
-      setContainerWidth(containerRef.current.getBoundingClientRect().width);
-    }
-    const handleResize = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.getBoundingClientRect().width);
-      }
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    if (!isDragging || !sliderRef.current) return;
-    
-    let clientX = 0;
-    if ('touches' in e) {
-      clientX = e.touches[0].clientX;
-    } else {
-      clientX = (e as React.MouseEvent).clientX;
-    }
-
-    const rect = sliderRef.current.getBoundingClientRect();
-    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
-    const percentage = (x / rect.width) * 100;
-    setSliderPosition(percentage);
-  };
-
-  const handleMouseUp = () => setIsDragging(false);
-
   return (
     <div 
       ref={containerRef}
       className="relative w-full h-[90vh] bg-[#050505] text-white overflow-hidden rounded-b-[40px]"
     >
-      {/* Before/After Slider Background */}
+      {/* Cinematic Background Elements */}
       <motion.div 
         className="absolute inset-0 z-0"
         style={{ y, opacity }}
       >
-        <div 
-          ref={sliderRef}
-          className="relative w-full h-full cursor-ew-resize select-none"
-          onMouseDown={() => setIsDragging(true)}
-          onTouchStart={() => setIsDragging(true)}
-          onMouseMove={handleMouseMove}
-          onTouchMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          onTouchEnd={handleMouseUp}
-        >
-          {/* AFTER Image (Bottom Layer) */}
-          <div className="absolute inset-0 pointer-events-none z-10">
-            <div 
-              className="absolute inset-0 bg-cover bg-center opacity-15"
-              style={{ backgroundImage: `url('/assets/rome_after.png')` }}
-            />
-            <div 
-              className="absolute inset-0 bg-contain bg-no-repeat bg-center"
-              style={{ backgroundImage: `url('/assets/antony.png')` }}
-            />
-          </div>
-          
-          {/* BEFORE Image (Top Layer) */}
+        {/* Background Rome Images (Low Opacity) */}
+        <div className="absolute inset-0 pointer-events-none z-0">
           <div 
-            className="absolute top-0 left-0 h-full overflow-hidden pointer-events-none border-r-2 border-[#C9A84C]/50 shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-20"
-            style={{ width: `${sliderPosition}%` }}
-          >
-            <div 
-              className="absolute top-0 left-0 h-full"
-              style={{ width: `${containerWidth}px` }}
-            >
-              <div 
-                className="absolute inset-0 bg-cover bg-center opacity-15"
-                style={{ backgroundImage: `url('/assets/rome_before.png')` }}
-              />
-              <div 
-                className="absolute inset-0 bg-contain bg-no-repeat bg-center"
-                style={{ backgroundImage: `url('/assets/caesar.png')` }}
-              />
-            </div>
-          </div>
+            className="absolute inset-0 bg-cover bg-center opacity-15"
+            style={{ backgroundImage: `url('/assets/rome_after.png')` }}
+          />
+        </div>
 
-          {/* Slider Handle */}
-          <div 
-            className="absolute top-1/2 -mt-6 -ml-6 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.4)] z-30 pointer-events-none"
-            style={{ left: `${sliderPosition}%` }}
-          >
-            <div className="flex gap-1">
-              <div className="w-1 h-4 bg-gray-400 rounded-full" />
-              <div className="w-1 h-4 bg-gray-400 rounded-full" />
-            </div>
+        {/* Lorenzo Interactive Portrait */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
+          <div className="w-full h-full max-w-4xl max-h-[80vh]">
+            <LorenzoInteractivePortrait 
+              baseImageUrl="/assets/caesar.png"
+              revealImageUrl="/assets/antony.png"
+              backgroundColor="transparent"
+              blobRadius={0.4}
+              blobFadeSpeed={2.0}
+              colorBgVec3="0.0, 0.0, 0.0"
+              colorSoftShapeVec3="0.05, 0.0, 0.0"
+              colorLineVec3="0.8, 0.6, 0.2"
+            />
           </div>
         </div>
 
