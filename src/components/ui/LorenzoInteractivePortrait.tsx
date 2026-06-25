@@ -1,59 +1,59 @@
-import * as React from "react";
-import { motion } from "framer-motion";
+import * as React from "react"
+import { motion } from "framer-motion"
 
-export type Props = {
-    baseImage?: string;
-    revealImage?: string;
-    backgroundColor?: string;
-    blobSize?: number;
-    fadeSpeed?: number;
-    blobColorBackground?: string;
-    blobColorSoftShape?: string;
-    blobColorLine?: string;
-    mobileBreakpoint?: number;
-    mobilePosition?: "Top" | "Bottom" | "Center";
-    fadeInDelay?: number;
-    fadeInDuration?: number;
-};
+type Props = {
+    baseImage?: string
+    revealImage?: string
+    backgroundColor?: string
+    blobSize?: number
+    fadeSpeed?: number
+    blobColorBackground?: string
+    blobColorSoftShape?: string
+    blobColorLine?: string
+    mobileBreakpoint?: number
+    mobilePosition?: "Top" | "Bottom" | "Center"
+    fadeInDelay?: number
+    fadeInDuration?: number
+}
 
 export default function LorenzoInteractivePortrait(props: Props) {
     const {
         baseImage = "https://framerusercontent.com/images/qvY2HYOKHmT5Urm3CA8rBFA0e4.png",
         revealImage = "https://framerusercontent.com/images/z4LUyH2iu95sOu5mTFtQjdinVI.png",
-        backgroundColor = "transparent",
+        backgroundColor = "#FFFFFF",
         blobSize = 0.35,
-        fadeSpeed = 0.2, // lowered fade speed for responsive tracking
+        fadeSpeed = 2.5,
         mobileBreakpoint = 768,
         mobilePosition = "Bottom",
         fadeInDelay = 0.2,
         fadeInDuration = 0.8,
-    } = props;
-    const containerRef = React.useRef<HTMLDivElement | null>(null);
-    const [pointer, setPointer] = React.useState({ x: 50, y: 50 });
-    const [isMobile, setIsMobile] = React.useState(false);
+    } = props
+    const containerRef = React.useRef<HTMLDivElement | null>(null)
+    const [pointer, setPointer] = React.useState({ x: 50, y: 50 })
+    const [isMobile, setIsMobile] = React.useState(false)
 
     React.useEffect(() => {
         const update = () => {
-            setIsMobile(window.innerWidth <= mobileBreakpoint);
-        };
-        update();
-        window.addEventListener("resize", update);
-        return () => window.removeEventListener("resize", update);
-    }, [mobileBreakpoint]);
+            setIsMobile(window.innerWidth <= mobileBreakpoint)
+        }
+        update()
+        window.addEventListener("resize", update)
+        return () => window.removeEventListener("resize", update)
+    }, [mobileBreakpoint])
 
     function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
-        const rect = containerRef.current?.getBoundingClientRect();
-        if (!rect) return;
-        const x = ((event.clientX - rect.left) / rect.width) * 100;
-        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        const rect = containerRef.current?.getBoundingClientRect()
+        if (!rect) return
+        const x = ((event.clientX - rect.left) / rect.width) * 100
+        const y = ((event.clientY - rect.top) / rect.height) * 100
         setPointer({
             x: Math.max(0, Math.min(100, x)),
             y: Math.max(0, Math.min(100, y)),
-        });
+        })
     }
 
     function handlePointerLeave() {
-        setPointer({ x: 50, y: 50 });
+        setPointer({ x: 50, y: 50 })
     }
 
     const mobileAlignment =
@@ -61,28 +61,24 @@ export default function LorenzoInteractivePortrait(props: Props) {
             ? "flex-start"
             : mobilePosition === "Bottom"
               ? "flex-end"
-              : "center";
-              
-    const revealRadius = `${Math.round(blobSize * 100)}%`;
+              : "center"
+    const revealRadius = `${Math.round(blobSize * 100)}%`
 
     return (
         <motion.div
             ref={containerRef}
             onPointerMove={handlePointerMove}
             onPointerLeave={handlePointerLeave}
-            initial={{ opacity: 0, y: 12, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
                 delay: fadeInDelay,
                 duration: fadeInDuration,
                 ease: [0.22, 1, 0.36, 1],
             }}
             style={{
-                width: '100%',
-                height: '100%',
-                maxWidth: '600px',
-                maxHeight: '600px',
-                aspectRatio: '1 / 1',
+                width: 250,
+                height: 250,
                 position: "relative",
                 overflow: "hidden",
                 borderRadius: "50%",
@@ -92,7 +88,6 @@ export default function LorenzoInteractivePortrait(props: Props) {
                 justifyContent: "center",
                 cursor: "none",
                 userSelect: "none",
-                boxShadow: "0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1)",
             }}
         >
             <img
@@ -126,8 +121,8 @@ export default function LorenzoInteractivePortrait(props: Props) {
                     position: "absolute",
                     left: `${pointer.x}%`,
                     top: `${pointer.y}%`,
-                    width: `${blobSize * 100}%`,
-                    aspectRatio: "1 / 1",
+                    width: `${blobSize * 220}px`,
+                    height: `${blobSize * 220}px`,
                     transform: "translate(-50%, -50%)",
                     borderRadius: "44% 56% 58% 42% / 48% 44% 56% 52%",
                     border: "1px solid rgba(232, 232, 232, 0.8)",
@@ -139,5 +134,5 @@ export default function LorenzoInteractivePortrait(props: Props) {
                 }}
             />
         </motion.div>
-    );
+    )
 }
