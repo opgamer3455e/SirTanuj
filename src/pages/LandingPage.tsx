@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { motion } from 'framer-motion';
 import { HeroSection } from '@/components/ui/hero-odyssey';
 import { InViewChunk } from '@/components/ui/InViewChunk';
 
@@ -27,10 +28,16 @@ export default function LandingPage() {
       </InViewChunk>
 
       {/* FAQ */}
-      <section className="page-container pt-20 pb-20 text-center">
+      <motion.section 
+        className="page-container pt-20 pb-20 text-center"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
         <h2 className="section-title text-[#C9A84C] font-['Cinzel']">Got Questions?</h2>
         <p className="section-subtitle font-['Playfair_Display'] text-gray-400">Consult the Senate.</p>
-      </section>
+      </motion.section>
     </div>
   );
 }
