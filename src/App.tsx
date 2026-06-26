@@ -22,6 +22,7 @@ const ParentPortal = lazy(() => import('./pages/ParentPortal'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const FAQPage = lazy(() => import('./pages/FAQPage'));
 const BlogPage = lazy(() => import('./pages/BlogPage'));
+const AuthPage = lazy(() => import('./pages/AuthPage'));
 
 function AppRoutes() {
   const location = useLocation();
@@ -43,6 +44,7 @@ function AppRoutes() {
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/faq" element={<FAQPage />} />
       <Route path="/blog" element={<BlogPage />} />
+      <Route path="/auth" element={<AuthPage />} />
     </Routes>
   );
 }
