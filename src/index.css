@@ -76,12 +76,7 @@ a:hover {
   color: var(--accent-primary);
 }
 
-button {
-  cursor: pointer;
-  font-family: var(--font-body);
-  border: none;
-  background: none;
-}
+
 
 /* Base Animations */
 @keyframes fadeIn {
