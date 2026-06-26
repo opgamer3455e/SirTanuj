@@ -1,7 +1,8 @@
 import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FileText, Play, Download, Search, Filter, BookOpen } from 'lucide-react';
+import { FileText, Play, Download, Filter, BookOpen } from 'lucide-react';
 import AnimatedCheckbox from '../components/ui/AnimatedCheckbox';
+import AnimatedInput from '../components/ui/AnimatedInput';
 
 const mockMaterials = [
   { id: 1, title: 'The Road Not Taken - Deep Analytical Breakdown', type: 'PDF', category: 'Poetry', class: 'Class 9', size: '2.4 MB', featured: true },
@@ -102,15 +103,12 @@ export default function StudyMaterialsPage() {
               <p className="text-zinc-400 font-['Playfair_Display'] text-lg italic border-l-2 border-[#00A699]/30 pl-4">Curated materials for academic excellence.</p>
             </div>
             
-            <div className="relative w-full md:w-80 group">
-              <input 
-                type="text" 
-                placeholder="Search the archives..."
+            <div className="flex-1 w-full relative z-10">
+              <AnimatedInput 
+                label="Search the archives..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-black/40 border border-white/10 rounded-full py-4 pl-12 pr-6 text-white font-['Playfair_Display'] focus:outline-none focus:border-[#00A699] transition-all focus:bg-white/5 shadow-inner"
               />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#00A699] transition-colors" size={20} />
             </div>
           </div>
 
