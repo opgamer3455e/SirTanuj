@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// removed framer motion
 import { Plus } from 'lucide-react';
 
 interface AccordionItemProps {
@@ -20,21 +20,19 @@ export function AccordionItem({ title, children, isOpen, onToggle }: AccordionIt
         <span className="text-lg font-medium text-white pr-4">{title}</span>
         <Plus className="text-zinc-400 shrink-0 transition-transform duration-200" size={20} />
       </button>
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            style={{ overflow: 'hidden' }}
-          >
-            <div className="px-6 pb-5 text-zinc-400">
-              {children}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div 
+        className="grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        style={{
+          gridTemplateRows: isOpen ? '1fr' : '0fr',
+          opacity: isOpen ? 1 : 0
+        }}
+      >
+        <div className="overflow-hidden">
+          <div className="px-6 pb-5 text-zinc-400">
+            {children}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
