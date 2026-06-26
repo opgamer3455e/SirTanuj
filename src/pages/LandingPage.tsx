@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { InViewChunk } from '@/components/ui/InViewChunk';
 import { InteractiveHelmet } from '@/components/ui/InteractiveHelmet';
@@ -31,15 +32,15 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 pointer-events-auto">
-            <button className="px-8 py-4 bg-[#FF5A5F] text-white font-bold rounded-full hover:bg-[#FC642D] transition-colors shadow-[0_0_20px_rgba(255,90,95,0.4)]">
+            <Link to="/courses" className="px-8 py-4 bg-[#FF5A5F] text-white font-bold rounded-full hover:bg-[#FC642D] transition-colors shadow-[0_0_20px_rgba(255,90,95,0.4)] text-center block">
               Explore Courses
-            </button>
-            <button className="px-8 py-4 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-colors backdrop-blur-md border border-white/20 flex items-center justify-center gap-2">
+            </Link>
+            <Link to="/study-materials" className="px-8 py-4 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-colors backdrop-blur-md border border-white/20 flex items-center justify-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
               Free Study Materials
-            </button>
+            </Link>
           </div>
         </div>
         <InteractiveHelmet />
