@@ -26,7 +26,8 @@ export function AccordionItem({ title, children, isOpen, onToggle }: AccordionIt
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            style={{ overflow: 'hidden' }}
           >
             <div className="px-6 pb-5 text-zinc-400">
               {children}
