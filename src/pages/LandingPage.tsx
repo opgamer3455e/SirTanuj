@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { InViewChunk } from '@/components/ui/InViewChunk';
 import { InteractiveHelmet } from '@/components/ui/InteractiveHelmet';
+import AnimatedHeroButton from '@/components/ui/AnimatedHeroButton';
 
 const MethodPanel = lazy(() => import('./LandingPageSections/MethodPanel'));
 const ExperienceSection = lazy(() => import('./LandingPageSections/ExperienceSection'));
@@ -31,9 +32,11 @@ export default function LandingPage() {
               "The beautiful thing about learning is that no one can take it away from you."
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 pointer-events-auto">
-            <Link to="/courses" className="px-8 py-4 bg-[#FF5A5F] text-white font-bold rounded-full hover:bg-[#FC642D] transition-colors shadow-[0_0_20px_rgba(255,90,95,0.4)] text-center block">
-              Explore Courses
+          <div className="flex flex-col sm:flex-row gap-4 pointer-events-auto items-center">
+            <Link to="/courses" className="block">
+              <AnimatedHeroButton>
+                Explore Courses
+              </AnimatedHeroButton>
             </Link>
             <Link to="/study-materials" className="px-8 py-4 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-colors backdrop-blur-md border border-white/20 flex items-center justify-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
