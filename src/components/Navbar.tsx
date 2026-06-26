@@ -32,10 +32,12 @@ const Navbar = memo(function Navbar() {
             <span style={{color: '#fff', fontWeight: 'bold', fontSize: '14px'}}>TS</span>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '2.5rem' }}>
+        <div style={{ display: 'flex', gap: '2rem' }}>
           <Link to="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Home</Link>
-          <Link to="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Courses</Link>
-          <Link to="/community" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Community</Link>
+          <Link to="/courses" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Courses</Link>
+          <Link to="/live-classes" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Live</Link>
+          <Link to="/study-materials" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Materials</Link>
+          <Link to="/dashboard" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Dashboard</Link>
         </div>
       </nav>
     </motion.div>
