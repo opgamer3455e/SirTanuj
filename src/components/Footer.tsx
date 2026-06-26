@@ -105,10 +105,11 @@ const Footer = memo(function Footer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5, ease: "easeOut" }}
-          className="flex justify-center items-center w-full mb-8 overflow-hidden pointer-events-none"
+          className="flex justify-center items-center w-full mb-8 overflow-hidden relative group"
         >
+          {/* Older text preserved exactly */}
           <h1 
-            className="font-black text-[12vw] leading-[0.8] tracking-tight text-center uppercase"
+            className="font-black text-[12vw] leading-[0.8] tracking-tight text-center uppercase relative z-10 pointer-events-none"
             style={{
               color: 'transparent',
               WebkitTextStroke: '1px rgba(255, 255, 255, 0.05)',
@@ -120,12 +121,15 @@ const Footer = memo(function Footer() {
           >
             TANUJ SIR
           </h1>
+          
+          {/* The effect applied as an overlay - perfectly matching size */}
+          <div className="absolute inset-0 z-20 pointer-events-auto mix-blend-color-dodge opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+             <TextHoverEffect 
+               text="TANUJ SIR" 
+               className="font-black text-[12vw] tracking-tight uppercase fill-transparent"
+             />
+          </div>
         </motion.div>
-
-        {/* Added TextHoverEffect as requested */}
-        <div className="h-[20rem] flex items-center justify-center mb-8">
-          <TextHoverEffect text="TANUJ SIR" />
-        </div>
 
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-6 border-t border-white/5">

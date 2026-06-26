@@ -5,10 +5,12 @@ import { motion } from "framer-motion"; // Changed from motion/react for compati
 export const TextHoverEffect = ({
   text,
   duration,
+  className,
 }: {
   text: string;
   duration?: number;
   automatic?: boolean;
+  className?: string;
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
@@ -32,7 +34,6 @@ export const TextHoverEffect = ({
       ref={svgRef}
       width="100%"
       height="100%"
-      viewBox="0 0 300 100"
       xmlns="http://www.w3.org/2000/svg"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -85,7 +86,7 @@ export const TextHoverEffect = ({
         textAnchor="middle"
         dominantBaseline="middle"
         strokeWidth="0.3"
-        className="fill-transparent stroke-neutral-200 font-[helvetica] text-7xl font-bold dark:stroke-neutral-800"
+        className={className || "fill-transparent stroke-neutral-200 font-[helvetica] text-7xl font-bold dark:stroke-neutral-800"}
         style={{ opacity: hovered ? 0.7 : 0 }}
       >
         {text}
@@ -96,7 +97,7 @@ export const TextHoverEffect = ({
         textAnchor="middle"
         dominantBaseline="middle"
         strokeWidth="0.3"
-        className="fill-transparent stroke-neutral-200 font-[helvetica] text-7xl font-bold dark:stroke-neutral-800"
+        className={className || "fill-transparent stroke-neutral-200 font-[helvetica] text-7xl font-bold dark:stroke-neutral-800"}
         initial={{ strokeDashoffset: 1000, strokeDasharray: 1000 }}
         animate={{
           strokeDashoffset: 0,
@@ -117,7 +118,7 @@ export const TextHoverEffect = ({
         stroke="url(#textGradient)"
         strokeWidth="0.3"
         mask="url(#textMask)"
-        className="fill-transparent font-[helvetica] text-7xl font-bold"
+        className={className || "fill-transparent font-[helvetica] text-7xl font-bold"}
       >
         {text}
       </text>
