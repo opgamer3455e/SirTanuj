@@ -1,19 +1,24 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, MessageCircle, Send } from 'lucide-react';
+import ErrorAlert from '../components/ui/ErrorAlert';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({ name: '', email: '', class: 'Class 9', message: '' });
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('submitting');
-    // Mock submission
+    // Mock submission with 50/50 chance of error
     setTimeout(() => {
-      setStatus('success');
-      setFormData({ name: '', email: '', class: 'Class 9', message: '' });
-      setTimeout(() => setStatus('idle'), 3000);
+      if (Math.random() > 0.5) {
+        setStatus('success');
+        setFormData({ name: '', email: '', class: 'Class 9', message: '' });
+        setTimeout(() => setStatus('idle'), 3000);
+      } else {
+        setStatus('error');
+      }
     }, 1500);
   };
 
@@ -161,9 +166,15 @@ export default function ContactPage() {
               </div>
             </form>
           </motion.div>
-
         </div>
       </div>
+
+      <ErrorAlert 
+        isOpen={status === 'error'} 
+        onClose={() => setStatus('idle')}
+        title="Submission Failed"
+        description="There was a problem sending your message. Please try again later."
+      />
     </div>
   );
 }
