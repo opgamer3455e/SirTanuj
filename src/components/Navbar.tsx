@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Avatar } from './ui/Avatar';
 
 const Navbar = memo(function Navbar() {
   return (
@@ -28,9 +29,11 @@ const Navbar = memo(function Navbar() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{ width: 32, height: 32, borderRadius: '50%', backgroundColor: '#FF5A5F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{color: '#fff', fontWeight: 'bold', fontSize: '14px'}}>TS</span>
-          </div>
+          <Avatar 
+            src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+            alt="User Avatar" 
+            fallback="TS" 
+          />
         </div>
         <div style={{ display: 'flex', gap: '2rem' }}>
           <Link to="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Home</Link>
