@@ -25,7 +25,7 @@ export default function StudentDashboard() {
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-panel border-l-4 border-l-[#FC642D] rounded-r-2xl p-5 mb-12 flex items-center justify-between sticky top-24 z-20"
+          className="glass-panel border-l-4 border-l-[#FC642D] rounded-r-2xl p-5 mb-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
         >
           <div className="flex items-center gap-4">
             <div className="w-3 h-3 rounded-full bg-[#FC642D] animate-pulse shadow-[0_0_15px_#FC642D]" />

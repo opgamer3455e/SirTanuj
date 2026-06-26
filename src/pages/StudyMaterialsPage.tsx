@@ -4,7 +4,6 @@ import { FileText, Play, Filter, BookOpen } from 'lucide-react';
 import AnimatedCheckbox from '../components/ui/AnimatedCheckbox';
 import AnimatedInput from '../components/ui/AnimatedInput';
 import AnimatedDownloadButton from '../components/ui/AnimatedDownloadButton';
-import AnimatedList from '../components/ui/AnimatedList';
 
 const mockMaterials = [
   { id: 1, title: 'The Road Not Taken - Deep Analytical Breakdown', type: 'PDF', category: 'Poetry', class: 'Class 9', size: '2.4 MB', featured: true },
@@ -114,70 +113,74 @@ export default function StudyMaterialsPage() {
             </div>
           </div>
 
-          <motion.div layout>
-            {filteredMaterials.length > 0 ? (
-              <AnimatedList
-                items={filteredMaterials}
-                className="w-full max-w-4xl mx-auto"
-                renderItem={(material, isSelected, idx) => {
-                  const isFeatured = material.featured;
-                  
-                  return (
-                    <div
-                      className={`glass-panel rounded-3xl p-6 border transition-all duration-500 hover:-translate-y-1 flex flex-col sm:flex-row gap-6 relative overflow-hidden w-full ${
-                        isSelected ? 'border-[#00A699]' : 'border-white/10 hover:border-white/30'
-                      }`}
-                    >
-                      {/* Atmospheric Glow inside Card */}
-                      {isFeatured && (
-                         <div className={`absolute -right-20 -bottom-20 w-64 h-64 blur-[80px] rounded-full pointer-events-none transition-colors duration-700 ${material.type === 'PDF' ? 'bg-[#FF5A5F]/10' : 'bg-[#00A699]/10'}`} />
-                      )}
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 auto-rows-[250px]">
+            <AnimatePresence mode="popLayout">
+              {filteredMaterials.map((material, idx) => {
+                const isFeatured = material.featured && idx < 2; // Only feature top items
+                
+                return (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    key={material.id}
+                    className={`glass-panel rounded-3xl p-8 border hover:border-white/30 transition-all duration-500 hover:-translate-y-2 flex flex-col group relative overflow-hidden ${
+                      isFeatured ? 'md:col-span-2 md:row-span-2' : 'col-span-1 row-span-1'
+                    }`}
+                    style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+                  >
+                    {/* Atmospheric Glow inside Card */}
+                    {isFeatured && (
+                       <div className={`absolute -right-20 -bottom-20 w-64 h-64 blur-[80px] rounded-full pointer-events-none transition-colors duration-700 ${material.type === 'PDF' ? 'bg-[#FF5A5F]/10 group-hover:bg-[#FF5A5F]/20' : 'bg-[#00A699]/10 group-hover:bg-[#00A699]/20'}`} />
+                    )}
 
-                      <div className={`p-6 rounded-2xl flex items-center justify-center backdrop-blur-md border shrink-0 ${
+                    <div className="flex items-start justify-between mb-auto relative z-10">
+                      <div className={`p-4 rounded-2xl flex items-center justify-center backdrop-blur-md border ${
                         material.type === 'PDF' 
                           ? 'bg-[#FF5A5F]/10 text-[#FF5A5F] border-[#FF5A5F]/20' 
                           : 'bg-[#FC642D]/10 text-[#FC642D] border-[#FC642D]/20'
                       }`}>
-                        {material.type === 'PDF' ? <FileText size={32} /> : <Play size={32} />}
+                        {material.type === 'PDF' ? <FileText size={isFeatured ? 32 : 24} /> : <Play size={isFeatured ? 32 : 24} />}
                       </div>
+                      <div className="flex flex-col items-end gap-2">
+                        <span className="px-3 py-1 bg-black/50 border border-white/10 rounded-full text-xs font-bold text-zinc-300 tracking-wider uppercase">
+                          {material.class}
+                        </span>
+                        <span className="text-xs font-['Playfair_Display'] text-zinc-500 italic">{material.category}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="relative z-10 mt-6">
+                      <h3 className={`font-bold text-white mb-3 font-['Cinzel'] leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r ${material.type === 'PDF' ? 'group-hover:from-[#FF5A5F] group-hover:to-[#ff999c]' : 'group-hover:from-[#FC642D] group-hover:to-[#ffb299]'} transition-all ${isFeatured ? 'text-3xl md:text-4xl max-w-md' : 'text-xl line-clamp-2'}`}>
+                        {material.title}
+                      </h3>
                       
-                      <div className="flex flex-col flex-grow justify-center relative z-10">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="px-3 py-1 bg-black/50 border border-white/10 rounded-full text-xs font-bold text-zinc-300 tracking-wider uppercase">
-                            {material.class}
-                          </span>
-                          <span className="text-xs font-['Playfair_Display'] text-zinc-500 italic">{material.category}</span>
-                        </div>
-                        
-                        <h3 className={`font-bold text-white mb-2 font-['Cinzel'] leading-tight transition-colors text-2xl ${material.type === 'PDF' ? 'hover:text-[#FF5A5F]' : 'hover:text-[#FC642D]'}`}>
-                          {material.title}
-                        </h3>
-                        
+                      <div className="flex items-center justify-between mt-6">
                         <span className="text-sm text-zinc-400 font-['Playfair_Display'] flex items-center gap-2">
                           <BookOpen size={14} className="text-zinc-500" />
                           {material.type === 'PDF' ? material.size : material.duration}
                         </span>
-                      </div>
 
-                      <div className="flex items-center sm:self-center shrink-0 relative z-10 mt-4 sm:mt-0">
                         {material.type === 'PDF' ? (
-                          <div className="scale-90">
+                          <div className="scale-75 origin-right">
                             <AnimatedDownloadButton />
                           </div>
                         ) : (
                           <button 
                             aria-label={`Play ${material.title} Video`}
-                            className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/10"
+                            className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/10"
                           >
-                            <Play size={20} className="ml-1" />
+                            <Play size={16} className="ml-1" />
                           </button>
                         )}
                       </div>
                     </div>
-                  );
-                }}
-              />
-            ) : null}
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
 
             {filteredMaterials.length === 0 && (
               <div className="col-span-full py-32 text-center glass-panel rounded-[2rem]">
