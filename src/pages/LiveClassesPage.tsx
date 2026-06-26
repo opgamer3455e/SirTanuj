@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, User, Play, Video } from 'lucide-react';
+import { Calendar, Clock, User, Video, Play } from 'lucide-react';
+import AnimatedList from '../components/ui/AnimatedList';
 
 const mockLiveClasses = [
   {
@@ -105,82 +106,83 @@ export default function LiveClassesPage() {
         {/* Class List */}
         <div className="space-y-6">
           <AnimatePresence mode="wait">
-            {filteredSessions.map((session, index) => {
-              const active = isClassActive(session.id);
-              
-              return (
-                <motion.div
-                  key={session.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className={`glass-panel rounded-3xl p-6 md:p-8 border hover:border-white/20 transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden ${
-                    active ? 'border-[#FC642D]/30 shadow-[0_0_30px_rgba(252,100,45,0.1)]' : ''
-                  }`}
-                >
-                  {active && (
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#FC642D]/10 blur-[80px] rounded-full pointer-events-none" />
-                  )}
-
-                  <div className="flex-1 relative z-10">
-                    <div className="flex flex-wrap items-center gap-3 mb-4">
-                      <span className="bg-black/50 border border-white/10 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
-                        {session.classTag}
-                      </span>
-                      {active ? (
-                        <span className="bg-[#FC642D]/10 border border-[#FC642D]/30 text-[#FC642D] text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-[#FC642D] rounded-full animate-pulse" /> LIVE NOW
-                        </span>
-                      ) : (
-                        <span className="bg-white/5 border border-white/10 text-zinc-400 text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
-                          Scheduled
-                        </span>
+            {filteredSessions.length > 0 ? (
+              <AnimatedList
+                items={filteredSessions}
+                className="w-full"
+                renderItem={(session, isSelected, index) => {
+                  const active = isClassActive(session.id);
+                  
+                  return (
+                    <div
+                      className={`glass-panel rounded-3xl p-6 md:p-8 border transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden w-full ${
+                        active ? 'border-[#FC642D]/30 shadow-[0_0_30px_rgba(252,100,45,0.1)]' : 'border-white/10 hover:border-white/20'
+                      } ${isSelected ? 'ring-1 ring-[#00A699]' : ''}`}
+                    >
+                      {active && (
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#FC642D]/10 blur-[80px] rounded-full pointer-events-none" />
                       )}
-                    </div>
-                    
-                    <h3 className="text-2xl font-bold text-white mb-4 font-['Cinzel'] leading-snug">{session.title}</h3>
-                    
-                    <div className="flex flex-wrap items-center gap-6 text-sm text-zinc-400 font-['Playfair_Display']">
-                      <div className="flex items-center gap-2">
-                        <User size={16} className="text-[#C9A84C]" />
-                        {session.instructor}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Calendar size={16} className="text-[#00A699]" />
-                        <time dateTime={session.date}>{session.date}</time>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Clock size={16} className="text-[#FF5A5F]" />
-                        <time dateTime={`${session.date}T${session.time}`}>{session.time}</time> ({session.duration})
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="w-full md:w-auto mt-4 md:mt-0 relative z-10">
-                    {activeTab === 'upcoming' ? (
-                      <button 
-                        className={`w-full md:w-auto px-8 py-4 rounded-full font-bold font-['Cinzel'] text-sm tracking-widest transition-all flex items-center justify-center gap-2 ${
-                          active 
-                          ? 'bg-[#FC642D] hover:bg-[#ff7544] text-white shadow-[0_0_20px_rgba(252,100,45,0.4)]' 
-                          : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'
-                        }`}
-                      >
-                        {active ? (
-                          <>
-                            <Video size={18} /> Join Broadcast
-                          </>
-                        ) : 'Set Reminder'}
-                      </button>
-                    ) : (
-                      <button className="w-full md:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-full font-bold font-['Cinzel'] text-sm tracking-widest border border-white/10 transition-colors flex items-center justify-center gap-2">
-                        <Play size={18} /> Watch Replay
-                      </button>
-                    )}
-                  </div>
-                </motion.div>
-              );
-            })}
+                      <div className="flex-1 relative z-10">
+                        <div className="flex flex-wrap items-center gap-3 mb-4">
+                          <span className="bg-black/50 border border-white/10 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+                            {session.classTag}
+                          </span>
+                          {active ? (
+                            <span className="bg-[#FC642D]/10 border border-[#FC642D]/30 text-[#FC642D] text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 bg-[#FC642D] rounded-full animate-pulse" /> LIVE NOW
+                            </span>
+                          ) : (
+                            <span className="bg-white/5 border border-white/10 text-zinc-400 text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+                              Scheduled
+                            </span>
+                          )}
+                        </div>
+                        
+                        <h3 className="text-2xl font-bold text-white mb-4 font-['Cinzel'] leading-snug">{session.title}</h3>
+                        
+                        <div className="flex flex-wrap items-center gap-6 text-sm text-zinc-400 font-['Playfair_Display']">
+                          <div className="flex items-center gap-2">
+                            <User size={16} className="text-[#C9A84C]" />
+                            {session.instructor}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Calendar size={16} className="text-[#00A699]" />
+                            <time dateTime={session.date}>{session.date}</time>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Clock size={16} className="text-[#FF5A5F]" />
+                            <time dateTime={`${session.date}T${session.time}`}>{session.time}</time> ({session.duration})
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="w-full md:w-auto mt-4 md:mt-0 relative z-10">
+                        {activeTab === 'upcoming' ? (
+                          <button 
+                            className={`w-full md:w-auto px-8 py-4 rounded-full font-bold font-['Cinzel'] text-sm tracking-widest transition-all flex items-center justify-center gap-2 ${
+                              active 
+                              ? 'bg-[#FC642D] hover:bg-[#ff7544] text-white shadow-[0_0_20px_rgba(252,100,45,0.4)]' 
+                              : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'
+                            }`}
+                          >
+                            {active ? (
+                              <>
+                                <Video size={18} /> Join Broadcast
+                              </>
+                            ) : 'Set Reminder'}
+                          </button>
+                        ) : (
+                          <button className="w-full md:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-full font-bold font-['Cinzel'] text-sm tracking-widest border border-white/10 transition-colors flex items-center justify-center gap-2">
+                            <Play size={18} /> Watch Replay
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                }}
+              />
+            ) : null}
           </AnimatePresence>
 
           {filteredSessions.length === 0 && (
