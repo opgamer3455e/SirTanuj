@@ -1,8 +1,9 @@
 import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FileText, Play, Download, Filter, BookOpen } from 'lucide-react';
+import { FileText, Play, Filter, BookOpen } from 'lucide-react';
 import AnimatedCheckbox from '../components/ui/AnimatedCheckbox';
 import AnimatedInput from '../components/ui/AnimatedInput';
+import AnimatedDownloadButton from '../components/ui/AnimatedDownloadButton';
 
 const mockMaterials = [
   { id: 1, title: 'The Road Not Taken - Deep Analytical Breakdown', type: 'PDF', category: 'Poetry', class: 'Class 9', size: '2.4 MB', featured: true },
@@ -163,12 +164,9 @@ export default function StudyMaterialsPage() {
                         </span>
 
                         {material.type === 'PDF' ? (
-                          <button 
-                            aria-label={`Download ${material.title} PDF`}
-                            className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/10"
-                          >
-                            <Download size={16} />
-                          </button>
+                          <div className="scale-75 origin-right">
+                            <AnimatedDownloadButton />
+                          </div>
                         ) : (
                           <button 
                             aria-label={`Play ${material.title} Video`}

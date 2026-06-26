@@ -1,5 +1,6 @@
-import { Users, FileText, Calendar, CreditCard, Download, ArrowUpRight, TrendingUp } from 'lucide-react';
+import { Users, FileText, Calendar, CreditCard, ArrowUpRight, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
+import AnimatedDownloadButton from '../components/ui/AnimatedDownloadButton';
 
 export default function ParentPortal() {
   return (
@@ -26,9 +27,7 @@ export default function ParentPortal() {
               Academic Report: <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A84C] to-[#E8D08A] italic">Alex Johnson</span>
             </h1>
           </div>
-          <button className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white font-['Cinzel'] font-bold flex items-center gap-3 transition-colors shadow-lg">
-            <Download size={18} /> Download Dossier
-          </button>
+          <AnimatedDownloadButton />
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
