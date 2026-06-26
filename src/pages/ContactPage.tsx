@@ -18,7 +18,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#0A0A0A]">
+    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#050505] bg-noise">
       <div className="max-w-6xl mx-auto">
         
         <motion.div 
@@ -27,7 +27,7 @@ export default function ContactPage() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 font-['Bricolage_Grotesque']">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 font-['Cinzel']">
             Get in <span className="text-[#FF5A5F]">Touch</span>
           </h1>
           <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
@@ -105,7 +105,7 @@ export default function ContactPage() {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#FF5A5F] transition-colors"
+                    className="w-full bg-[#050505] bg-noise border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#FF5A5F] transition-colors"
                   />
                 </div>
                 
@@ -117,7 +117,7 @@ export default function ContactPage() {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#FF5A5F] transition-colors"
+                    className="w-full bg-[#050505] bg-noise border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#FF5A5F] transition-colors"
                   />
                 </div>
 
@@ -127,7 +127,7 @@ export default function ContactPage() {
                     id="class"
                     value={formData.class}
                     onChange={(e) => setFormData({...formData, class: e.target.value})}
-                    className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#FF5A5F] transition-colors appearance-none"
+                    className="w-full bg-[#050505] bg-noise border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#FF5A5F] transition-colors appearance-none"
                   >
                     <option value="Class 9">Class 9 English</option>
                     <option value="Class 10">Class 10 English</option>
@@ -143,7 +143,7 @@ export default function ContactPage() {
                     rows={4}
                     value={formData.message}
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#FF5A5F] transition-colors resize-none"
+                    className="w-full bg-[#050505] bg-noise border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#FF5A5F] transition-colors resize-none"
                   />
                 </div>
 

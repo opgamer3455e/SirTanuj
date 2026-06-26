@@ -72,7 +72,7 @@ export default function FAQPage() {
   ];
 
   return (
-    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#0A0A0A]">
+    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#050505] bg-noise">
       <div className="max-w-4xl mx-auto">
         
         <motion.div 
@@ -84,7 +84,7 @@ export default function FAQPage() {
           <div className="w-16 h-16 bg-[#00A699]/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <HelpCircle className="text-[#00A699]" size={32} />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 font-['Bricolage_Grotesque']">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 font-['Cinzel']">
             Frequently Asked <span className="text-[#00A699]">Questions</span>
           </h1>
           <p className="text-lg text-zinc-400 max-w-2xl mx-auto">

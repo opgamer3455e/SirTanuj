@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FileText, Play, Download, Search, Filter } from 'lucide-react';
+import { FileText, Play, Download, Search, Filter, BookOpen } from 'lucide-react';
 
 const mockMaterials = [
-  { id: 1, title: 'The Road Not Taken - Analysis', type: 'PDF', category: 'Poetry', class: 'Class 9', size: '2.4 MB' },
-  { id: 2, title: 'Tenses Revision Guide', type: 'Video', category: 'Grammar', class: 'Class 10', duration: '15 mins' },
-  { id: 3, title: 'Beehive: Chapter 1 Summary', type: 'PDF', category: 'Prose', class: 'Class 9', size: '1.8 MB' },
-  { id: 4, title: 'Analytical Paragraph Writing', type: 'Video', category: 'Writing', class: 'Class 10', duration: '22 mins' },
-  { id: 5, title: 'First Flight: Important Questions', type: 'PDF', category: 'Prose', class: 'Class 10', size: '3.1 MB' },
-  { id: 6, title: 'Figures of Speech Explained', type: 'Video', category: 'Poetry', class: 'Class 9', duration: '18 mins' },
+  { id: 1, title: 'The Road Not Taken - Deep Analytical Breakdown', type: 'PDF', category: 'Poetry', class: 'Class 9', size: '2.4 MB', featured: true },
+  { id: 2, title: 'Tenses Revision Guide', type: 'Video', category: 'Grammar', class: 'Class 10', duration: '15 mins', featured: false },
+  { id: 3, title: 'Beehive: Chapter 1 Summary', type: 'PDF', category: 'Prose', class: 'Class 9', size: '1.8 MB', featured: false },
+  { id: 4, title: 'Analytical Paragraph Masterclass', type: 'Video', category: 'Writing', class: 'Class 10', duration: '22 mins', featured: true },
+  { id: 5, title: 'First Flight: Core Board Questions', type: 'PDF', category: 'Prose', class: 'Class 10', size: '3.1 MB', featured: false },
+  { id: 6, title: 'Figures of Speech Demystified', type: 'Video', category: 'Poetry', class: 'Class 9', duration: '18 mins', featured: false },
+  { id: 7, title: 'Grammar Worksheets Vol 1', type: 'PDF', category: 'Grammar', class: 'Class 9', size: '1.2 MB', featured: false },
 ];
 
 export default function StudyMaterialsPage() {
@@ -23,132 +24,155 @@ export default function StudyMaterialsPage() {
   );
 
   return (
-    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#0A0A0A]">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
+    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#050505] bg-noise relative overflow-hidden">
+      
+      {/* Deep Atmospheric Background */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none" style={{
+        background: 'radial-gradient(circle at top left, rgba(0, 166, 153, 0.08), transparent 50%), radial-gradient(circle at bottom right, rgba(255, 90, 95, 0.05), transparent 50%)'
+      }} />
+
+      <div className="max-w-[1400px] mx-auto flex flex-col xl:flex-row gap-10 relative z-10">
         
-        {/* Sidebar Filters */}
-        <div className="w-full lg:w-72 flex-shrink-0">
-          <div className="bg-[#121212] rounded-3xl p-6 border border-white/5 sticky top-28">
-            <div className="flex items-center gap-2 mb-8">
-              <Filter className="text-[#00A699]" size={20} />
-              <h3 className="text-xl font-bold text-white font-['Bricolage_Grotesque']">Filters</h3>
+        {/* Sidebar Filters - Editorial Style */}
+        <div className="w-full xl:w-80 flex-shrink-0">
+          <div className="glass-panel rounded-[2rem] p-8 sticky top-28">
+            <div className="flex items-center gap-3 mb-10">
+              <div className="w-10 h-10 rounded-full bg-[#00A699]/20 flex items-center justify-center border border-[#00A699]/30">
+                <Filter className="text-[#00A699]" size={20} />
+              </div>
+              <h3 className="text-2xl font-bold text-white font-['Cinzel'] tracking-wide">Archives</h3>
             </div>
 
             {/* Class Filter */}
-            <div className="mb-8">
-              <h4 className="text-sm font-semibold text-zinc-500 uppercase tracking-wider mb-4">Class</h4>
-              <div className="space-y-2">
+            <div className="mb-10">
+              <h4 className="text-xs font-bold text-[#C9A84C] uppercase tracking-widest mb-5">Academic Level</h4>
+              <div className="flex flex-col gap-3">
                 {['All', 'Class 9', 'Class 10'].map(cls => (
-                  <label key={cls} className="flex items-center gap-3 cursor-pointer group">
-                    <input 
-                      type="radio" 
-                      name="class" 
-                      checked={activeClass === cls}
-                      onChange={() => setActiveClass(cls)}
-                      className="hidden"
-                    />
-                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${activeClass === cls ? 'bg-[#00A699] border-[#00A699]' : 'border-zinc-600 group-hover:border-zinc-400'}`}>
-                      {activeClass === cls && <div className="w-2 h-2 bg-white rounded-sm" />}
-                    </div>
-                    <span className={`text-sm transition-colors ${activeClass === cls ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-300'}`}>{cls}</span>
-                  </label>
+                  <button 
+                    key={cls}
+                    onClick={() => setActiveClass(cls)}
+                    className={`text-left px-4 py-3 rounded-xl transition-all duration-300 font-['Playfair_Display'] text-lg ${activeClass === cls ? 'bg-white/10 text-white border border-white/20 shadow-inner' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5 border border-transparent'}`}
+                  >
+                    {cls}
+                  </button>
                 ))}
               </div>
             </div>
 
             {/* Category Filter */}
             <div>
-              <h4 className="text-sm font-semibold text-zinc-500 uppercase tracking-wider mb-4">Topic</h4>
-              <div className="space-y-2">
+              <h4 className="text-xs font-bold text-[#FF5A5F] uppercase tracking-widest mb-5">Subject Matter</h4>
+              <div className="flex flex-wrap gap-2">
                 {['All', 'Poetry', 'Prose', 'Grammar', 'Writing'].map(cat => (
-                  <label key={cat} className="flex items-center gap-3 cursor-pointer group">
-                    <input 
-                      type="radio" 
-                      name="category" 
-                      checked={activeCategory === cat}
-                      onChange={() => setActiveCategory(cat)}
-                      className="hidden"
-                    />
-                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${activeCategory === cat ? 'bg-[#FF5A5F] border-[#FF5A5F]' : 'border-zinc-600 group-hover:border-zinc-400'}`}>
-                      {activeCategory === cat && <div className="w-2 h-2 bg-white rounded-sm" />}
-                    </div>
-                    <span className={`text-sm transition-colors ${activeCategory === cat ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-300'}`}>{cat}</span>
-                  </label>
+                  <button 
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-4 py-2 rounded-full transition-all duration-300 font-['Playfair_Display'] text-sm ${activeCategory === cat ? 'bg-[#FF5A5F]/20 text-[#FF5A5F] border border-[#FF5A5F]/50' : 'bg-black/40 text-zinc-500 hover:text-zinc-300 border border-white/5 hover:border-white/20'}`}
+                  >
+                    {cat}
+                  </button>
                 ))}
               </div>
             </div>
-
           </div>
         </div>
 
-        {/* Main Content */}
+        {/* Main Content - Bento Box */}
         <div className="flex-1">
-          <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-white font-['Bricolage_Grotesque']">
-              Study <span className="text-[#00A699]">Repository</span>
-            </h1>
+          <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-end mb-12">
+            <div>
+              <h1 className="text-4xl md:text-6xl font-bold text-white font-['Cinzel'] mb-4 leading-none tracking-tight">
+                Study <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00A699] to-[#34d399]">Repository</span>
+              </h1>
+              <p className="text-zinc-400 font-['Playfair_Display'] text-lg italic border-l-2 border-[#00A699]/30 pl-4">Curated materials for academic excellence.</p>
+            </div>
             
-            <div className="relative w-full md:w-64">
+            <div className="relative w-full md:w-80 group">
               <input 
                 type="text" 
-                placeholder="Search materials..."
+                placeholder="Search the archives..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#121212] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-[#00A699] transition-colors"
+                className="w-full bg-black/40 border border-white/10 rounded-full py-4 pl-12 pr-6 text-white font-['Playfair_Display'] focus:outline-none focus:border-[#00A699] transition-all focus:bg-white/5 shadow-inner"
               />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#00A699] transition-colors" size={20} />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 auto-rows-[250px]">
             <AnimatePresence mode="popLayout">
-              {filteredMaterials.map((material) => (
-                <motion.div
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.2 }}
-                  key={material.id}
-                  className="bg-[#121212] rounded-2xl p-6 border border-white/5 hover:border-white/20 transition-all hover:-translate-y-1 flex flex-col h-full"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`p-3 rounded-xl ${material.type === 'PDF' ? 'bg-[#FF5A5F]/10 text-[#FF5A5F]' : 'bg-[#FC642D]/10 text-[#FC642D]'}`}>
-                      {material.type === 'PDF' ? <FileText size={24} /> : <Play size={24} />}
-                    </div>
-                    <span className="px-2.5 py-1 bg-[#0A0A0A] border border-white/10 rounded-md text-xs font-semibold text-zinc-400">
-                      {material.class}
-                    </span>
-                  </div>
-                  
-                  <h3 className="text-lg font-bold text-white mb-2 line-clamp-2">{material.title}</h3>
-                  <div className="flex items-center gap-2 text-sm text-zinc-500 mb-6 flex-1">
-                    <span>{material.category}</span>
-                    <span className="w-1 h-1 rounded-full bg-zinc-600" />
-                    <span>{material.type === 'PDF' ? material.size : material.duration}</span>
-                  </div>
+              {filteredMaterials.map((material, idx) => {
+                const isFeatured = material.featured && idx < 2; // Only feature top items
+                
+                return (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    key={material.id}
+                    className={`glass-panel rounded-3xl p-8 border hover:border-white/30 transition-all duration-500 hover:-translate-y-2 flex flex-col group relative overflow-hidden ${
+                      isFeatured ? 'md:col-span-2 md:row-span-2' : 'col-span-1 row-span-1'
+                    }`}
+                    style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+                  >
+                    {/* Atmospheric Glow inside Card */}
+                    {isFeatured && (
+                       <div className={`absolute -right-20 -bottom-20 w-64 h-64 blur-[80px] rounded-full pointer-events-none transition-colors duration-700 ${material.type === 'PDF' ? 'bg-[#FF5A5F]/10 group-hover:bg-[#FF5A5F]/20' : 'bg-[#00A699]/10 group-hover:bg-[#00A699]/20'}`} />
+                    )}
 
-                  {material.type === 'PDF' ? (
-                    <button className="w-full py-3 bg-white/5 hover:bg-white/10 text-white text-sm font-semibold rounded-xl border border-white/10 transition-colors flex items-center justify-center gap-2">
-                      <Download size={16} /> Download PDF
-                    </button>
-                  ) : (
-                    <button className="w-full py-3 bg-[#FC642D]/10 hover:bg-[#FC642D]/20 text-[#FC642D] text-sm font-semibold rounded-xl border border-[#FC642D]/20 transition-colors flex items-center justify-center gap-2">
-                      <Play size={16} /> Watch Lesson
-                    </button>
-                  )}
-                </motion.div>
-              ))}
+                    <div className="flex items-start justify-between mb-auto relative z-10">
+                      <div className={`p-4 rounded-2xl flex items-center justify-center backdrop-blur-md border ${
+                        material.type === 'PDF' 
+                          ? 'bg-[#FF5A5F]/10 text-[#FF5A5F] border-[#FF5A5F]/20' 
+                          : 'bg-[#FC642D]/10 text-[#FC642D] border-[#FC642D]/20'
+                      }`}>
+                        {material.type === 'PDF' ? <FileText size={isFeatured ? 32 : 24} /> : <Play size={isFeatured ? 32 : 24} />}
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                        <span className="px-3 py-1 bg-black/50 border border-white/10 rounded-full text-xs font-bold text-zinc-300 tracking-wider uppercase">
+                          {material.class}
+                        </span>
+                        <span className="text-xs font-['Playfair_Display'] text-zinc-500 italic">{material.category}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="relative z-10 mt-6">
+                      <h3 className={`font-bold text-white mb-3 font-['Cinzel'] leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r ${material.type === 'PDF' ? 'group-hover:from-[#FF5A5F] group-hover:to-[#ff999c]' : 'group-hover:from-[#FC642D] group-hover:to-[#ffb299]'} transition-all ${isFeatured ? 'text-3xl md:text-4xl max-w-md' : 'text-xl line-clamp-2'}`}>
+                        {material.title}
+                      </h3>
+                      
+                      <div className="flex items-center justify-between mt-6">
+                        <span className="text-sm text-zinc-400 font-['Playfair_Display'] flex items-center gap-2">
+                          <BookOpen size={14} className="text-zinc-500" />
+                          {material.type === 'PDF' ? material.size : material.duration}
+                        </span>
+
+                        {material.type === 'PDF' ? (
+                          <button className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/10">
+                            <Download size={16} />
+                          </button>
+                        ) : (
+                          <button className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/10">
+                            <Play size={16} className="ml-1" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </AnimatePresence>
 
             {filteredMaterials.length === 0 && (
-              <div className="col-span-full py-20 text-center">
-                <FileText className="mx-auto text-zinc-700 mb-4" size={48} />
-                <h3 className="text-xl font-semibold text-white mb-2">No materials found</h3>
-                <p className="text-zinc-500">Try adjusting your filters or search query.</p>
+              <div className="col-span-full py-32 text-center glass-panel rounded-[2rem]">
+                <FileText className="mx-auto text-zinc-600 mb-6" size={64} />
+                <h3 className="text-2xl font-bold text-white mb-3 font-['Cinzel']">The Archives are Empty</h3>
+                <p className="text-zinc-400 font-['Playfair_Display'] text-lg">No manuscripts found matching your criteria.</p>
               </div>
             )}
-          </div>
+          </motion.div>
 
         </div>
       </div>

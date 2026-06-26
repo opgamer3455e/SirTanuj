@@ -33,7 +33,7 @@ const Tutors = [
 
 export default function AboutPage() {
   return (
-    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#0A0A0A]">
+    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#050505] bg-noise">
       <div className="max-w-6xl mx-auto">
         
         {/* Header */}
@@ -43,7 +43,7 @@ export default function AboutPage() {
           transition={{ duration: 0.8 }}
           className="text-center mb-24"
         >
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 font-['Bricolage_Grotesque']">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 font-['Cinzel']">
             Our <span className="text-[#FF5A5F]">Story</span>
           </h1>
           <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
@@ -108,7 +108,7 @@ export default function AboutPage() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 font-['Bricolage_Grotesque']">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 font-['Cinzel']">
             Meet Your <span className="text-[#00A699]">Mentors</span>
           </h2>
           <p className="text-zinc-400 max-w-xl mx-auto">
@@ -135,7 +135,7 @@ export default function AboutPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent opacity-80" />
               </div>
               <div className="p-8 relative z-10 -mt-12">
-                <div className="bg-[#0A0A0A] inline-block px-4 py-1.5 rounded-full text-xs font-semibold text-[#00A699] mb-4 border border-white/10">
+                <div className="bg-[#050505] bg-noise inline-block px-4 py-1.5 rounded-full text-xs font-semibold text-[#00A699] mb-4 border border-white/10">
                   {tutor.role}
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">{tutor.name}</h3>

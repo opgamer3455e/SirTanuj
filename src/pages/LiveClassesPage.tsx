@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Calendar, Clock, Video, User, CheckCircle2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, Clock, User, Play, Video } from 'lucide-react';
 
-// Mock schedule data
-const scheduleData = [
+const mockLiveClasses = [
   {
     id: 1,
-    title: 'Advanced Grammar: Modals & Determiners',
+    title: 'Advanced Grammar: Clauses & Complex Sentences',
     instructor: 'Prof. Michael Chen',
-    date: '2026-06-27',
+    date: '2026-06-26',
     time: '10:00 AM',
     duration: '90 min',
-    isUpcoming: true,
+    isUpcoming: false,
     classTag: 'Class 10'
   },
   {
@@ -40,59 +39,60 @@ export default function LiveClassesPage() {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [_currentTime, setCurrentTime] = useState(new Date());
 
-  // Simulate real-time clock for "Join Class" button activation
   useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 60000); // update every minute
+    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
 
-  // Mock logic: randomly activate a class if it's "close" to the time (just for demo purposes)
   const isClassActive = (id: number) => {
-    // In a real app, we'd compare currentTime with the class date/time
-    return id === 1; // Let's mock that the first class is active (within 10 minutes)
+    return id === 2; // Mocking one active class for demo
   };
 
+  const filteredSessions = mockLiveClasses.filter(cls => 
+    activeTab === 'upcoming' ? cls.isUpcoming : !cls.isUpcoming
+  );
+
   return (
-    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#0A0A0A]">
-      <div className="max-w-5xl mx-auto">
+    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#050505] bg-noise relative overflow-hidden">
+      
+      <div className="absolute top-0 right-0 w-full h-full atmospheric-gradient pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto relative z-10">
         
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FC642D]/10 border border-[#FC642D]/20 text-[#FC642D] text-sm font-semibold mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#FC642D] animate-pulse" />
-            LIVE SESSIONS
+        <header className="mb-16 border-b border-white/10 pb-10 flex flex-col md:flex-row justify-between items-end">
+          <div>
+             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FC642D]/10 border border-[#FC642D]/20 text-[#FC642D] text-xs font-bold mb-6 tracking-widest uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#FC642D] animate-pulse" />
+              Live Sessions
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-white font-['Cinzel'] leading-tight">
+              Interactive <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FC642D] to-[#ffb299] italic">Broadcasts</span>
+            </h1>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 font-['Bricolage_Grotesque']">
-            Interactive <span className="text-[#FC642D]">Live Classes</span>
-          </h1>
-          <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
+          <p className="text-lg text-zinc-400 font-['Playfair_Display'] max-w-sm italic border-l-2 border-[#FC642D]/30 pl-4 mt-6 md:mt-0">
             Join real-time interactive sessions with expert educators. Ask questions, participate in polls, and learn collaboratively.
           </p>
-        </motion.div>
+        </header>
 
         {/* Filters / Tabs */}
-        <div className="flex justify-center mb-12">
-          <div className="bg-[#121212] p-1.5 rounded-xl border border-white/10 flex gap-2">
+        <div className="flex justify-start mb-12">
+          <div className="bg-black/40 p-1.5 rounded-full border border-white/10 inline-flex shadow-inner">
             <button 
               onClick={() => setActiveTab('upcoming')}
-              className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`px-8 py-3 rounded-full text-sm font-['Cinzel'] font-bold transition-all ${
                 activeTab === 'upcoming' 
-                ? 'bg-white/10 text-white shadow-sm' 
-                : 'text-zinc-500 hover:text-zinc-300'
+                ? 'bg-white/10 text-white shadow-lg backdrop-blur-md' 
+                : 'text-zinc-500 hover:text-white'
               }`}
             >
-              Upcoming Schedule
+              Upcoming Classes
             </button>
             <button 
               onClick={() => setActiveTab('past')}
-              className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+              className={`px-8 py-3 rounded-full text-sm font-['Cinzel'] font-bold transition-all ${
                 activeTab === 'past' 
-                ? 'bg-white/10 text-white shadow-sm' 
-                : 'text-zinc-500 hover:text-zinc-300'
+                ? 'bg-white/10 text-white shadow-lg backdrop-blur-md' 
+                : 'text-zinc-500 hover:text-white'
               }`}
             >
               Past Recordings
@@ -100,75 +100,92 @@ export default function LiveClassesPage() {
           </div>
         </div>
 
-        {/* Schedule List */}
+        {/* Class List */}
         <div className="space-y-6">
-          {activeTab === 'upcoming' ? (
-            scheduleData.map((session, index) => {
+          <AnimatePresence mode="wait">
+            {filteredSessions.map((session, index) => {
               const active = isClassActive(session.id);
+              
               return (
-                <motion.div 
+                <motion.div
+                  key={session.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  key={session.id}
-                  className={`p-6 md:p-8 rounded-3xl border transition-all duration-300 ${
-                    active 
-                    ? 'bg-[#121212] border-[#FC642D]/30 shadow-[0_0_30px_rgba(252,100,45,0.1)]' 
-                    : 'bg-[#121212] border-white/5 hover:border-white/10'
-                  } flex flex-col md:flex-row items-start md:items-center justify-between gap-6`}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  className={`glass-panel rounded-3xl p-6 md:p-8 border hover:border-white/20 transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden ${
+                    active ? 'border-[#FC642D]/30 shadow-[0_0_30px_rgba(252,100,45,0.1)]' : ''
+                  }`}
                 >
-                  <div className="flex-1">
+                  {active && (
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#FC642D]/10 blur-[80px] rounded-full pointer-events-none" />
+                  )}
+
+                  <div className="flex-1 relative z-10">
                     <div className="flex flex-wrap items-center gap-3 mb-4">
-                      <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-md text-xs font-semibold text-zinc-300">
+                      <span className="bg-black/50 border border-white/10 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
                         {session.classTag}
                       </span>
-                      {active && (
-                        <span className="px-3 py-1 bg-[#FC642D]/20 border border-[#FC642D]/30 rounded-md text-xs font-semibold text-[#FC642D] flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#FC642D] animate-pulse" />
-                          Starting Soon
+                      {active ? (
+                        <span className="bg-[#FC642D]/10 border border-[#FC642D]/30 text-[#FC642D] text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 bg-[#FC642D] rounded-full animate-pulse" /> LIVE NOW
+                        </span>
+                      ) : (
+                        <span className="bg-white/5 border border-white/10 text-zinc-400 text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+                          Scheduled
                         </span>
                       )}
                     </div>
                     
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-2">{session.title}</h3>
+                    <h3 className="text-2xl font-bold text-white mb-4 font-['Cinzel'] leading-snug">{session.title}</h3>
                     
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-zinc-400">
-                      <div className="flex items-center gap-1.5">
-                        <User size={16} className="text-zinc-500" />
+                    <div className="flex flex-wrap items-center gap-6 text-sm text-zinc-400 font-['Playfair_Display']">
+                      <div className="flex items-center gap-2">
+                        <User size={16} className="text-[#C9A84C]" />
                         {session.instructor}
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <Calendar size={16} className="text-zinc-500" />
+                      <div className="flex items-center gap-2">
+                        <Calendar size={16} className="text-[#00A699]" />
                         {session.date}
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <Clock size={16} className="text-zinc-500" />
+                      <div className="flex items-center gap-2">
+                        <Clock size={16} className="text-[#FF5A5F]" />
                         {session.time} ({session.duration})
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="w-full md:w-auto">
-                    {active ? (
-                      <button className="w-full md:w-auto px-8 py-4 bg-[#FC642D] hover:bg-[#e55726] text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(252,100,45,0.4)]">
-                        <Video size={18} />
-                        Join Class Now
+
+                  <div className="w-full md:w-auto mt-4 md:mt-0 relative z-10">
+                    {activeTab === 'upcoming' ? (
+                      <button 
+                        className={`w-full md:w-auto px-8 py-4 rounded-full font-bold font-['Cinzel'] text-sm tracking-widest transition-all flex items-center justify-center gap-2 ${
+                          active 
+                          ? 'bg-[#FC642D] hover:bg-[#ff7544] text-white shadow-[0_0_20px_rgba(252,100,45,0.4)]' 
+                          : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'
+                        }`}
+                      >
+                        {active ? (
+                          <>
+                            <Video size={18} /> Join Broadcast
+                          </>
+                        ) : 'Set Reminder'}
                       </button>
                     ) : (
-                      <button className="w-full md:w-auto px-8 py-4 bg-[#1a1a1a] hover:bg-[#252525] text-white font-semibold rounded-xl border border-white/10 transition-colors flex items-center justify-center gap-2">
-                        <CheckCircle2 size={18} />
-                        Book / Remind Me
+                      <button className="w-full md:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-full font-bold font-['Cinzel'] text-sm tracking-widest border border-white/10 transition-colors flex items-center justify-center gap-2">
+                        <Play size={18} /> Watch Replay
                       </button>
                     )}
                   </div>
                 </motion.div>
               );
-            })
-          ) : (
-            <div className="text-center py-20 bg-[#121212] rounded-3xl border border-white/5">
-              <Video size={48} className="mx-auto text-zinc-600 mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">No Past Recordings</h3>
-              <p className="text-zinc-500">Past classes will appear here after they conclude.</p>
+            })}
+          </AnimatePresence>
+
+          {filteredSessions.length === 0 && (
+            <div className="text-center py-20 glass-panel rounded-3xl">
+              <Calendar className="mx-auto text-zinc-600 mb-6" size={48} />
+              <h3 className="text-2xl font-bold text-white mb-2 font-['Cinzel']">No {activeTab} classes</h3>
+              <p className="text-zinc-400 font-['Playfair_Display'] text-lg">Check back later for updates to the schedule.</p>
             </div>
           )}
         </div>

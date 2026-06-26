@@ -36,7 +36,7 @@ const plans = [
 
 export default function PaymentPage() {
   return (
-    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#0A0A0A]">
+    <div className="pt-32 pb-24 px-4 min-h-screen bg-[#050505] bg-noise">
       <div className="max-w-6xl mx-auto">
         
         <motion.div 
@@ -45,7 +45,7 @@ export default function PaymentPage() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 font-['Bricolage_Grotesque']">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 font-['Cinzel']">
             Invest in Your <span className="text-[#FF5A5F]">Future</span>
           </h1>
           <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
@@ -76,7 +76,7 @@ export default function PaymentPage() {
               <p className="text-zinc-400 text-sm mb-6 h-10">{plan.description}</p>
               
               <div className="mb-8">
-                <span className="text-5xl font-bold text-white font-['Bricolage_Grotesque']">{plan.price}</span>
+                <span className="text-5xl font-bold text-white font-['Cinzel']">{plan.price}</span>
                 <span className="text-zinc-500 font-medium">{plan.period}</span>
               </div>
 

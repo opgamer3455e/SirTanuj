@@ -19,8 +19,8 @@
   --text-tertiary: #52525B;
 
   /* Typography */
-  --font-display: 'Bricolage Grotesque', sans-serif;
-  --font-body: 'Instrument Sans', sans-serif;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Playfair Display', serif;
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -106,4 +106,32 @@ a:hover {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--border-glass);
+}
+
+/* Atmospheric Utilities */
+.bg-noise {
+  position: relative;
+}
+.bg-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.atmospheric-gradient {
+  background: radial-gradient(circle at top right, rgba(255, 90, 95, 0.15), transparent 40%),
+              radial-gradient(circle at bottom left, rgba(0, 166, 153, 0.1), transparent 50%),
+              #0A0A0A;
+}
+
+.glass-panel {
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 30px 60px -10px rgba(0,0,0,0.5);
 }
