@@ -123,10 +123,11 @@ const Footer = memo(function Footer() {
           </h1>
           
           {/* The effect applied as an overlay - perfectly matching size */}
-          <div className="absolute inset-0 z-20 pointer-events-auto mix-blend-color-dodge opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div className="absolute inset-0 z-20 pointer-events-auto opacity-0 group-hover:opacity-100 transition-opacity duration-500">
              <TextHoverEffect 
                text="TANUJ SIR" 
-               className="font-black text-[12vw] tracking-tight uppercase fill-transparent"
+               className="font-black text-[12vw] tracking-tight uppercase fill-transparent stroke-zinc-800/30"
+               strokeWidth={2.5}
              />
           </div>
         </motion.div>
