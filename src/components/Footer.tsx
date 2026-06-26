@@ -23,14 +23,14 @@ const Footer = memo(function Footer() {
   };
 
   return (
-    <footer className="relative w-full overflow-hidden bg-[#050505] pt-24 pb-10 border-t border-white/5">
+    <footer className="relative w-full overflow-hidden bg-[#050505] pt-10 pb-10 border-t border-white/5">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-8 relative z-10">
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-8 mb-24"
+          className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-8 mb-8"
         >
           {/* Brand & Description */}
           <motion.div variants={itemVariants} className="lg:col-span-2 flex flex-col items-start pr-8">
@@ -104,7 +104,7 @@ const Footer = memo(function Footer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5, ease: "easeOut" }}
-          className="flex justify-center items-center w-full mt-12 mb-8 overflow-hidden pointer-events-none"
+          className="flex justify-center items-center w-full mb-8 overflow-hidden pointer-events-none"
         >
           <h1 
             className="font-black text-[12vw] leading-[0.8] tracking-tight text-center uppercase"
