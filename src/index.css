@@ -40,6 +40,10 @@
 
 
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-body);
   background-color: var(--bg-primary);
@@ -120,6 +124,8 @@ a:hover {
   opacity: 0.03;
   pointer-events: none;
   z-index: 0;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .atmospheric-gradient {
@@ -130,8 +136,11 @@ a:hover {
 
 .glass-panel {
   background: rgba(20, 20, 20, 0.6);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 30px 60px -10px rgba(0,0,0,0.5);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform, backdrop-filter;
 }

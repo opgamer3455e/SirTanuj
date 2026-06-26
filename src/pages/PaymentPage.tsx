@@ -108,6 +108,7 @@ export default function PaymentPage() {
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
           className="bg-[#121212] rounded-2xl border border-white/5 p-8 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16"
         >
           <div className="flex items-center gap-3 text-zinc-400">
