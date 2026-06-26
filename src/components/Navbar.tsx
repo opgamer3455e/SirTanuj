@@ -19,7 +19,7 @@ const Navbar = memo(function Navbar() {
           WebkitBackdropFilter: 'blur(12px)',
           borderRadius: '9999px', 
           width: '100%',
-          maxWidth: '600px', 
+          maxWidth: '800px', 
           padding: '1rem 2rem',
           boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -35,13 +35,13 @@ const Navbar = memo(function Navbar() {
             fallback="TS" 
           />
         </div>
-        <div style={{ display: 'flex', gap: '2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <Link to="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Home</Link>
           <Link to="/courses" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Courses</Link>
           <Link to="/live-classes" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Live</Link>
           <Link to="/study-materials" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Materials</Link>
           <Link to="/dashboard" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Dashboard</Link>
-          <Link to="/auth" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="whitespace-nowrap px-4 py-1.5 bg-[#FF5A5F] hover:bg-[#FC642D] rounded-full transition-colors ml-4 shadow-[0_0_15px_rgba(255,90,95,0.3)]">Sign In</Link>
+          <Link to="/auth" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="whitespace-nowrap px-5 py-2 bg-[#FF5A5F] hover:bg-[#FC642D] rounded-full transition-colors shadow-[0_0_15px_rgba(255,90,95,0.3)]">Sign In</Link>
         </div>
       </nav>
     </motion.div>
