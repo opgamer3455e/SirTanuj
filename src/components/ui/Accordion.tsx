@@ -1,6 +1,4 @@
 import { useState } from 'react';
-// removed framer motion
-import { Plus } from 'lucide-react';
 
 interface AccordionItemProps {
   title: string;
@@ -13,20 +11,36 @@ export function AccordionItem({ title, children, isOpen, onToggle }: AccordionIt
   return (
     <div className="border border-white/10 rounded-2xl bg-[#121212] overflow-hidden mb-4">
       <button
-        className="w-full px-6 py-5 flex items-center justify-between text-left transition-colors hover:bg-white/5 [&[data-state=open]>svg]:rotate-180 [&>svg>path:last-child]:origin-center [&>svg>path:last-child]:transition-all [&>svg>path:last-child]:duration-200 [&[data-state=open]>svg>path:last-child]:rotate-90 [&[data-state=open]>svg>path:last-child]:opacity-0"
+        className="w-full px-6 py-5 flex items-center justify-between text-left transition-colors hover:bg-white/5"
         onClick={onToggle}
-        data-state={isOpen ? 'open' : 'closed'}
       >
         <span className="text-lg font-medium text-white pr-4">{title}</span>
-        <Plus className="text-zinc-400 shrink-0 transition-transform duration-200" size={20} />
+        <svg 
+          className="text-zinc-400 shrink-0" 
+          width="20" 
+          height="20" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="2" 
+          strokeLinecap="round" 
+          strokeLinejoin="round"
+        >
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <line 
+            x1="12" 
+            y1="5" 
+            x2="12" 
+            y2="19" 
+            className="origin-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            style={{
+              transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+              opacity: isOpen ? 0 : 1
+            }}
+          />
+        </svg>
       </button>
-      <div 
-        className="grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
-        style={{
-          gridTemplateRows: isOpen ? '1fr' : '0fr',
-          opacity: isOpen ? 1 : 0
-        }}
-      >
+      <div className={`accordion-wrapper ${isOpen ? 'open' : ''}`}>
         <div className="overflow-hidden">
           <div className="px-6 pb-5 text-zinc-400">
             {children}

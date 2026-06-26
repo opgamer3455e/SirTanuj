@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Calendar, User, ArrowRight, BookOpen } from 'lucide-react';
+import { ArrowRight, BookOpen } from 'lucide-react';
 
 const blogPosts = [
   {

@@ -1,4 +1,4 @@
-import { Users, FileText, Calendar, CreditCard, ArrowUpRight, TrendingUp } from 'lucide-react';
+import { Users, Calendar, CreditCard, ArrowUpRight, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AnimatedDownloadButton from '../components/ui/AnimatedDownloadButton';
 
