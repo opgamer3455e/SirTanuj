@@ -9,6 +9,7 @@ import './App.css';
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const JuliusCaesarGuide = lazy(() => import('./pages/JuliusCaesarGuide'));
 const ResourceLibrary = lazy(() => import('./pages/ResourceLibrary'));
+const ResourceCommunityPage = lazy(() => import('./pages/ResourceCommunityPage'));
 
 function AppRoutes() {
   const location = useLocation();
@@ -17,6 +18,7 @@ function AppRoutes() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/julius-caesar" element={<JuliusCaesarGuide />} />
       <Route path="/resources" element={<ResourceLibrary />} />
+      <Route path="/community" element={<ResourceCommunityPage />} />
     </Routes>
   );
 }

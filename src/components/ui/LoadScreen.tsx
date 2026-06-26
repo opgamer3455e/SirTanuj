@@ -26,9 +26,9 @@ export default function LoadScreen() {
 
     const columnVariants: Variants = {
         hidden: { y: "0%" },
-        show: { 
-            y: "-100%", 
-            transition: { duration: 0.8, ease: "easeOut" } 
+        show: {
+            y: "-100%",
+            transition: { duration: 0.8, ease: "easeOut" }
         }
     };
 
