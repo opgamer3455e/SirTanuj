@@ -20,9 +20,9 @@ export default function ResourceCommunityPage() {
   return (
     <div className="relative min-h-screen bg-[#0A0A0A] pt-32 pb-24 px-4 flex items-center">
       <div className="max-w-[1000px] mx-auto w-full relative z-10">
-        
+
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -39,32 +39,32 @@ export default function ResourceCommunityPage() {
 
         {/* Two-column layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          
+
           {/* Left: Free Resources */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-            className="bg-[#121212] rounded-3xl p-10 md:p-12 flex flex-col border border-white/[0.03]"
+            className="bg-[#121212] rounded-[2.5rem] p-12 md:p-16 flex flex-col border border-white/[0.03]"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 text-zinc-300 text-xs font-semibold uppercase tracking-widest mb-8 w-max">
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/10 text-zinc-300 text-xs font-semibold uppercase tracking-widest mb-10 w-max">
               <Download size={14} />
               <span>Free Downloads</span>
             </div>
-            
+
             <h2 className="text-3xl md:text-[2rem] font-bold text-white mb-6 font-['Cinzel'] leading-tight">
               Accelerate your<br />learning journey.
             </h2>
-            
+
             <p className="text-zinc-400 text-base mb-10 font-['Playfair_Display'] leading-relaxed">
               Curated materials, built to help you move fast and retain more.
             </p>
-            
+
             <ul className="space-y-5 mb-10 flex-1">
               {resources.map((res, idx) => (
-                <motion.li 
-                  key={idx} 
+                <motion.li
+                  key={idx}
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -81,42 +81,42 @@ export default function ResourceCommunityPage() {
               ))}
             </ul>
 
-            <button className="w-full py-4 bg-[#1A1A1A] text-white font-semibold rounded-xl border border-white/10 hover:bg-[#222] transition-colors flex items-center justify-center gap-3 mt-auto">
+            <button className="w-full py-5 bg-[#1A1A1A] text-white font-semibold rounded-2xl border border-white/10 hover:bg-[#222] transition-colors flex items-center justify-center gap-3 mt-auto">
               <Download size={18} />
               <span>Download Free Now</span>
             </button>
           </motion.div>
 
           {/* Right: Community */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="bg-[#121212] rounded-3xl p-10 md:p-12 flex flex-col border border-white/[0.03]"
+            className="bg-[#121212] rounded-[2.5rem] p-12 md:p-16 flex flex-col border border-white/[0.03]"
           >
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center border border-[#FF5A5F]/20 mb-8">
-              <Mail size={24} className="text-[#FF5A5F]" />
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center border border-[#FF5A5F]/20 mb-10 bg-[#FF5A5F]/5">
+              <Mail size={28} className="text-[#FF5A5F]" />
             </div>
-            
+
             <h2 className="text-3xl md:text-[2rem] font-bold text-white mb-6 font-['Cinzel'] leading-tight">
               Join the Inner<br />Circle
             </h2>
-            
+
             <p className="text-zinc-400 text-base mb-10 font-['Playfair_Display'] leading-relaxed">
               Subscribe for exclusive weekly tips and exam strategies — delivered straight to your inbox.
             </p>
 
             {/* Email row — no form tag */}
-            <div className="flex items-stretch bg-[#1A1A1A] rounded-xl p-1 border border-white/10 focus-within:border-white/20 transition-colors mb-10">
-              <input 
+            <div className="flex items-stretch bg-[#1A1A1A] rounded-2xl p-2 border border-white/10 focus-within:border-white/20 transition-colors mb-10">
+              <input
                 type="email"
-                placeholder="name@example.com" 
-                className="flex-1 min-w-0 bg-transparent px-4 py-2.5 text-zinc-300 placeholder-zinc-600 focus:outline-none text-sm font-['Playfair_Display']"
+                placeholder="name@example.com"
+                className="flex-1 min-w-0 bg-transparent px-5 py-3.5 text-zinc-300 placeholder-zinc-600 focus:outline-none text-base font-['Playfair_Display']"
               />
-              <button 
+              <button
                 type="button"
-                className="px-5 py-2.5 bg-[#0A0A0A] text-white text-sm font-semibold rounded-lg border border-white/10 hover:bg-[#1F1F1F] transition-colors whitespace-nowrap flex-shrink-0"
+                className="px-6 py-3.5 bg-[#0A0A0A] text-white text-base font-semibold rounded-xl border border-white/10 hover:bg-[#1F1F1F] transition-colors whitespace-nowrap flex-shrink-0"
               >
                 Subscribe
               </button>
@@ -126,15 +126,15 @@ export default function ResourceCommunityPage() {
               <h3 className="text-zinc-500 text-xs font-semibold uppercase tracking-widest mb-5 font-['Cinzel']">
                 Connect With Us
               </h3>
-              <div className="flex gap-3">
+              <div className="flex gap-4">
                 {socialLinks.map((platform, idx) => (
-                  <a 
-                    key={idx} 
-                    href="#" 
+                  <a
+                    key={idx}
+                    href="#"
                     aria-label={platform.name}
-                    className="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center text-zinc-500 hover:text-white hover:border-white/30 transition-all duration-300"
+                    className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-zinc-500 hover:text-white hover:border-white/30 transition-all duration-300"
                   >
-                    <platform.icon size={17} strokeWidth={1.5} />
+                    <platform.icon size={18} strokeWidth={1.5} />
                   </a>
                 ))}
               </div>
