@@ -42,7 +42,7 @@ const StyledWrapper = styled.div`
     width: 160px;
     cursor: pointer;
     transition: all 0.4s ease;
-    padding: 5px;
+    padding: 5px 5px 5px 8px;
     position: relative;
   }
 
