@@ -38,7 +38,7 @@ const scheduleData = [
 
 export default function LiveClassesPage() {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [_currentTime, setCurrentTime] = useState(new Date());
 
   // Simulate real-time clock for "Join Class" button activation
   useEffect(() => {

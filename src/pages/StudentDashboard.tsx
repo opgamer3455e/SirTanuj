@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { BookOpen, Video, TrendingUp, CheckCircle, Clock, Bell } from 'lucide-react';
+import { BookOpen, TrendingUp, CheckCircle, Clock, Bell } from 'lucide-react';
 
 const enrolledCourses = [
   { id: 1, name: 'Class 10 English Masterclass', progress: 65, totalModules: 24, completedModules: 15 },

@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { Users, FileText, Calendar, CreditCard, Download, ArrowUpRight } from 'lucide-react';
 
 export default function ParentPortal() {

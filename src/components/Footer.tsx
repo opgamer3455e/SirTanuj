@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { MessageCircle, Globe, Play, Mail } from 'lucide-react';
+import { TextHoverEffect } from '@/components/ui/text-hover-effect';
 
 const Footer = memo(function Footer() {
   const currentYear = new Date().getFullYear();
@@ -120,6 +121,11 @@ const Footer = memo(function Footer() {
             TANUJ SIR
           </h1>
         </motion.div>
+
+        {/* Added TextHoverEffect as requested */}
+        <div className="h-[20rem] flex items-center justify-center mb-8">
+          <TextHoverEffect text="TANUJ SIR" />
+        </div>
 
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-6 border-t border-white/5">

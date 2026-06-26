@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { BookOpen, PenTool, MessageSquare, ArrowRight, Download } from 'lucide-react';
+import { BookOpen, PenTool, MessageSquare, Download } from 'lucide-react';
 import Tabs from '../components/ui/Tabs';
 import Accordion from '../components/ui/Accordion';
 
