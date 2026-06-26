@@ -19,7 +19,7 @@ export default function LandingPage() {
     <div className="landing-page bg-[#050505]">
       
       {/* Interactive Hero Section */}
-      <section className="relative w-screen h-screen overflow-hidden">
+      <section className="relative w-full h-screen overflow-hidden">
         <div className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-center items-center text-center px-4 bg-black/40">
           <h1 className="text-5xl md:text-7xl font-bold text-[#FF5A5F] font-['Cinzel'] mb-4 tracking-tight drop-shadow-2xl">
             Learn English with Tanuj Sir
