@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 interface AccordionItemProps {
   title: string;
@@ -13,16 +13,12 @@ export function AccordionItem({ title, children, isOpen, onToggle }: AccordionIt
   return (
     <div className="border border-white/10 rounded-2xl bg-[#121212] overflow-hidden mb-4">
       <button
-        className="w-full px-6 py-5 flex items-center justify-between text-left transition-colors hover:bg-white/5"
+        className="w-full px-6 py-5 flex items-center justify-between text-left transition-colors hover:bg-white/5 [&[data-state=open]>svg]:rotate-180 [&>svg>path:last-child]:origin-center [&>svg>path:last-child]:transition-all [&>svg>path:last-child]:duration-200 [&[data-state=open]>svg>path:last-child]:rotate-90 [&[data-state=open]>svg>path:last-child]:opacity-0"
         onClick={onToggle}
+        data-state={isOpen ? 'open' : 'closed'}
       >
-        <span className="text-lg font-medium text-white">{title}</span>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <ChevronDown className="text-zinc-400" size={20} />
-        </motion.div>
+        <span className="text-lg font-medium text-white pr-4">{title}</span>
+        <Plus className="text-zinc-400 shrink-0 transition-transform duration-200" size={20} />
       </button>
       <AnimatePresence initial={false}>
         {isOpen && (
