@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, User, Play, Video } from 'lucide-react';
 
@@ -44,13 +44,15 @@ export default function LiveClassesPage() {
     return () => clearInterval(timer);
   }, []);
 
-  const isClassActive = (id: number) => {
+  const isClassActive = useCallback((id: number) => {
     return id === 2; // Mocking one active class for demo
-  };
+  }, []);
 
-  const filteredSessions = mockLiveClasses.filter(cls => 
-    activeTab === 'upcoming' ? cls.isUpcoming : !cls.isUpcoming
-  );
+  const filteredSessions = useMemo(() => {
+    return mockLiveClasses.filter(cls => 
+      activeTab === 'upcoming' ? cls.isUpcoming : !cls.isUpcoming
+    );
+  }, [activeTab]);
 
   return (
     <div className="pt-32 pb-24 px-4 min-h-screen bg-[#050505] bg-noise relative overflow-hidden">
@@ -146,11 +148,11 @@ export default function LiveClassesPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Calendar size={16} className="text-[#00A699]" />
-                        {session.date}
+                        <time dateTime={session.date}>{session.date}</time>
                       </div>
                       <div className="flex items-center gap-2">
                         <Clock size={16} className="text-[#FF5A5F]" />
-                        {session.time} ({session.duration})
+                        <time dateTime={`${session.date}T${session.time}`}>{session.time}</time> ({session.duration})
                       </div>
                     </div>
                   </div>

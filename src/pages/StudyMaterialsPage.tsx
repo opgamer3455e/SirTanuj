@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FileText, Play, Download, Search, Filter, BookOpen } from 'lucide-react';
 import AnimatedCheckbox from '../components/ui/AnimatedCheckbox';
@@ -18,23 +18,25 @@ export default function StudyMaterialsPage() {
   const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const toggleClass = (cls: string) => {
+  const toggleClass = useCallback((cls: string) => {
     setActiveClasses(prev => 
       prev.includes(cls) ? prev.filter(c => c !== cls) : [...prev, cls]
     );
-  };
+  }, []);
 
-  const toggleCategory = (cat: string) => {
+  const toggleCategory = useCallback((cat: string) => {
     setActiveCategories(prev => 
       prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
     );
-  };
+  }, []);
 
-  const filteredMaterials = mockMaterials.filter(m => 
-    (activeClasses.length === 0 || activeClasses.includes(m.class)) &&
-    (activeCategories.length === 0 || activeCategories.includes(m.category)) &&
-    (m.title.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const filteredMaterials = useMemo(() => {
+    return mockMaterials.filter(m => 
+      (activeClasses.length === 0 || activeClasses.includes(m.class)) &&
+      (activeCategories.length === 0 || activeCategories.includes(m.category)) &&
+      (m.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+  }, [activeClasses, activeCategories, searchQuery]);
 
   return (
     <div className="pt-32 pb-24 px-4 min-h-screen bg-[#050505] bg-noise relative overflow-hidden">
@@ -163,11 +165,17 @@ export default function StudyMaterialsPage() {
                         </span>
 
                         {material.type === 'PDF' ? (
-                          <button className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/10">
+                          <button 
+                            aria-label={`Download ${material.title} PDF`}
+                            className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/10"
+                          >
                             <Download size={16} />
                           </button>
                         ) : (
-                          <button className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/10">
+                          <button 
+                            aria-label={`Play ${material.title} Video`}
+                            className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/10"
+                          >
                             <Play size={16} className="ml-1" />
                           </button>
                         )}

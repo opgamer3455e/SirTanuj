@@ -92,6 +92,8 @@ export default function BlogPage() {
             <img 
               src={featuredPost.image} 
               alt={featuredPost.title}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105"
             />
             
@@ -119,7 +121,9 @@ export default function BlogPage() {
               </div>
               <div>
                 <span className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1">Published</span>
-                <span className="text-zinc-400 font-['Playfair_Display']">{featuredPost.date}</span>
+                <time className="text-zinc-400 font-['Playfair_Display']" dateTime={new Date(featuredPost.date).toISOString()}>
+                  {featuredPost.date}
+                </time>
               </div>
               <div className="pt-4 mt-auto">
                 <span className="inline-flex items-center gap-2 text-[#C9A84C] font-['Cinzel'] font-bold text-sm tracking-wider uppercase group-hover:gap-4 transition-all">
@@ -146,6 +150,8 @@ export default function BlogPage() {
                 <img 
                   src={post.image} 
                   alt={post.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
                 />
                 <div className="absolute top-4 left-4 z-20">
@@ -169,11 +175,16 @@ export default function BlogPage() {
                 <footer className="mt-auto flex items-center justify-between border-t border-white/10 pt-6">
                   <div className="flex flex-col">
                     <span className="text-white font-['Cinzel'] text-sm">{post.author}</span>
-                    <span className="text-zinc-500 font-['Playfair_Display'] text-xs">{post.date}</span>
+                    <time className="text-zinc-500 font-['Playfair_Display'] text-xs" dateTime={new Date(post.date).toISOString()}>
+                      {post.date}
+                    </time>
                   </div>
-                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-[#00A699] group-hover:border-[#00A699] transition-all">
+                  <button 
+                    aria-label={`Read full article: ${post.title}`}
+                    className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-[#00A699] group-hover:border-[#00A699] transition-all"
+                  >
                     <ArrowRight size={16} className="text-zinc-400 group-hover:text-white group-hover:-rotate-45 transition-all" />
-                  </div>
+                  </button>
                 </footer>
               </div>
             </motion.article>
