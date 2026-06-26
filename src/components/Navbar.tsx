@@ -41,7 +41,7 @@ const Navbar = memo(function Navbar() {
           <Link to="/live-classes" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Live</Link>
           <Link to="/study-materials" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Materials</Link>
           <Link to="/dashboard" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="hover:text-[#FF5A5F] transition-colors">Dashboard</Link>
-          <Link to="/auth" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="px-4 py-1.5 bg-[#FF5A5F] hover:bg-[#FC642D] rounded-full transition-colors ml-4 shadow-[0_0_15px_rgba(255,90,95,0.3)]">Sign In</Link>
+          <Link to="/auth" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', letterSpacing: '0.5px' }} className="whitespace-nowrap px-4 py-1.5 bg-[#FF5A5F] hover:bg-[#FC642D] rounded-full transition-colors ml-4 shadow-[0_0_15px_rgba(255,90,95,0.3)]">Sign In</Link>
         </div>
       </nav>
     </motion.div>
