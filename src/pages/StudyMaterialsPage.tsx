@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FileText, Play, Download, Search, Filter, BookOpen } from 'lucide-react';
+import AnimatedCheckbox from '../components/ui/AnimatedCheckbox';
 
 const mockMaterials = [
   { id: 1, title: 'The Road Not Taken - Deep Analytical Breakdown', type: 'PDF', category: 'Poetry', class: 'Class 9', size: '2.4 MB', featured: true },
@@ -13,13 +14,25 @@ const mockMaterials = [
 ];
 
 export default function StudyMaterialsPage() {
-  const [activeClass, setActiveClass] = useState('All');
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeClasses, setActiveClasses] = useState<string[]>([]);
+  const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const toggleClass = (cls: string) => {
+    setActiveClasses(prev => 
+      prev.includes(cls) ? prev.filter(c => c !== cls) : [...prev, cls]
+    );
+  };
+
+  const toggleCategory = (cat: string) => {
+    setActiveCategories(prev => 
+      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    );
+  };
+
   const filteredMaterials = mockMaterials.filter(m => 
-    (activeClass === 'All' || m.class === activeClass) &&
-    (activeCategory === 'All' || m.category === activeCategory) &&
+    (activeClasses.length === 0 || activeClasses.includes(m.class)) &&
+    (activeCategories.length === 0 || activeCategories.includes(m.category)) &&
     (m.title.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
@@ -45,32 +58,32 @@ export default function StudyMaterialsPage() {
 
             {/* Class Filter */}
             <div className="mb-10">
-              <h4 className="text-xs font-bold text-[#C9A84C] uppercase tracking-widest mb-5">Academic Level</h4>
-              <div className="flex flex-col gap-3">
-                {['All', 'Class 9', 'Class 10'].map(cls => (
-                  <button 
+              <h4 className="text-xs font-bold text-[#C9A84C] uppercase tracking-widest mb-6">Academic Level</h4>
+              <div className="flex flex-col gap-4 pl-2">
+                {['Class 9', 'Class 10'].map(cls => (
+                  <AnimatedCheckbox 
                     key={cls}
-                    onClick={() => setActiveClass(cls)}
-                    className={`text-left px-4 py-3 rounded-xl transition-all duration-300 font-['Playfair_Display'] text-lg ${activeClass === cls ? 'bg-white/10 text-white border border-white/20 shadow-inner' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5 border border-transparent'}`}
-                  >
-                    {cls}
-                  </button>
+                    id={`class-${cls}`}
+                    label={cls}
+                    checked={activeClasses.includes(cls)}
+                    onChange={() => toggleClass(cls)}
+                  />
                 ))}
               </div>
             </div>
 
             {/* Category Filter */}
             <div>
-              <h4 className="text-xs font-bold text-[#FF5A5F] uppercase tracking-widest mb-5">Subject Matter</h4>
-              <div className="flex flex-wrap gap-2">
-                {['All', 'Poetry', 'Prose', 'Grammar', 'Writing'].map(cat => (
-                  <button 
+              <h4 className="text-xs font-bold text-[#FF5A5F] uppercase tracking-widest mb-6">Subject Matter</h4>
+              <div className="flex flex-col gap-4 pl-2">
+                {['Poetry', 'Prose', 'Grammar', 'Writing'].map(cat => (
+                  <AnimatedCheckbox 
                     key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-['Playfair_Display'] text-sm ${activeCategory === cat ? 'bg-[#FF5A5F]/20 text-[#FF5A5F] border border-[#FF5A5F]/50' : 'bg-black/40 text-zinc-500 hover:text-zinc-300 border border-white/5 hover:border-white/20'}`}
-                  >
-                    {cat}
-                  </button>
+                    id={`category-${cat}`}
+                    label={cat}
+                    checked={activeCategories.includes(cat)}
+                    onChange={() => toggleCategory(cat)}
+                  />
                 ))}
               </div>
             </div>
