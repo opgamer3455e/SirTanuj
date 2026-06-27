@@ -127,6 +127,16 @@ io.on('connection', (socket) => {
   socket.on('send-message', (roomId, messageData) => {
     io.to(roomId).emit('receive-message', messageData);
   });
+
+  // Whiteboard Action Sync
+  socket.on('whiteboard-action', (roomId, actionData) => {
+    socket.to(roomId).emit('whiteboard-action', actionData);
+  });
+
+  // Whiteboard Toggle Sync
+  socket.on('whiteboard-toggle', (roomId, isOpen) => {
+    socket.to(roomId).emit('whiteboard-toggle', isOpen);
+  });
   
   // Media State Update
   socket.on('update-media-state', (roomId, mediaState) => {

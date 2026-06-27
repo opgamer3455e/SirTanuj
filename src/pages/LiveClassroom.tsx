@@ -4,9 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useWebRTC } from '../hooks/useWebRTC';
 import { useAntiRecording } from '../hooks/useAntiRecording';
 import { Watermark } from '../components/ui/Watermark';
-import { Mic, MicOff, Video, VideoOff, MonitorUp, PhoneOff, MessageSquare, Users, Disc } from 'lucide-react';
+import { Mic, MicOff, Video, VideoOff, MonitorUp, PhoneOff, MessageSquare, Users, Disc, Presentation } from 'lucide-react';
 import { Instance as PeerInstance } from 'simple-peer';
 import { useFirebaseAuth } from '../hooks/useFirebaseAuth';
+import Whiteboard from '../components/ui/Whiteboard';
 
 const VideoStream = ({ peerData }: { peerData: any }) => {
   const ref = useRef<HTMLVideoElement>(null);
@@ -62,6 +63,7 @@ export default function LiveClassroom() {
     isMuted,
     isVideoOff,
     isScreenSharing,
+    socket,
     toggleMute,
     toggleVideo,
     toggleScreenShare,
@@ -72,8 +74,33 @@ export default function LiveClassroom() {
 
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<Blob[]>([]);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on('whiteboard-toggle', (isOpen: boolean) => {
+      setIsWhiteboardOpen(isOpen);
+    });
+    return () => {
+      socket.off('whiteboard-toggle');
+    };
+  }, [socket]);
+
+  const toggleWhiteboard = () => {
+    const nextState = !isWhiteboardOpen;
+    setIsWhiteboardOpen(nextState);
+    socket?.emit('whiteboard-toggle', roomId || 'main-room', nextState);
+  };
+
+  const handleLeave = () => {
+    if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1);
+    } else {
+      navigate(isTeacher ? '/cms/broadcast' : '/live-classes');
+    }
+  };
 
   const toggleRecording = async () => {
     if (isRecording) {
@@ -149,38 +176,77 @@ export default function LiveClassroom() {
         </div>
       </div>
 
-      {/* Video Grid Area */}
-      <div className={`pt-24 pb-32 px-6 h-screen flex transition-all duration-300 ${isChatOpen ? 'pr-[340px]' : ''}`}>
-        <div className="w-full h-full grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
-          
-          {/* Local Video */}
-          <div className="w-full h-full rounded-2xl overflow-hidden relative border border-white/10 bg-zinc-900 shadow-xl group">
-             {!isVideoOff ? (
-               <video
-                 ref={localVideoRef}
-                 autoPlay
-                 playsInline
-                 muted
-                 className={`w-full h-full object-cover ${isScreenSharing ? 'object-contain' : ''} ${!isScreenSharing ? 'scale-x-[-1]' : ''}`}
-               />
-             ) : (
-               <div className="w-full h-full flex items-center justify-center">
-                  <div className="w-20 h-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-500 text-3xl font-bold uppercase ring-4 ring-zinc-800/50">
-                    You
-                  </div>
+      {/* Video Grid Area / Whiteboard Split View */}
+      <div className={`pt-24 pb-32 px-6 h-screen flex gap-4 transition-all duration-300 ${isChatOpen ? 'pr-[340px]' : ''}`}>
+        {isWhiteboardOpen ? (
+          <>
+            {/* Whiteboard Space */}
+            <div className="flex-[3] h-full flex flex-col">
+              <Whiteboard socket={socket} roomId={roomId || 'main-room'} isTeacher={isTeacher} />
+            </div>
+
+            {/* Peer Sidebar */}
+            <div className="flex-[1] flex flex-col gap-4 overflow-y-auto max-h-full pr-1 scrollbar-thin">
+              {/* Local Video */}
+              <div className="aspect-video w-full rounded-2xl overflow-hidden relative border border-white/10 bg-zinc-900 shadow-xl group flex-shrink-0">
+                 {!isVideoOff ? (
+                   <video
+                     ref={localVideoRef}
+                     autoPlay
+                     playsInline
+                     muted
+                     className={`w-full h-full object-cover ${isScreenSharing ? 'object-contain' : ''} ${!isScreenSharing ? 'scale-x-[-1]' : ''}`}
+                   />
+                 ) : (
+                   <div className="w-full h-full flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-500 text-lg font-bold uppercase ring-2 ring-zinc-800/50">
+                        You
+                      </div>
+                   </div>
+                 )}
+                 <div className="absolute bottom-2 left-2 px-2 py-0.5 bg-black/60 backdrop-blur-md rounded text-[10px] font-semibold text-white/90">
+                   You {isMuted && <span className="ml-1 text-red-400">Muted</span>}
+                 </div>
+              </div>
+
+              {/* Remote Video Cards */}
+              {peers.map((peerData, index) => (
+                <div key={index} className="aspect-video w-full flex-shrink-0">
+                  <VideoStream peerData={peerData} />
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="w-full h-full grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
+            {/* Local Video */}
+            <div className="w-full h-full rounded-2xl overflow-hidden relative border border-white/10 bg-zinc-900 shadow-xl group">
+               {!isVideoOff ? (
+                 <video
+                   ref={localVideoRef}
+                   autoPlay
+                   playsInline
+                   muted
+                   className={`w-full h-full object-cover ${isScreenSharing ? 'object-contain' : ''} ${!isScreenSharing ? 'scale-x-[-1]' : ''}`}
+                 />
+               ) : (
+                 <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-500 text-3xl font-bold uppercase ring-4 ring-zinc-800/50">
+                      You
+                    </div>
+                 </div>
+               )}
+               <div className="absolute bottom-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md text-xs font-semibold text-white/90">
+                 You {isMuted && <span className="ml-2 text-red-400">Muted</span>}
                </div>
-             )}
-             <div className="absolute bottom-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md text-xs font-semibold text-white/90">
-               You {isMuted && <span className="ml-2 text-red-400">Muted</span>}
-             </div>
+            </div>
+
+            {/* Remote Peers */}
+            {peers.map((peerData, index) => (
+              <VideoStream key={index} peerData={peerData} />
+            ))}
           </div>
-
-          {/* Remote Peers */}
-          {peers.map((peerData, index) => (
-            <VideoStream key={index} peerData={peerData} />
-          ))}
-
-        </div>
+        )}
       </div>
 
       {/* Bottom Floating Control Dock */}
@@ -218,17 +284,27 @@ export default function LiveClassroom() {
           </button>
 
           {isTeacher && (
-            <button 
-              onClick={toggleRecording}
-              className={`p-4 rounded-xl flex items-center justify-center transition-all ${isRecording ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10'}`}
-              title={isRecording ? "Stop Recording" : "Start Recording"}
-            >
-              <Disc className={`w-5 h-5 ${isRecording ? 'animate-pulse' : ''}`} />
-            </button>
+            <>
+              <button 
+                onClick={toggleRecording}
+                className={`p-4 rounded-xl flex items-center justify-center transition-all ${isRecording ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10'}`}
+                title={isRecording ? "Stop Recording" : "Start Recording"}
+              >
+                <Disc className={`w-5 h-5 ${isRecording ? 'animate-pulse' : ''}`} />
+              </button>
+
+              <button 
+                onClick={toggleWhiteboard}
+                className={`p-4 rounded-xl flex items-center justify-center transition-all ${isWhiteboardOpen ? 'bg-[#FC642D]/20 text-[#FC642D] hover:bg-[#FC642D]/30' : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10'}`}
+                title="Whiteboard"
+              >
+                <Presentation className="w-5 h-5" />
+              </button>
+            </>
           )}
 
           <button 
-            onClick={() => navigate('/live')}
+            onClick={handleLeave}
             className="p-4 px-6 rounded-xl flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white font-bold transition-all shadow-lg shadow-red-500/20 ml-2"
           >
             <PhoneOff className="w-5 h-5" />

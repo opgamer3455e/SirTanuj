@@ -243,6 +243,7 @@ export function useWebRTC(roomId: string, currentUserId: string) {
     isMuted,
     isVideoOff,
     isScreenSharing,
+    socket: socketRef.current,
     toggleMute,
     toggleVideo,
     toggleScreenShare,
