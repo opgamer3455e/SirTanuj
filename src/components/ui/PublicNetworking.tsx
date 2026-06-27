@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChevronDown, Info, Zap, Plus } from 'lucide-react';
 
 export default function PublicNetworking() {
