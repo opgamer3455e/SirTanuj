@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { InViewChunk } from '@/components/ui/InViewChunk';
 import { InteractiveHelmet } from '@/components/ui/InteractiveHelmet';
 import AnimatedHeroButton from '@/components/ui/AnimatedHeroButton';
+import Accordion from '@/components/ui/Accordion';
 
 const MethodPanel = lazy(() => import('./LandingPageSections/MethodPanel'));
 const ExperienceSection = lazy(() => import('./LandingPageSections/ExperienceSection'));
@@ -14,9 +15,16 @@ import CoreOfferings from './LandingPageSections/CoreOfferings';
 import FeaturesSection from './LandingPageSections/FeaturesSection';
 import StatsBanner from './LandingPageSections/StatsBanner';
 
+// FAQ Items
+const faqItems = [
+  { id: 'q1', title: 'How do the lessons work?', content: <p>Each lesson is a live video session with interactive exercises.</p> },
+  { id: 'q2', title: 'What is the duration?', content: <p>Courses run for 12 weeks with weekly live classes.</p> },
+  // Add more items as needed
+];
+
 export default function LandingPage() {
   return (
-    <div className="landing-page bg-[#050505]">
+    <div className="landing-page bg-[#121212]">
       
       {/* Interactive Hero Section */}
       <section className="relative w-full h-screen overflow-hidden">
@@ -67,17 +75,16 @@ export default function LandingPage() {
         <PricingSection />
       </InViewChunk>
 
-      {/* FAQ */}
-      <motion.section 
-        className="page-container pt-20 pb-20 text-center"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <h2 className="section-title text-[#C9A84C] font-['Cinzel']">Got Questions?</h2>
-        <p className="section-subtitle font-['Playfair_Display'] text-gray-400">Consult the Senate.</p>
-      </motion.section>
+      {/* FAQ Section */}
+      <section className="page-container pt-20 pb-20 text-center md:text-left flex flex-col md:flex-row items-start gap-12">
+        <div className="flex-1">
+          <h2 className="section-title text-[#C9A84C] font-['Cinzel']">Got Questions?</h2>
+          <p className="section-subtitle font-['Playfair_Display'] text-gray-400">Consult the Senate.</p>
+        </div>
+        <div className="flex-1 max-w-xl">
+          <Accordion items={faqItems} />
+        </div>
+      </section>
     </div>
   );
 }

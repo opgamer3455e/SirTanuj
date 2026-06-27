@@ -1,74 +1,111 @@
-import { motion } from 'framer-motion';
-import { Plus } from 'lucide-react';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import { Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } }
+const headerAnim = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 80, damping: 20 } }
 };
 
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
+const cardAnim = {
+  hidden: { opacity: 0, y: 100 },
+  visible: (i: number) => ({
     opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.1 }
-  }
+    y: 0,
+    transition: { type: 'spring', stiffness: 80, damping: 20, delay: i * 0.15 }
+  })
 };
+
+const plans = [
+  {
+    subtitle: "Best for begginers",
+    title: "Starter",
+    price: "$19",
+    features: [
+      "1 live lesson per week",
+      "Certified language teacher",
+      "Personalized feedback",
+      "All learning materials included",
+      "Online, flexible scheduling"
+    ]
+  },
+  {
+    subtitle: "Best for fast progress",
+    title: "Progress",
+    price: "$39",
+    features: [
+      "2 live lessons per week",
+      "Certified teachers",
+      "Personalized feedback",
+      "All learning materials included",
+      "Online, flexible scheduling"
+    ]
+  },
+  {
+    subtitle: "Master real conversations",
+    title: "Fluent",
+    price: "$79",
+    features: [
+      "4 live lessons per week",
+      "Certified expert teachers",
+      "In-depth personalized feedback",
+      "All learning materials included",
+      "Priority scheduling"
+    ]
+  }
+];
 
 export default function PricingSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { margin: '-10%' });
+  
   return (
-    <motion.section 
-      className="page-container text-center"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
-      variants={staggerContainer}
-    >
-      <motion.h2 variants={fadeUp} className="section-title font-['Cinzel'] text-[#C9A84C]">Learning Plans</motion.h2>
-      <motion.p variants={fadeUp} className="section-subtitle mx-auto font-['Playfair_Display']">Conquer the ICSE boards with our guided plans</motion.p>
+    <section ref={ref} className="page-container text-center text-white py-24 font-sans">
+      <motion.h2 variants={headerAnim} initial="hidden" animate={isInView ? 'visible' : 'hidden'} className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+        Learning Plans
+      </motion.h2>
+      <motion.p variants={headerAnim} initial="hidden" animate={isInView ? 'visible' : 'hidden'} className="text-gray-300 text-lg mb-16">
+        Personalized learning that adapts to you
+      </motion.p>
       
-      <motion.div variants={staggerContainer} className="pricing-wrapper text-left">
-        <motion.div variants={fadeUp} whileHover={{ scale: 0.95 }} className="pricing-card left cursor-pointer hover:border-[#C9A84C]/50 bg-[#0A0A0A] border-[#333]">
-          <div className="text-xs text-[#E8D08A] uppercase mb-2">The Plebeian</div>
-          <h3 className="font-['Cinzel'] text-white">Starter</h3>
-          <div className="price" style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'white' }}>₹1,499 <span style={{fontSize:'0.9rem', color: '#888'}}>/ Week</span></div>
-          <div className="text-xs text-[#E8D08A] font-bold mb-4">What's included</div>
-          <ul className="text-gray-300">
-            <li><Plus size={14} className="text-[#C9A84C]"/> 1 live lesson per week</li>
-            <li><Plus size={14} className="text-[#C9A84C]"/> Access to study guides</li>
-            <li><Plus size={14} className="text-[#C9A84C]"/> Monthly feedback</li>
-          </ul>
-          <Link to="/payment" className="btn w-full mt-4 bg-transparent border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black inline-block text-center">Join Forces</Link>
-        </motion.div>
-
-        <motion.div variants={fadeUp} whileHover={{ scale: 1.05 }} className="pricing-card center cursor-pointer border-[#8B0000] bg-[#1A0505] shadow-[0_0_40px_rgba(139,0,0,0.3)] flex flex-col">
-          <div className="text-xs text-red-300 uppercase mb-2">The Senator</div>
-          <h3 className="font-['Cinzel'] text-white">Mastery</h3>
-          <div className="price text-white">₹2,999 <span className="text-red-300">/ Week</span></div>
-          <div className="text-xs text-red-400 font-bold mb-4">What's included</div>
-          <ul className="text-white flex-1">
-            <li><Plus size={16} className="text-red-500"/> 2 live lessons per week</li>
-            <li><Plus size={16} className="text-red-500"/> Julius Caesar premium guide</li>
-            <li><Plus size={16} className="text-red-500"/> Physics lab manual</li>
-            <li><Plus size={16} className="text-red-500"/> 24/7 doubt resolution</li>
-            <li><Plus size={16} className="text-red-500"/> Mock test series</li>
-          </ul>
-          <Link to="/payment" className="btn w-full mt-4 inline-block text-center" style={{ padding: '1rem', background: '#8B0000', color: 'white', fontWeight: 'bold' }}>Claim Your Empire</Link>
-        </motion.div>
-
-        <motion.div variants={fadeUp} whileHover={{ scale: 0.95 }} className="pricing-card right cursor-pointer hover:border-[#C9A84C]/50 bg-[#0A0A0A] border-[#333] flex flex-col">
-          <div className="text-xs text-[#E8D08A] uppercase mb-2">The Emperor</div>
-          <h3 className="font-['Cinzel'] text-white">Intensive</h3>
-          <div className="price" style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'white' }}>₹5,999 <span style={{fontSize:'0.9rem', color: '#888'}}>/ Week</span></div>
-          <div className="text-xs text-[#E8D08A] font-bold mb-4">What's included</div>
-          <ul className="text-gray-300 flex-1">
-            <li><Plus size={14} className="text-[#C9A84C]"/> 4 live lessons per week</li>
-            <li><Plus size={14} className="text-[#C9A84C]"/> 1-on-1 mentorship</li>
-            <li><Plus size={14} className="text-[#C9A84C]"/> All premium resources</li>
-          </ul>
-          <Link to="/payment" className="btn w-full mt-4 bg-transparent border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-black inline-block text-center">Ascend the Throne</Link>
-        </motion.div>
-      </motion.div>
-    </motion.section>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4 text-left">
+        {plans.map((plan, i) => (
+          <motion.div
+            key={i}
+            custom={i}
+            variants={cardAnim}
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
+            className="bg-[#18181b] border border-white/5 rounded-3xl p-8 flex flex-col hover:border-white/10 transition-colors duration-300 shadow-xl"
+          >
+            <div className="text-sm text-gray-400 mb-2 font-medium">{plan.subtitle}</div>
+            <h3 className="text-3xl font-bold text-white mb-4">{plan.title}</h3>
+            
+            <div className="text-3xl font-bold text-[#0ea5e9] mb-8">
+              {plan.price} <span className="text-lg font-normal">/ Week</span>
+            </div>
+            
+            <div className="text-sm font-semibold text-white mb-6">What's included</div>
+            
+            <ul className="flex-1 space-y-4 mb-10">
+              {plan.features.map((feature, idx) => (
+                <li key={idx} className="flex items-start text-gray-300 text-sm font-medium">
+                  <Check size={18} className="text-white mr-3 shrink-0 mt-0.5" strokeWidth={3} />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+            
+            <Link 
+              to="/payment" 
+              className="w-full block bg-white text-black font-semibold text-center rounded-full py-3.5 hover:bg-gray-100 transition-colors"
+            >
+              Get Started
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+    </section>
   );
 }

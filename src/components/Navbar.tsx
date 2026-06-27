@@ -18,14 +18,14 @@ const Navbar = memo(function Navbar() {
 
   return (
     <motion.div 
-      className="navbar-wrapper z-50 fixed w-full top-6 px-4 flex flex-col items-center justify-center pointer-events-none"
+      className="navbar-wrapper z-50 fixed w-full top-0 px-4 flex flex-col items-center justify-center pointer-events-none"
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="relative w-full max-w-[800px] pointer-events-auto">
+      <div className="relative w-full pointer-events-auto">
         <nav 
-          className="w-full px-4 md:px-6 py-3.5 bg-black/60 backdrop-blur-xl rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-white/10 flex justify-between items-center transition-all duration-300"
+          className="w-full px-4 md:px-6 py-3.5 bg-black/50 backdrop-blur-md rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-white/10 flex justify-between items-center transition-all duration-300"
         >
           {/* Logo / Avatar */}
           <div className="flex items-center">
