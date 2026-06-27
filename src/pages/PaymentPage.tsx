@@ -5,7 +5,7 @@ const plans = [
   {
     id: 'monthly',
     name: 'Monthly Pro',
-    price: '$29',
+    price: '₹2,499',
     period: '/month',
     description: 'Perfect for short-term revision and crash courses.',
     features: ['Access to all live classes', 'Basic study materials', '24/7 forum support', 'Monthly progress reports'],
@@ -15,7 +15,7 @@ const plans = [
   {
     id: 'yearly',
     name: 'Annual Mastery',
-    price: '$199',
+    price: '₹14,999',
     period: '/year',
     description: 'Our most popular plan for comprehensive exam prep.',
     features: ['Everything in Monthly', '1-on-1 Mentorship session', 'Premium Video Vault', 'Advanced mock tests', 'Parent portal access'],
@@ -25,7 +25,7 @@ const plans = [
   {
     id: 'course',
     name: 'Per-Course',
-    price: '$49',
+    price: '₹3,999',
     period: '/course',
     description: 'Targeted learning for specific syllabus modules.',
     features: ['Lifetime access to course', 'Course-specific PDFs', 'Doubt clearing sessions', 'Certificate of completion'],

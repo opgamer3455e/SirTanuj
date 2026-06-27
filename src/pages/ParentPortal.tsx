@@ -159,7 +159,7 @@ export default function ParentPortal() {
                       <div className="text-sm text-zinc-500 font-['Playfair_Display']">{i === 0 ? 'Jan 15, 2026' : `Jan 15, 202${5-i}`}</div>
                     </div>
                     <div className="text-right">
-                      <div className="text-lg font-bold text-white font-['Cinzel']">$199.00</div>
+                      <div className="text-lg font-bold text-white font-['Cinzel']">₹14,999.00</div>
                       <div className="text-xs text-[#00A699] font-bold tracking-widest uppercase mt-1">Settled</div>
                     </div>
                   </div>
