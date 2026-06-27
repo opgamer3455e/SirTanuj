@@ -81,6 +81,15 @@ export const TextHoverEffect = ({
             fill="url(#revealMask)"
           />
         </mask>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="8" result="blur1" />
+          <feGaussianBlur stdDeviation="3" result="blur2" />
+          <feMerge>
+            <feMergeNode in="blur1" />
+            <feMergeNode in="blur2" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
       <text
         x="50%"
@@ -117,10 +126,11 @@ export const TextHoverEffect = ({
         y="50%"
         textAnchor="middle"
         dominantBaseline="middle"
-        stroke="url(#textGradient)"
         strokeWidth={strokeWidth}
         mask="url(#textMask)"
+        filter="url(#glow)"
         className={className || "fill-transparent font-[helvetica] text-7xl font-bold"}
+        style={{ stroke: "url(#textGradient)" }}
       >
         {text}
       </text>
