@@ -79,18 +79,21 @@ const io = new Server(server, {
 // Map of roomId -> Map of socketId -> UserData
 const rooms = new Map();
 
+// Track which room each socket is in, so disconnect can clean up
+const socketRoomMap = new Map(); // socketId -> roomId
+
 io.on('connection', (socket) => {
-  console.log(`User Connected: ${socket.id}`);
+  console.log(`[WS] Connected: ${socket.id}`);
 
   // Join Room
   socket.on('join-room', (roomId, userId) => {
     socket.join(roomId);
+    socketRoomMap.set(socket.id, roomId);
 
     if (!rooms.has(roomId)) {
       rooms.set(roomId, new Map());
     }
     
-    // Store user data
     rooms.get(roomId).set(socket.id, {
       id: socket.id,
       userId: userId,
@@ -100,41 +103,22 @@ io.on('connection', (socket) => {
       audioEnabled: true
     });
 
-    // Notify others in the room that a new user connected
-    socket.to(roomId).emit('user-connected', socket.id);
-
-    // Send the new user the list of all existing users in the room
+    // Send the new user the list of all existing users in the room (excluding themselves)
     const existingUsers = Array.from(rooms.get(roomId).keys()).filter(id => id !== socket.id);
     socket.emit('all-users', existingUsers);
 
-    console.log(`User ${socket.id} joined room ${roomId}`);
+    // Notify existing users that someone new joined
+    socket.to(roomId).emit('user-joined', socket.id);
 
-    socket.on('disconnect', () => {
-      console.log(`User Disconnected: ${socket.id}`);
-      if (rooms.has(roomId)) {
-        rooms.get(roomId).delete(socket.id);
-        if (rooms.get(roomId).size === 0) {
-          rooms.delete(roomId);
-        }
-      }
-      // Broadcast to everyone else that this user disconnected
-      socket.to(roomId).emit('user-disconnected', socket.id);
-    });
+    console.log(`[WS] ${socket.id} joined room ${roomId} (${existingUsers.length} existing users)`);
   });
 
-  // Signaling: WebRTC Offer
-  socket.on('offer', (payload) => {
-    io.to(payload.userToSignal).emit('offer', {
-      signal: payload.signal,
-      callerID: payload.callerID
-    });
-  });
-
-  // Signaling: WebRTC Answer
-  socket.on('answer', (payload) => {
-    io.to(payload.callerID).emit('answer', {
-      signal: payload.signal,
-      id: socket.id
+  // Generic signal relay — forwards offers, answers, AND ICE candidates
+  socket.on('relay-signal', (payload) => {
+    const { targetId, signal } = payload;
+    io.to(targetId).emit('relay-signal', {
+      senderId: socket.id,
+      signal,
     });
   });
 
@@ -143,7 +127,7 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('receive-message', messageData);
   });
   
-  // Media State Update (Active Speaker filtering logic)
+  // Media State Update
   socket.on('update-media-state', (roomId, mediaState) => {
     if (rooms.has(roomId) && rooms.get(roomId).has(socket.id)) {
       const user = rooms.get(roomId).get(socket.id);
@@ -151,7 +135,6 @@ io.on('connection', (socket) => {
       user.videoEnabled = mediaState.videoEnabled;
       user.audioEnabled = mediaState.audioEnabled;
       
-      // Broadcast to room the updated state so peers can adjust their UIs
       socket.to(roomId).emit('user-media-state-changed', {
         userId: socket.id,
         state: mediaState
@@ -159,6 +142,19 @@ io.on('connection', (socket) => {
     }
   });
 
+  // Disconnect — moved OUTSIDE join-room to prevent duplicate handlers
+  socket.on('disconnect', () => {
+    console.log(`[WS] Disconnected: ${socket.id}`);
+    const roomId = socketRoomMap.get(socket.id);
+    if (roomId && rooms.has(roomId)) {
+      rooms.get(roomId).delete(socket.id);
+      if (rooms.get(roomId).size === 0) {
+        rooms.delete(roomId);
+      }
+      socket.to(roomId).emit('user-disconnected', socket.id);
+    }
+    socketRoomMap.delete(socket.id);
+  });
 });
 
 const PORT = process.env.PORT || 5001;

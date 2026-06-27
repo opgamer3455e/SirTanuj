@@ -21,7 +21,7 @@ const VideoStream = ({ peerData }: { peerData: any }) => {
     return (
       <div className="w-full h-full bg-zinc-900 rounded-2xl flex items-center justify-center border border-white/5 relative overflow-hidden">
         <div className="w-20 h-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-500 text-3xl font-bold uppercase ring-4 ring-zinc-800/50">
-          {peerData.userId.substring(0, 2)}
+          {(peerData.peerId || 'P').substring(0, 2)}
         </div>
         {peerData.isSpeaking && (
           <motion.div 
@@ -43,7 +43,7 @@ const VideoStream = ({ peerData }: { peerData: any }) => {
         className="w-full h-full object-cover"
       />
       <div className="absolute bottom-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md text-xs font-semibold text-white/90">
-        {peerData.userId.substring(0, 8)}
+        {(peerData.peerId || 'Peer').substring(0, 8)}
       </div>
     </div>
   );
