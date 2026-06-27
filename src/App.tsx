@@ -1,10 +1,9 @@
 import { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+
 import LoadScreen from './components/ui/LoadScreen';
-import './App.css';
+import PublicLayout from './components/PublicLayout';
 
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const JuliusCaesarGuide = lazy(() => import('./pages/JuliusCaesarGuide'));
@@ -25,28 +24,49 @@ const BlogPage = lazy(() => import('./pages/BlogPage'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
 const LiveClassroom = lazy(() => import('./pages/LiveClassroom'));
 
+const AuthGuard = lazy(() => import('./components/cms/AuthGuard'));
+const CMSLayout = lazy(() => import('./components/cms/CMSLayout'));
+const TeacherDashboard = lazy(() => import('./pages/cms/TeacherDashboard'));
+const BroadcastStudio = lazy(() => import('./pages/cms/BroadcastStudio'));
+const StudentsPage = lazy(() => import('./pages/cms/StudentsPage'));
+const SettingsPage = lazy(() => import('./pages/cms/SettingsPage'));
+const CMSPlaceholder = lazy(() => import('./pages/cms/CMSPlaceholder'));
+
 function AppRoutes() {
   const location = useLocation();
   return (
     <Routes location={location} key={location.pathname}>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/julius-caesar" element={<JuliusCaesarGuide />} />
-      <Route path="/resources" element={<ResourceLibrary />} />
-      <Route path="/community" element={<ResourceCommunityPage />} />
-      
-      {/* New Routes */}
-      <Route path="/about" element={<AboutPage />} />
-      <Route path="/courses" element={<CoursesPage />} />
-      <Route path="/live-classes" element={<LiveClassesPage />} />
-      <Route path="/live/:roomId?" element={<LiveClassroom />} />
-      <Route path="/study-materials" element={<StudyMaterialsPage />} />
-      <Route path="/payment" element={<PaymentPage />} />
-      <Route path="/dashboard" element={<StudentDashboard />} />
-      <Route path="/parent-portal" element={<ParentPortal />} />
-      <Route path="/contact" element={<ContactPage />} />
-      <Route path="/faq" element={<FAQPage />} />
-      <Route path="/blog" element={<BlogPage />} />
-      <Route path="/auth" element={<AuthPage />} />
+      {/* Public Routes with Navbar/Footer */}
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/julius-caesar" element={<JuliusCaesarGuide />} />
+        <Route path="/resources" element={<ResourceLibrary />} />
+        <Route path="/community" element={<ResourceCommunityPage />} />
+        
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/courses" element={<CoursesPage />} />
+        <Route path="/live-classes" element={<LiveClassesPage />} />
+        <Route path="/live/:roomId?" element={<LiveClassroom />} />
+        <Route path="/study-materials" element={<StudyMaterialsPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/dashboard" element={<StudentDashboard />} />
+        <Route path="/parent-portal" element={<ParentPortal />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/auth" element={<AuthPage />} />
+      </Route>
+
+      {/* Protected CMS Routes with Sidebar */}
+      <Route element={<AuthGuard requiredRole="TEACHER" />}>
+        <Route element={<CMSLayout />}>
+          <Route path="/cms" element={<TeacherDashboard />} />
+          <Route path="/cms/curriculum" element={<TeacherDashboard />} />
+          <Route path="/cms/broadcast" element={<BroadcastStudio />} />
+          <Route path="/cms/students" element={<StudentsPage />} />
+          <Route path="/cms/settings" element={<SettingsPage />} />
+        </Route>
+      </Route>
     </Routes>
   );
 }
@@ -63,21 +83,15 @@ function App() {
 
   return (
     <Router>
-      <div className="app-layout">
-        <Navbar />
-        <main className="main-content">
-          <AnimatePresence mode="wait">
-            {initialLoading ? (
-              <LoadScreen key="initial-loading" />
-            ) : (
-              <Suspense fallback={<div className="w-full h-screen bg-[#0a0014]" />}>
-                <AppRoutes />
-              </Suspense>
-            )}
-          </AnimatePresence>
-        </main>
-        <Footer />
-      </div>
+      <AnimatePresence mode="wait">
+        {initialLoading ? (
+          <LoadScreen key="initial-loading" />
+        ) : (
+          <Suspense fallback={<div className="w-full h-screen bg-[#0a0014]" />}>
+            <AppRoutes />
+          </Suspense>
+        )}
+      </AnimatePresence>
     </Router>
   );
 }

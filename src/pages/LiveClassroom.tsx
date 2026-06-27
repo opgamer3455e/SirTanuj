@@ -4,8 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useWebRTC } from '../hooks/useWebRTC';
 import { useAntiRecording } from '../hooks/useAntiRecording';
 import { Watermark } from '../components/ui/Watermark';
-import { Mic, MicOff, Video, VideoOff, MonitorUp, PhoneOff, MessageSquare, Users } from 'lucide-react';
+import { Mic, MicOff, Video, VideoOff, MonitorUp, PhoneOff, MessageSquare, Users, Disc } from 'lucide-react';
 import { Instance as PeerInstance } from 'simple-peer';
+import { useFirebaseAuth } from '../hooks/useFirebaseAuth';
 
 const VideoStream = ({ peerData }: { peerData: any }) => {
   const ref = useRef<HTMLVideoElement>(null);
@@ -66,7 +67,52 @@ export default function LiveClassroom() {
     toggleScreenShare,
   } = useWebRTC(roomId || 'main-room', userId);
 
+  const { appUser } = useFirebaseAuth();
+  const isTeacher = appUser?.role === 'TEACHER' || appUser?.role === 'ADMIN';
+
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordedChunksRef = useRef<Blob[]>([]);
+
+  const toggleRecording = async () => {
+    if (isRecording) {
+      mediaRecorderRef.current?.stop();
+      setIsRecording(false);
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+        const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        mediaRecorderRef.current = recorder;
+        recordedChunksRef.current = [];
+        
+        recorder.ondataavailable = (e) => {
+          if (e.data.size > 0) recordedChunksRef.current.push(e.data);
+        };
+        
+        recorder.onstop = () => {
+          const blob = new Blob(recordedChunksRef.current, { type: 'video/webm' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = `recording_${roomId}.webm`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          
+          // Stop all tracks to remove the screen sharing icon from browser tab
+          stream.getTracks().forEach(track => track.stop());
+        };
+        
+        recorder.start();
+        setIsRecording(true);
+      } catch (err) {
+        console.error("Recording failed", err);
+        alert("Recording permission denied or failed.");
+      }
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-[999] bg-[#0a0a0a] text-white overflow-hidden">
@@ -91,7 +137,14 @@ export default function LiveClassroom() {
       {/* Top Bar */}
       <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-10 bg-gradient-to-b from-black/80 to-transparent">
         <div>
-          <h1 className="text-xl font-bold tracking-tight">Classroom: {roomId}</h1>
+          <h1 className="text-xl font-bold tracking-tight flex items-center gap-3">
+            Classroom: {roomId}
+            {isRecording && (
+              <span className="px-2 py-0.5 bg-red-500/20 text-red-500 text-xs tracking-widest rounded flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" /> REC
+              </span>
+            )}
+          </h1>
           <p className="text-xs text-white/50 font-mono mt-1">Encrypted Hybrid Mesh • {peers.length + 1} Participants</p>
         </div>
       </div>
@@ -163,6 +216,16 @@ export default function LiveClassroom() {
           >
             <MessageSquare className="w-5 h-5" />
           </button>
+
+          {isTeacher && (
+            <button 
+              onClick={toggleRecording}
+              className={`p-4 rounded-xl flex items-center justify-center transition-all ${isRecording ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10'}`}
+              title={isRecording ? "Stop Recording" : "Start Recording"}
+            >
+              <Disc className={`w-5 h-5 ${isRecording ? 'animate-pulse' : ''}`} />
+            </button>
+          )}
 
           <button 
             onClick={() => navigate('/live')}

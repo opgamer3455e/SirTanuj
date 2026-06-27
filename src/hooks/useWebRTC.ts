@@ -24,7 +24,7 @@ export function useWebRTC(roomId: string, currentUserId: string) {
 
   // Initialize socket and local stream
   useEffect(() => {
-    socketRef.current = io('http://localhost:5000');
+    socketRef.current = io('http://localhost:5001');
 
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
       setLocalStream(stream);
