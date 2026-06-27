@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+
 import { InViewChunk } from '@/components/ui/InViewChunk';
 import { InteractiveHelmet } from '@/components/ui/InteractiveHelmet';
 import AnimatedHeroButton from '@/components/ui/AnimatedHeroButton';

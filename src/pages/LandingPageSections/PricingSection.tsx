@@ -1,14 +1,14 @@
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, Variants } from 'framer-motion';
 import { useRef } from 'react';
 import { Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const headerAnim = {
+const headerAnim: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 80, damping: 20 } }
 };
 
-const cardAnim = {
+const cardAnim: Variants = {
   hidden: { opacity: 0, y: 100 },
   visible: (i: number) => ({
     opacity: 1,
