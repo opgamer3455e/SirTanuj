@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-oauth/google": "^0.13.5",
+    "events": "^3.3.0",
     "firebase": "^12.15.0",
     "framer-motion": "^12.41.0",
     "lucide-react": "^1.21.0",
@@ -21,7 +22,8 @@
     "react-router-dom": "^7.18.0",
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.8.3",
-    "styled-components": "^6.4.3"
+    "styled-components": "^6.4.3",
+    "util": "^0.12.5"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.1",

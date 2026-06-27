@@ -116,6 +116,7 @@ io.on('connection', (socket) => {
   // Generic signal relay — forwards offers, answers, AND ICE candidates
   socket.on('relay-signal', (payload) => {
     const { targetId, signal } = payload;
+    console.log(`[WS] relay-signal: ${socket.id} -> ${targetId} (${signal.type || 'candidate'})`);
     io.to(targetId).emit('relay-signal', {
       senderId: socket.id,
       signal,
