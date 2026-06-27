@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useFirebaseAuth } from '../../hooks/useFirebaseAuth';
 import { Loader2 } from 'lucide-react';
@@ -9,15 +8,6 @@ interface AuthGuardProps {
 
 export default function AuthGuard({ requiredRole }: AuthGuardProps) {
   const { appUser, isLoading, sessionError } = useFirebaseAuth();
-  const [showError, setShowError] = useState(false);
-
-  useEffect(() => {
-    if (sessionError) {
-      setShowError(true);
-      const timer = setTimeout(() => setShowError(false), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [sessionError]);
 
   if (isLoading) {
     return (

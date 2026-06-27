@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import Peer, { Instance as PeerInstance } from 'simple-peer';
+import Peer, { type Instance as PeerInstance } from 'simple-peer';
+import { API_BASE_URL } from '@/config';
 
 interface PeerData {
   peer: PeerInstance;
@@ -11,11 +12,10 @@ interface PeerData {
   audioEnabled: boolean;
 }
 
-const SIGNALING_SERVER = 'http://localhost:5001';
+const SIGNALING_SERVER = API_BASE_URL;
 
 export function useWebRTC(roomId: string, currentUserId: string) {
   const [peers, setPeers] = useState<PeerData[]>([]);
-  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
@@ -59,7 +59,6 @@ export function useWebRTC(roomId: string, currentUserId: string) {
       if (destroyed) { stream.getTracks().forEach(t => t.stop()); return; }
 
       localStreamRef.current = stream;
-      setLocalStream(stream);
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
       }

@@ -30,7 +30,6 @@ const TeacherDashboard = lazy(() => import('./pages/cms/TeacherDashboard'));
 const BroadcastStudio = lazy(() => import('./pages/cms/BroadcastStudio'));
 const StudentsPage = lazy(() => import('./pages/cms/StudentsPage'));
 const SettingsPage = lazy(() => import('./pages/cms/SettingsPage'));
-const CMSPlaceholder = lazy(() => import('./pages/cms/CMSPlaceholder'));
 
 function AppRoutes() {
   const location = useLocation();

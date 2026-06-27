@@ -52,7 +52,7 @@ export class EventEmitter {
     return this;
   }
 
-  setMaxListeners(n: number) {
+  setMaxListeners(_n: number) {
     return this;
   }
 }

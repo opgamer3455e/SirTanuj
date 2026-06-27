@@ -5,6 +5,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import DotField from '../components/ui/DotField';
 import { useFirebaseAuth } from '../hooks/useFirebaseAuth';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '@/config';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -28,7 +29,7 @@ export default function AuthPage() {
         ? { identifier: email, password }
         : { name, email, password };
 
-      const response = await fetch(`http://localhost:5001${endpoint}`, {
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -61,7 +62,7 @@ export default function AuthPage() {
     setLoading(true);
     
     try {
-      const response = await fetch(`http://localhost:5001/api/auth/google`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

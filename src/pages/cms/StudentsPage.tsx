@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFirebaseAuth } from '../../hooks/useFirebaseAuth';
-import { Search, ShieldAlert, Mail, UserX, Loader2, MoreVertical } from 'lucide-react';
+import { Search, Mail, Loader2, MoreVertical } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface Student {

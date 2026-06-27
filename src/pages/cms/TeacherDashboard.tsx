@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Sidebar from '../../components/cms/Sidebar';
+import { useState, useEffect } from 'react';
 import { Plus, GripVertical, Calendar, Clock, Trash2, Settings2, FileVideo, FileText, HelpCircle, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useFirebaseAuth } from '../../hooks/useFirebaseAuth';
 
 export default function TeacherDashboard() {
-  const { secureFetch } = useFirebaseAuth();
+  useFirebaseAuth();
   const [isSaving, setIsSaving] = useState(false);
   const [modules, setModules] = useState([
     {

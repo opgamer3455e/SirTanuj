@@ -17,8 +17,22 @@ const { router: authRouter } = require('./routes/auth');
 const curriculumRouter = require('./routes/curriculum');
 
 const app = express();
+
+// Allow localhost in dev, and the deployed Netlify URL in production
+const allowedOrigins = [
+  'http://localhost:5173',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 app.use(cors({
-  origin: 'http://localhost:5173', // frontend URL
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS: Origin not allowed: ${origin}`));
+    }
+  },
   credentials: true // allow cookies
 }));
 app.use(express.json()); // Enable JSON body parsing for REST API
@@ -71,8 +85,9 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Video, Copy, Play, CheckCircle2, MonitorUp, Eye, Trash2, Radio, Clock, Calendar } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { Video, Copy, Play, CheckCircle2, Trash2, Radio, Clock, Calendar } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useFirebaseAuth } from '../../hooks/useFirebaseAuth';
 

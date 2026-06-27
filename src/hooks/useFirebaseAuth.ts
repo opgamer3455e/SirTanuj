@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { API_BASE_URL } from '@/config';
 
 interface AppUser {
   id: string;
@@ -16,7 +17,7 @@ export function useFirebaseAuth() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch('http://localhost:5001/api/auth/me', {
+        const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
           credentials: 'include', // send cookies
         });
 
@@ -45,14 +46,14 @@ export function useFirebaseAuth() {
 
   const logout = async () => {
     try {
-      await fetch('http://localhost:5001/api/auth/logout', { method: 'POST', credentials: 'include' });
+      await fetch(`${API_BASE_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
     } catch(e) {}
     setAppUser(null);
   };
 
   // Helper method to make API calls with cookies
   const secureFetch = async (url: string, options: RequestInit = {}) => {
-    const res = await fetch(`http://localhost:5001${url}`, { 
+    const res = await fetch(`${API_BASE_URL}${url}`, { 
       ...options, 
       credentials: 'include', 
       headers: {

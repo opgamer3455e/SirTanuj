@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, User, Play, Video, Radio, Loader2 } from 'lucide-react';
+import { API_BASE_URL } from '@/config';
 
 interface LiveClassEntry {
   _id: string;
@@ -29,7 +30,7 @@ export default function LiveClassesPage() {
 
   const fetchClasses = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/live-classes');
+      const res = await fetch(`${API_BASE_URL}/api/live-classes`);
       if (res.ok) {
         const data = await res.json();
         setClasses(data);

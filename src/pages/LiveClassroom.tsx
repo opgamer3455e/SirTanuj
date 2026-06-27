@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWebRTC } from '../hooks/useWebRTC';
 import { useAntiRecording } from '../hooks/useAntiRecording';
 import { Watermark } from '../components/ui/Watermark';
 import { Mic, MicOff, Video, VideoOff, MonitorUp, PhoneOff, MessageSquare, Users, Disc, Presentation } from 'lucide-react';
-import { Instance as PeerInstance } from 'simple-peer';
 import { useFirebaseAuth } from '../hooks/useFirebaseAuth';
 import Whiteboard from '../components/ui/Whiteboard';
 

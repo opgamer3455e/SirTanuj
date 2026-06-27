@@ -1,6 +1,5 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, Video, Palette, Users, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Video, Users, Settings, LogOut } from 'lucide-react';
 import { useFirebaseAuth } from '../../hooks/useFirebaseAuth';
 
 export default function Sidebar() {
