@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, User, Play, Video } from 'lucide-react';
 
@@ -36,6 +37,7 @@ const mockLiveClasses = [
 ];
 
 export default function LiveClassesPage() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [_currentTime, setCurrentTime] = useState(new Date());
 
@@ -160,6 +162,7 @@ export default function LiveClassesPage() {
                   <div className="w-full md:w-auto mt-4 md:mt-0 relative z-10">
                     {activeTab === 'upcoming' ? (
                       <button 
+                        onClick={() => active ? navigate(`/live/room-${session.id}`) : null}
                         className={`w-full md:w-auto px-8 py-4 rounded-full font-bold font-['Cinzel'] text-sm tracking-widest transition-all flex items-center justify-center gap-2 ${
                           active 
                           ? 'bg-[#FC642D] hover:bg-[#ff7544] text-white shadow-[0_0_20px_rgba(252,100,45,0.4)]' 

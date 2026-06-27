@@ -76,7 +76,7 @@ const Navbar = memo(function Navbar() {
           {/* Mobile Menu Hamburger Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex lg:hidden items-center justify-center p-2 rounded-full hover:bg-white/5 text-zinc-300 hover:text-white focus:outline-none transition-colors"
+            className="flex lg:!hidden items-center justify-center p-2 rounded-full hover:bg-white/5 text-zinc-300 hover:text-white focus:outline-none transition-colors"
             aria-label="Toggle menu"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -135,7 +135,7 @@ const Navbar = memo(function Navbar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute top-full left-0 right-0 mt-3 bg-black/80 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl z-40 flex flex-col lg:hidden"
+              className="absolute top-full left-0 right-0 mt-3 bg-black/80 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl z-40 flex flex-col lg:!hidden"
             >
               <div className="flex flex-col p-6 gap-4">
                 {navLinks.map((link, idx) => {

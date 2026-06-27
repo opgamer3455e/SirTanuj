@@ -23,6 +23,7 @@ const ContactPage = lazy(() => import('./pages/ContactPage'));
 const FAQPage = lazy(() => import('./pages/FAQPage'));
 const BlogPage = lazy(() => import('./pages/BlogPage'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
+const LiveClassroom = lazy(() => import('./pages/LiveClassroom'));
 
 function AppRoutes() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function AppRoutes() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/courses" element={<CoursesPage />} />
       <Route path="/live-classes" element={<LiveClassesPage />} />
+      <Route path="/live/:roomId?" element={<LiveClassroom />} />
       <Route path="/study-materials" element={<StudyMaterialsPage />} />
       <Route path="/payment" element={<PaymentPage />} />
       <Route path="/dashboard" element={<StudentDashboard />} />
