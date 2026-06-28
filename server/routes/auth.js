@@ -20,7 +20,7 @@ const issueTokenAndCookie = (res, user, newSessionKey) => {
   res.cookie('token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   });
 
@@ -170,7 +170,12 @@ router.post('/google', async (req, res) => {
 // @route   POST /api/auth/logout
 // @desc    Logout user and clear cookie
 router.post('/logout', (req, res) => {
-  res.cookie('token', '', { expires: new Date(0) });
+  res.cookie('token', '', { 
+    expires: new Date(0),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  });
   res.json({ message: 'Logged out successfully' });
 });
 
