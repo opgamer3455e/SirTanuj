@@ -6,6 +6,7 @@ import { API_BASE_URL } from '@/config';
 interface PeerData {
   peer: PeerInstance;
   peerId: string;
+  name?: string;
   stream?: MediaStream;
   isSpeaking: boolean;
   videoEnabled: boolean;
@@ -24,6 +25,7 @@ export function useWebRTC(roomId: string, currentUserId: string) {
   const peersRef = useRef<PeerData[]>([]);
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
+  const namesMapRef = useRef<Record<string, string>>({});
 
   useEffect(() => {
     let destroyed = false;
@@ -68,33 +70,40 @@ export function useWebRTC(roomId: string, currentUserId: string) {
       console.log('[WebRTC] Emitted join-room for', roomId);
 
       // Server tells us who is already in the room. We initiate to each.
-      socket.on('all-users', (userSocketIds: string[]) => {
-        console.log('[WebRTC] all-users:', userSocketIds);
-        userSocketIds.forEach((remoteSocketId) => {
-          if (peersRef.current.find(p => p.peerId === remoteSocketId)) return; // no dupes
+      socket.on('all-users', (users: { id: string, name: string }[]) => {
+        console.log('[WebRTC] all-users:', users);
+        users.forEach((u) => {
+          namesMapRef.current[u.id] = u.name;
+          if (peersRef.current.find(p => p.peerId === u.id)) return; // no dupes
 
           const peer = new Peer({ initiator: true, trickle: true, stream });
 
           peer.on('signal', (signal) => {
-            console.log('[WebRTC] Sending signal to', remoteSocketId, signal.type || 'candidate');
-            socket.emit('relay-signal', { targetId: remoteSocketId, signal });
+            console.log('[WebRTC] Sending signal to', u.id, signal.type || 'candidate');
+            socket.emit('relay-signal', { targetId: u.id, signal });
           });
 
           peer.on('stream', (remoteStream) => {
-            console.log('[WebRTC] Got stream from', remoteSocketId);
-            updatePeerStream(remoteSocketId, remoteStream);
+            console.log('[WebRTC] Got stream from', u.id);
+            updatePeerStream(u.id, remoteStream);
           });
 
-          peer.on('connect', () => console.log('[WebRTC] Peer connected:', remoteSocketId));
-          peer.on('error', (err) => console.error('[WebRTC] Peer error:', remoteSocketId, err.message));
+          peer.on('connect', () => console.log('[WebRTC] Peer connected:', u.id));
+          peer.on('error', (err) => console.error('[WebRTC] Peer error:', u.id, err.message));
 
           const peerData: PeerData = {
-            peer, peerId: remoteSocketId,
+            peer, peerId: u.id, name: u.name,
             isSpeaking: false, videoEnabled: true, audioEnabled: true,
           };
           peersRef.current.push(peerData);
         });
         setPeers([...peersRef.current]);
+      });
+
+      // Someone new joined (Server sends {id, name})
+      socket.on('user-joined', (user: { id: string, name: string }) => {
+        console.log('[WebRTC] user-joined:', user);
+        namesMapRef.current[user.id] = user.name;
       });
 
       // Incoming signal (offer, answer, or ICE candidate)
@@ -126,7 +135,7 @@ export function useWebRTC(roomId: string, currentUserId: string) {
           try { peer.signal(signal); } catch(e) { console.error('[WebRTC] initial signal error:', e); }
 
           const peerData: PeerData = {
-            peer, peerId: senderId,
+            peer, peerId: senderId, name: namesMapRef.current[senderId],
             isSpeaking: false, videoEnabled: true, audioEnabled: true,
           };
           peersRef.current.push(peerData);

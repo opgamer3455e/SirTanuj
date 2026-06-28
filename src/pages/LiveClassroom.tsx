@@ -21,7 +21,7 @@ const VideoStream = ({ peerData }: { peerData: any }) => {
     return (
       <div className="w-full h-full bg-zinc-900 rounded-2xl flex items-center justify-center border border-white/5 relative overflow-hidden">
         <div className="w-20 h-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-500 text-3xl font-bold uppercase ring-4 ring-zinc-800/50">
-          {(peerData.peerId || 'P').substring(0, 2)}
+          {(peerData.name || peerData.peerId || 'P').substring(0, 2)}
         </div>
         {peerData.isSpeaking && (
           <motion.div 
@@ -43,17 +43,31 @@ const VideoStream = ({ peerData }: { peerData: any }) => {
         className="w-full h-full object-cover"
       />
       <div className="absolute bottom-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md text-xs font-semibold text-white/90">
-        {(peerData.peerId || 'Peer').substring(0, 8)}
+        {peerData.name || peerData.peerId || 'Peer'}
       </div>
     </div>
   );
 };
 
-export default function LiveClassroom() {
+export default function LiveClassroomWrapper() {
+  const { appUser, isLoading } = useFirebaseAuth();
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center text-white">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#00A699]"></div>
+      </div>
+    );
+  }
+
+  return <LiveClassroom appUser={appUser} />;
+}
+
+function LiveClassroom({ appUser }: { appUser: any }) {
   const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
-  // Using a mock user ID based on random string for demo, normally from auth context
-  const [userId] = useState(() => `student_${Math.random().toString(36).substring(2, 8)}`);
+  
+  const [userId] = useState(() => appUser?.name || `Guest_${Math.random().toString(36).substring(2, 6)}`);
   
   const { isBlurred } = useAntiRecording();
   const {
@@ -68,7 +82,6 @@ export default function LiveClassroom() {
     toggleScreenShare,
   } = useWebRTC(roomId || 'main-room', userId);
 
-  const { appUser } = useFirebaseAuth();
   const isTeacher = appUser?.role === 'TEACHER' || appUser?.role === 'ADMIN';
 
   const [isChatOpen, setIsChatOpen] = useState(false);

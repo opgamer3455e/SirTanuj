@@ -154,11 +154,14 @@ io.on('connection', (socket) => {
     });
 
     // Send the new user the list of all existing users in the room (excluding themselves)
-    const existingUsers = Array.from(rooms.get(roomId).keys()).filter(id => id !== socket.id);
+    const existingUsers = Array.from(rooms.get(roomId).values())
+      .filter(u => u.id !== socket.id)
+      .map(u => ({ id: u.id, name: u.userId }));
+    
     socket.emit('all-users', existingUsers);
 
     // Notify existing users that someone new joined
-    socket.to(roomId).emit('user-joined', socket.id);
+    socket.to(roomId).emit('user-joined', { id: socket.id, name: userId });
 
     console.log(`[WS] ${socket.id} joined room ${roomId} (${existingUsers.length} existing users)`);
   });
