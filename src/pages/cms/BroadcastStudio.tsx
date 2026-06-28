@@ -19,6 +19,7 @@ export default function BroadcastStudio() {
   const [roomId, setRoomId] = useState('');
   const [classTitle, setClassTitle] = useState('');
   const [classDescription, setClassDescription] = useState('');
+  const [scheduledDate, setScheduledDate] = useState('');
   const [isCopied, setIsCopied] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [classes, setClasses] = useState<LiveClassEntry[]>([]);
@@ -47,32 +48,41 @@ export default function BroadcastStudio() {
     setIsCopied(false);
   };
 
-  const saveAndGoLive = async () => {
+  const saveClass = async (goLive: boolean) => {
     if (!classTitle.trim()) {
       alert('Please enter a class title.');
+      return;
+    }
+    if (!goLive && !scheduledDate) {
+      alert('Please select a schedule date.');
       return;
     }
 
     setIsSaving(true);
     try {
+      const targetDate = goLive ? new Date().toISOString() : new Date(scheduledDate).toISOString();
       const res = await secureFetch('/api/live-classes', {
         method: 'POST',
         body: JSON.stringify({
           title: classTitle,
           description: classDescription,
           roomId,
-          scheduledFor: new Date().toISOString()
+          scheduledFor: targetDate
         })
       });
 
       if (res.ok) {
         const created = await res.json();
-        // Mark it as LIVE immediately
-        await secureFetch(`/api/live-classes/${created._id}/status`, {
-          method: 'PATCH',
-          body: JSON.stringify({ status: 'LIVE' })
-        });
-        navigate(`/live/${roomId}`);
+        if (goLive) {
+          await secureFetch(`/api/live-classes/${created._id}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'LIVE' })
+          });
+          navigate(`/live/${roomId}`);
+        } else {
+          setRoomId(''); setClassTitle(''); setClassDescription(''); setScheduledDate('');
+          fetchClasses();
+        }
       }
     } catch (err) {
       console.error('Failed to create class:', err);
@@ -193,6 +203,16 @@ export default function BroadcastStudio() {
                 </div>
 
                 <div>
+                  <label className="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-2 block">Schedule Date (optional for Go Live Now)</label>
+                  <input
+                    type="datetime-local"
+                    value={scheduledDate}
+                    onChange={(e) => setScheduledDate(e.target.value)}
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FC642D] transition-colors"
+                  />
+                </div>
+
+                <div>
                   <label className="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-2 block">Room ID</label>
                   <input
                     type="text"
@@ -220,17 +240,25 @@ export default function BroadcastStudio() {
                   </div>
                 </div>
 
-                <div className="pt-4 flex gap-3">
+                <div className="pt-4 flex flex-col sm:flex-row gap-3">
                   <button
-                    onClick={saveAndGoLive}
+                    onClick={() => saveClass(true)}
                     disabled={isSaving}
                     className="flex-1 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     <Play size={18} />
-                    {isSaving ? 'Saving...' : 'Save & Go Live'}
+                    {isSaving ? 'Saving...' : 'Go Live Now'}
                   </button>
                   <button
-                    onClick={() => { setRoomId(''); setClassTitle(''); setClassDescription(''); }}
+                    onClick={() => saveClass(false)}
+                    disabled={isSaving}
+                    className="flex-1 py-3 bg-[#FC642D] hover:bg-[#ff7544] text-white font-bold rounded-xl shadow-[0_0_20px_rgba(252,100,45,0.4)] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <Calendar size={18} />
+                    {isSaving ? 'Saving...' : 'Schedule for Later'}
+                  </button>
+                  <button
+                    onClick={() => { setRoomId(''); setClassTitle(''); setClassDescription(''); setScheduledDate(''); }}
                     className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-colors"
                   >
                     Cancel

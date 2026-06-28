@@ -7,8 +7,9 @@ import { Watermark } from '../components/ui/Watermark';
 import { Mic, MicOff, Video, VideoOff, MonitorUp, PhoneOff, MessageSquare, Users, Disc, Presentation } from 'lucide-react';
 import { useFirebaseAuth } from '../hooks/useFirebaseAuth';
 import Whiteboard from '../components/ui/Whiteboard';
+import ChatPanel from '../components/ui/ChatPanel';
 
-const VideoStream = ({ peerData }: { peerData: any }) => {
+const VideoStream = ({ peerData, className = '' }: { peerData: any, className?: string }) => {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const VideoStream = ({ peerData }: { peerData: any }) => {
   }
 
   return (
-    <div className={`w-full h-full rounded-2xl overflow-hidden relative border border-white/10 shadow-xl ${peerData.isSpeaking ? 'ring-2 ring-emerald-500' : ''}`}>
+    <div className={`w-full h-full rounded-2xl overflow-hidden relative border border-white/10 shadow-xl ${peerData.isSpeaking ? 'ring-2 ring-emerald-500' : ''} ${className}`}>
       <video
         ref={ref}
         autoPlay
@@ -80,10 +81,11 @@ function LiveClassroom({ appUser }: { appUser: any }) {
     toggleMute,
     toggleVideo,
     toggleScreenShare,
-  } = useWebRTC(roomId || 'main-room', userId);
+  } = useWebRTC(roomId || 'main-room', userId, appUser?.role || 'STUDENT');
 
   const isTeacher = appUser?.role === 'TEACHER' || appUser?.role === 'ADMIN';
 
+  const [viewMode, setViewMode] = useState<'FOCUS' | 'GALLERY'>('FOCUS');
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
@@ -153,6 +155,9 @@ function LiveClassroom({ appUser }: { appUser: any }) {
     }
   };
 
+  const teacherPeer = peers.find(p => p.role === 'TEACHER' || p.role === 'ADMIN');
+  const otherPeers = peers.filter(p => p !== teacherPeer);
+
   return (
     <div className="fixed inset-0 z-[999] bg-[#0a0a0a] text-white overflow-hidden">
       <Watermark userId={userId} />
@@ -188,19 +193,41 @@ function LiveClassroom({ appUser }: { appUser: any }) {
         </div>
       </div>
 
-      {/* Video Grid Area / Whiteboard Split View */}
-      <div className={`pt-24 pb-32 px-6 h-screen flex gap-4 transition-all duration-300 ${isChatOpen ? 'pr-[340px]' : ''}`}>
-        {isWhiteboardOpen ? (
-          <>
-            {/* Whiteboard Space */}
-            <div className="flex-[3] h-full flex flex-col">
-              <Whiteboard socket={socket} roomId={roomId || 'main-room'} isTeacher={isTeacher} />
+      {/* Main Classroom Area */}
+      <div className={`pt-24 pb-32 px-6 h-screen flex gap-4 transition-all duration-300 ${isChatOpen ? 'pr-[380px]' : ''}`}>
+        {viewMode === 'FOCUS' ? (
+          <div className="w-full h-full flex flex-col items-center justify-center relative">
+            {/* Main Stage */}
+            <div className="w-full h-full flex gap-4">
+              {(isWhiteboardOpen || teacherPeer || (isTeacher && peers.length === 0)) ? (
+                <div className="flex-1 rounded-2xl overflow-hidden relative shadow-2xl bg-zinc-900 border border-white/10">
+                  {isWhiteboardOpen ? (
+                    <Whiteboard socket={socket} roomId={roomId || 'main-room'} isTeacher={isTeacher} />
+                  ) : teacherPeer ? (
+                    <VideoStream peerData={teacherPeer} className="w-full h-full" />
+                  ) : (
+                     <video
+                       ref={localVideoRef}
+                       autoPlay
+                       playsInline
+                       muted
+                       className={`w-full h-full object-cover ${isScreenSharing ? 'object-contain' : ''} ${!isScreenSharing ? 'scale-x-[-1]' : ''}`}
+                     />
+                  )}
+                </div>
+              ) : (
+                <div className="flex-1 rounded-2xl flex items-center justify-center border border-white/5 bg-zinc-900/50">
+                  <div className="flex flex-col items-center opacity-50">
+                    <Users className="w-12 h-12 mb-4" />
+                    <p className="font-medium tracking-wide">Waiting for teacher...</p>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Peer Sidebar */}
-            <div className="flex-[1] flex flex-col gap-4 overflow-y-auto max-h-full pr-1 scrollbar-thin">
-              {/* Local Video */}
-              <div className="aspect-video w-full rounded-2xl overflow-hidden relative border border-white/10 bg-zinc-900 shadow-xl group flex-shrink-0">
+            {/* PiP Local Video (if not occupying main stage) */}
+            {(!isTeacher || isWhiteboardOpen || teacherPeer) && (
+              <div className="absolute bottom-6 right-6 w-64 aspect-video rounded-xl overflow-hidden border-2 border-white/20 shadow-2xl bg-zinc-900 z-10 hover:scale-105 transition-transform duration-300">
                  {!isVideoOff ? (
                    <video
                      ref={localVideoRef}
@@ -210,28 +237,32 @@ function LiveClassroom({ appUser }: { appUser: any }) {
                      className={`w-full h-full object-cover ${isScreenSharing ? 'object-contain' : ''} ${!isScreenSharing ? 'scale-x-[-1]' : ''}`}
                    />
                  ) : (
-                   <div className="w-full h-full flex items-center justify-center">
-                      <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-500 text-lg font-bold uppercase ring-2 ring-zinc-800/50">
-                        You
-                      </div>
+                   <div className="w-full h-full flex items-center justify-center bg-zinc-800">
+                     <span className="text-zinc-500 font-bold uppercase ring-2 ring-zinc-700 p-2 rounded-full text-xs">You</span>
                    </div>
                  )}
-                 <div className="absolute bottom-2 left-2 px-2 py-0.5 bg-black/60 backdrop-blur-md rounded text-[10px] font-semibold text-white/90">
+                 <div className="absolute bottom-1 left-2 bg-black/60 px-2 py-0.5 rounded text-[10px] font-semibold text-white/90">
                    You {isMuted && <span className="ml-1 text-red-400">Muted</span>}
                  </div>
               </div>
-
-              {/* Remote Video Cards */}
-              {peers.map((peerData, index) => (
-                <div key={index} className="aspect-video w-full flex-shrink-0">
-                  <VideoStream peerData={peerData} />
-                </div>
-              ))}
+            )}
+            
+            {/* Badges bar */}
+            <div className="absolute bottom-6 left-6 flex items-center gap-2">
+               {otherPeers.map(p => (
+                 <div key={p.peerId} className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-sm font-bold uppercase ring-2 ring-white/10 shadow-lg relative group transition-transform hover:-translate-y-1">
+                   {(p.name || p.peerId || 'P').substring(0, 2)}
+                   {p.isSpeaking && <span className="absolute inset-0 rounded-full ring-2 ring-emerald-500 animate-pulse"></span>}
+                   <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity pointer-events-none z-20">
+                     {p.name || 'Peer'}
+                   </div>
+                 </div>
+               ))}
             </div>
-          </>
+          </div>
         ) : (
-          <div className="w-full h-full grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
-            {/* Local Video */}
+          /* GALLERY VIEW */
+          <div className="w-full h-full grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr">
             <div className="w-full h-full rounded-2xl overflow-hidden relative border border-white/10 bg-zinc-900 shadow-xl group">
                {!isVideoOff ? (
                  <video
@@ -253,13 +284,32 @@ function LiveClassroom({ appUser }: { appUser: any }) {
                </div>
             </div>
 
-            {/* Remote Peers */}
             {peers.map((peerData, index) => (
               <VideoStream key={index} peerData={peerData} />
             ))}
           </div>
         )}
       </div>
+
+      {/* Chat Panel Overlay */}
+      <AnimatePresence>
+        {isChatOpen && (
+          <motion.div
+            initial={{ x: 380, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 380, opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="absolute top-24 bottom-32 right-6 w-[340px] z-30"
+          >
+            <ChatPanel 
+              socket={socket} 
+              roomId={roomId || 'main-room'} 
+              currentUserId={userId} 
+              currentUserName={appUser?.name || 'Guest'} 
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Bottom Floating Control Dock */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
@@ -287,6 +337,14 @@ function LiveClassroom({ appUser }: { appUser: any }) {
           </button>
 
           <div className="w-px h-8 bg-white/10 mx-2" />
+
+          <button 
+            onClick={() => setViewMode(prev => prev === 'FOCUS' ? 'GALLERY' : 'FOCUS')}
+            className="px-4 py-3 rounded-xl flex items-center justify-center transition-all bg-white/5 text-white hover:bg-white/10 text-sm font-semibold gap-2"
+          >
+            {viewMode === 'FOCUS' ? <Users className="w-4 h-4" /> : <Presentation className="w-4 h-4" />}
+            {viewMode === 'FOCUS' ? 'Gallery View' : 'Focus View'}
+          </button>
 
           <button 
             onClick={() => setIsChatOpen(!isChatOpen)}

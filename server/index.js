@@ -136,7 +136,7 @@ io.on('connection', (socket) => {
   console.log(`[WS] Connected: ${socket.id}`);
 
   // Join Room
-  socket.on('join-room', (roomId, userId) => {
+  socket.on('join-room', (roomId, userId, role) => {
     socket.join(roomId);
     socketRoomMap.set(socket.id, roomId);
 
@@ -147,6 +147,7 @@ io.on('connection', (socket) => {
     rooms.get(roomId).set(socket.id, {
       id: socket.id,
       userId: userId,
+      role: role || 'STUDENT',
       isSpeaking: false,
       isScreenSharing: false,
       videoEnabled: true,
@@ -156,12 +157,12 @@ io.on('connection', (socket) => {
     // Send the new user the list of all existing users in the room (excluding themselves)
     const existingUsers = Array.from(rooms.get(roomId).values())
       .filter(u => u.id !== socket.id)
-      .map(u => ({ id: u.id, name: u.userId }));
+      .map(u => ({ id: u.id, name: u.userId, role: u.role }));
     
     socket.emit('all-users', existingUsers);
 
     // Notify existing users that someone new joined
-    socket.to(roomId).emit('user-joined', { id: socket.id, name: userId });
+    socket.to(roomId).emit('user-joined', { id: socket.id, name: userId, role: role || 'STUDENT' });
 
     console.log(`[WS] ${socket.id} joined room ${roomId} (${existingUsers.length} existing users)`);
   });
