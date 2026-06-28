@@ -49,15 +49,22 @@ app.use(cookieParser()); // Enable Cookie parsing for JWT
 // Connect to MongoDB
 const connectDB = async () => {
   try {
-    try {
-      await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/teacher_cms');
-      console.log('MongoDB connected successfully');
-    } catch (err) {
-      console.log('Local MongoDB not running. Starting in-memory database for dev...');
-      const { MongoMemoryServer } = require('mongodb-memory-server');
-      const mongoServer = await MongoMemoryServer.create();
-      await mongoose.connect(mongoServer.getUri());
-      console.log('In-memory MongoDB connected successfully');
+    if (process.env.MONGO_URI) {
+      // Production: use the provided MongoDB URI
+      await mongoose.connect(process.env.MONGO_URI);
+      console.log('MongoDB connected successfully (external)');
+    } else {
+      // Development: try local MongoDB first, then fall back to in-memory
+      try {
+        await mongoose.connect('mongodb://localhost:27017/teacher_cms');
+        console.log('MongoDB connected successfully (local)');
+      } catch (err) {
+        console.log('Local MongoDB not running. Starting in-memory database for dev...');
+        const { MongoMemoryServer } = require('mongodb-memory-server');
+        const mongoServer = await MongoMemoryServer.create();
+        await mongoose.connect(mongoServer.getUri());
+        console.log('In-memory MongoDB connected successfully');
+      }
     }
 
     // Auto-create Admin/Teacher account
@@ -67,7 +74,7 @@ const connectDB = async () => {
       await User.create({
         username: 'TanujKim',
         name: 'Tanuj Kim',
-        email: 'admin@nexus.edu', // dummy email
+        email: 'admin@nexus.edu',
         password: hashedPassword,
         role: 'TEACHER'
       });
@@ -77,6 +84,7 @@ const connectDB = async () => {
     }
   } catch (err) {
     console.error('CRITICAL ERROR in connectDB:', err);
+    // Don't crash the server — let it run without DB so CORS headers still work
   }
 };
 connectDB();
@@ -93,7 +101,13 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      if (!origin || origin.includes('localhost') || origin.includes('netlify.app') || origin === process.env.FRONTEND_URL) {
+        callback(null, true);
+      } else {
+        callback(new Error('Socket CORS blocked: ' + origin));
+      }
+    },
     methods: ['GET', 'POST'],
     credentials: true
   }
