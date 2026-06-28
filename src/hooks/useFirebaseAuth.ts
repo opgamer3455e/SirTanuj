@@ -9,34 +9,45 @@ interface AppUser {
   role: 'STUDENT' | 'TEACHER' | 'ADMIN';
 }
 
+let globalAuthPromise: Promise<any> | null = null;
+
 export function useFirebaseAuth() {
   const [appUser, setAppUser] = useState<AppUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [sessionError, setSessionError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchUser = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
-          credentials: 'include', // send cookies
-        });
+        if (!globalAuthPromise) {
+          globalAuthPromise = fetch(`${API_BASE_URL}/api/auth/me`, {
+            credentials: 'include',
+          }).then(res => {
+            if (!res.ok) throw res;
+            return res.json();
+          });
+        }
 
-        if (response.ok) {
-          const data = await response.json();
+        const data = await globalAuthPromise;
+        if (isMounted) {
           setAppUser(data.user);
           setSessionError(null);
-        } else {
-          setAppUser(null);
-          // If token expired, backend sends 401
         }
       } catch (err) {
-        setAppUser(null);
+        if (isMounted) {
+          setAppUser(null);
+        }
+        // Clear promise after a short delay so user can try logging in again later
+        setTimeout(() => { globalAuthPromise = null; }, 1000);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
 
     fetchUser();
+    return () => { isMounted = false; };
   }, []);
 
   const login = (user: AppUser) => {
