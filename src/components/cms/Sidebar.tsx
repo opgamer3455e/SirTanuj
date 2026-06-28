@@ -1,9 +1,9 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, Video, Users, Settings, LogOut } from 'lucide-react';
-import { useFirebaseAuth } from '../../hooks/useFirebaseAuth';
+import { LayoutDashboard, BookOpen, Video, Users, Settings, LogOut, FileText } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Sidebar() {
-  const { logout } = useFirebaseAuth();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -12,6 +12,7 @@ export default function Sidebar() {
   const links = [
     { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/cms' },
     { name: 'Curriculum Builder', icon: <BookOpen size={20} />, path: '/cms/curriculum' },
+    { name: 'Study Materials', icon: <FileText size={20} />, path: '/cms/materials' },
     { name: 'Broadcast Studio', icon: <Video size={20} />, path: '/cms/broadcast' },
     { name: 'Students', icon: <Users size={20} />, path: '/cms/students' },
     { name: 'Settings', icon: <Settings size={20} />, path: '/cms/settings' },

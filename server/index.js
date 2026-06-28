@@ -92,10 +92,23 @@ connectDB();
 // REST API Routes
 const studentsRouter = require('./routes/students');
 const liveClassesRouter = require('./routes/liveClasses');
+const studyMaterialsRouter = require('./routes/studyMaterials');
 app.use('/api/auth', authRouter);
 app.use('/api/curriculum', curriculumRouter);
 app.use('/api/students', studentsRouter);
 app.use('/api/live-classes', liveClassesRouter);
+app.use('/api/study-materials', studyMaterialsRouter);
+
+// Public endpoint: get published courses (no auth)
+const Course = require('./models/Course');
+app.get('/api/public/courses', async (req, res) => {
+  try {
+    const courses = await Course.find({ isPublished: true }).select('-modules.lessons.contentUrl');
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch courses' });
+  }
+});
 
 const server = http.createServer(app);
 

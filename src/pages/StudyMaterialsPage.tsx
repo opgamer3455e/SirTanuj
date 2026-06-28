@@ -1,24 +1,46 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FileText, Play, Filter, BookOpen } from 'lucide-react';
+import { FileText, Play, Filter, BookOpen, Loader2 } from 'lucide-react';
 import AnimatedCheckbox from '../components/ui/AnimatedCheckbox';
 import AnimatedInput from '../components/ui/AnimatedInput';
 import AnimatedDownloadButton from '../components/ui/AnimatedDownloadButton';
+import { API_BASE_URL } from '@/config';
 
-const mockMaterials = [
-  { id: 1, title: 'The Road Not Taken - Deep Analytical Breakdown', type: 'PDF', category: 'Poetry', class: 'Class 9', size: '2.4 MB', featured: true },
-  { id: 2, title: 'Tenses Revision Guide', type: 'Video', category: 'Grammar', class: 'Class 10', duration: '15 mins', featured: false },
-  { id: 3, title: 'Beehive: Chapter 1 Summary', type: 'PDF', category: 'Prose', class: 'Class 9', size: '1.8 MB', featured: false },
-  { id: 4, title: 'Analytical Paragraph Masterclass', type: 'Video', category: 'Writing', class: 'Class 10', duration: '22 mins', featured: true },
-  { id: 5, title: 'First Flight: Core Board Questions', type: 'PDF', category: 'Prose', class: 'Class 10', size: '3.1 MB', featured: false },
-  { id: 6, title: 'Figures of Speech Demystified', type: 'Video', category: 'Poetry', class: 'Class 9', duration: '18 mins', featured: false },
-  { id: 7, title: 'Grammar Worksheets Vol 1', type: 'PDF', category: 'Grammar', class: 'Class 9', size: '1.2 MB', featured: false },
-];
+interface Material {
+  _id: string;
+  title: string;
+  type: 'PDF' | 'Video';
+  category: string;
+  classLevel: string;
+  fileUrl: string;
+  size: string;
+  duration: string;
+  featured: boolean;
+}
 
 export default function StudyMaterialsPage() {
+  const [materials, setMaterials] = useState<Material[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeClasses, setActiveClasses] = useState<string[]>([]);
   const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/study-materials`);
+        if (res.ok) {
+          const data = await res.json();
+          setMaterials(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch materials:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMaterials();
+  }, []);
 
   const toggleClass = useCallback((cls: string) => {
     setActiveClasses(prev => 
@@ -32,13 +54,16 @@ export default function StudyMaterialsPage() {
     );
   }, []);
 
+  const allClasses = useMemo(() => [...new Set(materials.map(m => m.classLevel))], [materials]);
+  const allCategories = useMemo(() => [...new Set(materials.map(m => m.category))], [materials]);
+
   const filteredMaterials = useMemo(() => {
-    return mockMaterials.filter(m => 
-      (activeClasses.length === 0 || activeClasses.includes(m.class)) &&
+    return materials.filter(m => 
+      (activeClasses.length === 0 || activeClasses.includes(m.classLevel)) &&
       (activeCategories.length === 0 || activeCategories.includes(m.category)) &&
       (m.title.toLowerCase().includes(searchQuery.toLowerCase()))
     );
-  }, [activeClasses, activeCategories, searchQuery]);
+  }, [materials, activeClasses, activeCategories, searchQuery]);
 
   return (
     <div className="pt-32 pb-24 px-4 min-h-screen bg-[#050505] bg-noise relative overflow-hidden">
@@ -48,150 +73,163 @@ export default function StudyMaterialsPage() {
         background: 'radial-gradient(circle at top left, rgba(0, 166, 153, 0.08), transparent 50%), radial-gradient(circle at bottom right, rgba(255, 90, 95, 0.05), transparent 50%)'
       }} />
 
-      <div className="max-w-[1400px] mx-auto flex flex-col xl:flex-row gap-10 relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* Sidebar Filters - Editorial Style */}
-        <div className="w-full xl:w-80 flex-shrink-0">
-          <div className="glass-panel rounded-[2rem] p-8 sticky top-28">
-            <div className="flex items-center gap-3 mb-10">
-              <div className="w-10 h-10 rounded-full bg-[#00A699]/20 flex items-center justify-center border border-[#00A699]/30">
-                <Filter className="text-[#00A699]" size={20} />
-              </div>
-              <h3 className="text-2xl font-bold text-white font-['Cinzel'] tracking-wide">Archives</h3>
-            </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-16"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold text-white font-['Cinzel'] mb-4">Study Materials</h1>
+          <p className="text-zinc-400 font-['Playfair_Display'] text-lg max-w-xl border-l-2 border-[#00A699]/30 pl-4">
+            Access curated resources uploaded by your teacher — PDFs, video lessons, and more.
+          </p>
+        </motion.div>
 
-            {/* Class Filter */}
-            <div className="mb-10">
-              <h4 className="text-xs font-bold text-[#C9A84C] uppercase tracking-widest mb-6">Academic Level</h4>
-              <div className="flex flex-col gap-4 pl-2">
-                {['Class 9', 'Class 10'].map(cls => (
-                  <AnimatedCheckbox 
-                    key={cls}
-                    id={`class-${cls}`}
-                    label={cls}
-                    checked={activeClasses.includes(cls)}
-                    onChange={() => toggleClass(cls)}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Category Filter */}
-            <div>
-              <h4 className="text-xs font-bold text-[#FF5A5F] uppercase tracking-widest mb-6">Subject Matter</h4>
-              <div className="flex flex-col gap-4 pl-2">
-                {['Poetry', 'Prose', 'Grammar', 'Writing'].map(cat => (
-                  <AnimatedCheckbox 
-                    key={cat}
-                    id={`category-${cat}`}
-                    label={cat}
-                    checked={activeCategories.includes(cat)}
-                    onChange={() => toggleCategory(cat)}
-                  />
-                ))}
-              </div>
-            </div>
+        {loading ? (
+          <div className="flex items-center justify-center py-32">
+            <Loader2 className="w-10 h-10 text-[#FC642D] animate-spin" />
           </div>
-        </div>
-
-        {/* Main Content - Bento Box */}
-        <div className="flex-1">
-          <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-end mb-12">
-            <div>
-              <h1 className="text-4xl md:text-6xl font-bold text-white font-['Cinzel'] mb-4 leading-none tracking-tight">
-                Study <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00A699] to-[#34d399]">Repository</span>
-              </h1>
-              <p className="text-zinc-400 font-['Playfair_Display'] text-lg italic border-l-2 border-[#00A699]/30 pl-4">Curated materials for academic excellence.</p>
-            </div>
-            
-            <div className="flex-1 w-full relative z-10">
-              <AnimatedInput 
-                label="Search the archives..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 auto-rows-[250px]">
-            <AnimatePresence mode="popLayout">
-              {filteredMaterials.map((material, idx) => {
-                const isFeatured = material.featured && idx < 2; // Only feature top items
-                
-                return (
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    key={material.id}
-                    className={`glass-panel rounded-3xl p-8 border hover:border-white/30 transition-all duration-500 hover:-translate-y-2 flex flex-col group relative overflow-hidden ${
-                      isFeatured ? 'md:col-span-2 md:row-span-2' : 'col-span-1 row-span-1'
-                    }`}
-                    style={{ borderColor: 'rgba(255,255,255,0.08)' }}
-                  >
-                    {/* Atmospheric Glow inside Card */}
-                    {isFeatured && (
-                       <div className={`absolute -right-20 -bottom-20 w-64 h-64 blur-[80px] rounded-full pointer-events-none transition-colors duration-700 ${material.type === 'PDF' ? 'bg-[#FF5A5F]/10 group-hover:bg-[#FF5A5F]/20' : 'bg-[#00A699]/10 group-hover:bg-[#00A699]/20'}`} />
-                    )}
-
-                    <div className="flex items-start justify-between mb-auto relative z-10">
-                      <div className={`p-4 rounded-2xl flex items-center justify-center backdrop-blur-md border ${
-                        material.type === 'PDF' 
-                          ? 'bg-[#FF5A5F]/10 text-[#FF5A5F] border-[#FF5A5F]/20' 
-                          : 'bg-[#FC642D]/10 text-[#FC642D] border-[#FC642D]/20'
-                      }`}>
-                        {material.type === 'PDF' ? <FileText size={isFeatured ? 32 : 24} /> : <Play size={isFeatured ? 32 : 24} />}
-                      </div>
-                      <div className="flex flex-col items-end gap-2">
-                        <span className="px-3 py-1 bg-black/50 border border-white/10 rounded-full text-xs font-bold text-zinc-300 tracking-wider uppercase">
-                          {material.class}
-                        </span>
-                        <span className="text-xs font-['Playfair_Display'] text-zinc-500 italic">{material.category}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="relative z-10 mt-6">
-                      <h3 className={`font-bold text-white mb-3 font-['Cinzel'] leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r ${material.type === 'PDF' ? 'group-hover:from-[#FF5A5F] group-hover:to-[#ff999c]' : 'group-hover:from-[#FC642D] group-hover:to-[#ffb299]'} transition-all ${isFeatured ? 'text-3xl md:text-4xl max-w-md' : 'text-xl line-clamp-2'}`}>
-                        {material.title}
-                      </h3>
-                      
-                      <div className="flex items-center justify-between mt-6">
-                        <span className="text-sm text-zinc-400 font-['Playfair_Display'] flex items-center gap-2">
-                          <BookOpen size={14} className="text-zinc-500" />
-                          {material.type === 'PDF' ? material.size : material.duration}
-                        </span>
-
-                        {material.type === 'PDF' ? (
-                          <div className="scale-75 origin-right">
-                            <AnimatedDownloadButton />
-                          </div>
-                        ) : (
-                          <button 
-                            aria-label={`Play ${material.title} Video`}
-                            className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/10"
-                          >
-                            <Play size={16} className="ml-1" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-
-            {filteredMaterials.length === 0 && (
-              <div className="col-span-full py-32 text-center glass-panel rounded-[2rem]">
-                <FileText className="mx-auto text-zinc-600 mb-6" size={64} />
-                <h3 className="text-2xl font-bold text-white mb-3 font-['Cinzel']">The Archives are Empty</h3>
-                <p className="text-zinc-400 font-['Playfair_Display'] text-lg">No manuscripts found matching your criteria.</p>
-              </div>
-            )}
+        ) : materials.length === 0 ? (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="glass-panel p-16 rounded-3xl text-center max-w-lg mx-auto"
+          >
+            <BookOpen className="w-16 h-16 text-zinc-600 mx-auto mb-6" />
+            <h3 className="text-2xl font-bold text-white font-['Cinzel'] mb-3">No Materials Yet</h3>
+            <p className="text-zinc-500 font-['Playfair_Display']">Your teacher hasn't uploaded any study materials yet. Check back soon!</p>
           </motion.div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            {/* Filters Sidebar */}
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+              className="lg:col-span-1 space-y-8"
+            >
+              <div className="glass-panel p-6 rounded-2xl">
+                <div className="flex items-center gap-2 mb-6">
+                  <Filter size={18} className="text-[#FC642D]" />
+                  <h3 className="text-white font-['Cinzel'] font-bold">Filters</h3>
+                </div>
 
-        </div>
+                <div className="mb-6">
+                  <AnimatedInput
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    label="Search materials..."
+                  />
+                </div>
+
+                {allClasses.length > 0 && (
+                  <div className="mb-6">
+                    <h4 className="text-zinc-400 text-xs uppercase tracking-widest font-bold mb-3">Class Level</h4>
+                    <div className="space-y-2">
+                      {allClasses.map(cls => (
+                        <AnimatedCheckbox
+                          key={cls}
+                          id={`class-${cls.replace(/\s+/g, '-')}`}
+                          checked={activeClasses.includes(cls)}
+                          onChange={() => toggleClass(cls)}
+                          label={cls}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {allCategories.length > 0 && (
+                  <div>
+                    <h4 className="text-zinc-400 text-xs uppercase tracking-widest font-bold mb-3">Category</h4>
+                    <div className="space-y-2">
+                      {allCategories.map(cat => (
+                        <AnimatedCheckbox
+                          key={cat}
+                          id={`cat-${cat.replace(/\s+/g, '-')}`}
+                          checked={activeCategories.includes(cat)}
+                          onChange={() => toggleCategory(cat)}
+                          label={cat}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+
+            {/* Materials Grid */}
+            <div className="lg:col-span-3">
+              <AnimatePresence mode="popLayout">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {filteredMaterials.map((material, idx) => (
+                    <motion.div
+                      key={material._id}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ delay: idx * 0.05 }}
+                      className={`glass-panel p-6 rounded-2xl group hover:border-white/20 transition-all relative overflow-hidden ${
+                        material.featured ? 'border-[#C9A84C]/30 shadow-[0_0_30px_rgba(201,168,76,0.1)]' : ''
+                      }`}
+                    >
+                      {material.featured && (
+                        <div className="absolute top-4 right-4 px-2 py-0.5 bg-[#C9A84C]/20 text-[#C9A84C] text-[10px] font-bold uppercase rounded-full tracking-wider">
+                          Featured
+                        </div>
+                      )}
+
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className={`p-3 rounded-xl ${
+                          material.type === 'PDF' 
+                            ? 'bg-red-500/10 text-red-400' 
+                            : 'bg-blue-500/10 text-blue-400'
+                        }`}>
+                          {material.type === 'PDF' ? <FileText size={20} /> : <Play size={20} />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-white font-bold font-['Cinzel'] text-sm leading-snug mb-1 group-hover:text-[#00A699] transition-colors">{material.title}</h3>
+                          <div className="flex items-center gap-3 text-xs text-zinc-500 font-['Playfair_Display']">
+                            <span>{material.category}</span>
+                            <span>·</span>
+                            <span>{material.classLevel}</span>
+                            {material.type === 'Video' && material.duration && (
+                              <>
+                                <span>·</span>
+                                <span>{material.duration}</span>
+                              </>
+                            )}
+                            {material.type === 'PDF' && material.size && (
+                              <>
+                                <span>·</span>
+                                <span>{material.size}</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {material.fileUrl ? (
+                        <AnimatedDownloadButton href={material.fileUrl} />
+                      ) : (
+                        <div className="text-xs text-zinc-600 font-['Playfair_Display'] italic">No file attached</div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              </AnimatePresence>
+
+              {filteredMaterials.length === 0 && materials.length > 0 && (
+                <div className="text-center py-16">
+                  <p className="text-zinc-500 font-['Playfair_Display'] text-lg">No materials match your filters.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

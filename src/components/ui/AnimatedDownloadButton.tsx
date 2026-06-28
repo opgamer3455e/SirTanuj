@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 
-const AnimatedDownloadButton = () => {
+interface AnimatedDownloadButtonProps {
+  href?: string;
+}
+
+const AnimatedDownloadButton = ({ href }: AnimatedDownloadButtonProps) => {
   return (
     <StyledWrapper>
-      <div className="container">
+      <a href={href} target="_blank" rel="noopener noreferrer" className="container block">
         <label className="label">
           <input type="checkbox" className="input" />
           <span className="circle">
@@ -15,7 +19,7 @@ const AnimatedDownloadButton = () => {
           <p className="title font-['Cinzel'] font-bold tracking-widest text-sm">Download</p>
           <p className="title font-['Cinzel'] font-bold tracking-widest text-sm">Open</p>
         </label>
-      </div>
+      </a>
     </StyledWrapper>
   );
 }

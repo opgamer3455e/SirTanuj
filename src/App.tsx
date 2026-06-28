@@ -2,6 +2,7 @@ import { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
+import { AuthProvider } from './context/AuthContext';
 import LoadScreen from './components/ui/LoadScreen';
 import PublicLayout from './components/PublicLayout';
 
@@ -31,6 +32,7 @@ const TeacherDashboard = lazy(() => import('./pages/cms/TeacherDashboard'));
 const BroadcastStudio = lazy(() => import('./pages/cms/BroadcastStudio'));
 const StudentsPage = lazy(() => import('./pages/cms/StudentsPage'));
 const SettingsPage = lazy(() => import('./pages/cms/SettingsPage'));
+const StudyMaterialsManager = lazy(() => import('./pages/cms/StudyMaterialsManager'));
 
 function AppRoutes() {
   const location = useLocation();
@@ -65,6 +67,7 @@ function AppRoutes() {
           <Route path="/cms/curriculum" element={<TeacherDashboard />} />
           <Route path="/cms/broadcast" element={<BroadcastStudio />} />
           <Route path="/cms/students" element={<StudentsPage />} />
+          <Route path="/cms/materials" element={<StudyMaterialsManager />} />
           <Route path="/cms/settings" element={<SettingsPage />} />
         </Route>
       </Route>
@@ -84,15 +87,17 @@ function App() {
 
   return (
     <Router>
-      <AnimatePresence mode="wait">
-        {initialLoading ? (
-          <LoadScreen key="initial-loading" />
-        ) : (
-          <Suspense fallback={<div className="w-full h-screen bg-[#0a0014]" />}>
-            <AppRoutes />
-          </Suspense>
-        )}
-      </AnimatePresence>
+      <AuthProvider>
+        <AnimatePresence mode="wait">
+          {initialLoading ? (
+            <LoadScreen key="initial-loading" />
+          ) : (
+            <Suspense fallback={<div className="w-full h-screen bg-[#0a0014]" />}>
+              <AppRoutes />
+            </Suspense>
+          )}
+        </AnimatePresence>
+      </AuthProvider>
     </Router>
   );
 }

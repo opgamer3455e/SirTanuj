@@ -1,6 +1,17 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, PenTool, MessageSquare, Download, MapPin } from 'lucide-react';
+import { BookOpen, PenTool, MessageSquare, Download, MapPin, Loader2, PlayCircle, FileText } from 'lucide-react';
 import Accordion from '../components/ui/Accordion';
+import { API_BASE_URL } from '@/config';
+
+interface CourseData {
+  _id: string;
+  title: string;
+  description: string;
+  modules: { title: string; lessons: any[] }[];
+  isPublished: boolean;
+}
+
 
 const class9Curriculum = [
   {
@@ -77,6 +88,26 @@ const class10Curriculum = [
 ];
 
 export default function CoursesPage() {
+  const [courses, setCourses] = useState<CourseData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/public/courses`);
+        if (res.ok) {
+          const data = await res.json();
+          setCourses(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch courses:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
+
   return (
     <div className="pt-32 pb-24 px-4 min-h-screen bg-[#050505] bg-noise relative overflow-hidden">
       
@@ -104,6 +135,59 @@ export default function CoursesPage() {
             </p>
           </div>
         </motion.div>
+
+        {/* Real Live Courses */}
+        <div className="mb-32">
+          <h2 className="text-3xl font-bold text-white mb-8 font-['Cinzel'] flex items-center gap-3">
+             Active Enrollments Open
+          </h2>
+          {loading ? (
+            <div className="flex items-center justify-center py-20 glass-panel rounded-3xl">
+              <Loader2 className="w-10 h-10 text-[#C9A84C] animate-spin" />
+            </div>
+          ) : courses.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {courses.map((course, idx) => {
+                const totalLessons = course.modules.reduce((sum, m) => sum + m.lessons.length, 0);
+                return (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.1 }}
+                    key={course._id}
+                    className="glass-panel p-8 rounded-3xl group relative overflow-hidden flex flex-col"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#C9A84C]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    
+                    <div className="flex justify-between items-start mb-6 relative z-10">
+                      <h3 className="text-xl font-bold text-white font-['Cinzel'] leading-snug pr-4">{course.title}</h3>
+                      <div className="w-10 h-10 rounded-full bg-[#C9A84C]/10 flex items-center justify-center text-[#C9A84C] border border-[#C9A84C]/20 shrink-0">
+                        <BookOpen size={16} />
+                      </div>
+                    </div>
+                    
+                    <p className="text-zinc-400 text-sm mb-6 font-['Playfair_Display'] line-clamp-3 relative z-10 flex-1">{course.description}</p>
+                    
+                    <div className="relative z-10 pt-6 border-t border-white/10">
+                      <div className="flex justify-between text-sm text-zinc-400 font-['Playfair_Display'] mb-4">
+                        <span className="flex items-center gap-1"><FileText size={14} className="text-[#00A699]" /> {course.modules.length} Modules</span>
+                        <span className="flex items-center gap-1"><PlayCircle size={14} className="text-[#FF5A5F]" /> {totalLessons} Lessons</span>
+                      </div>
+                      <a href="/auth" className="block w-full py-3 bg-white/5 hover:bg-[#C9A84C]/20 text-center text-white text-sm font-bold rounded-xl border border-white/10 hover:border-[#C9A84C]/30 transition-all font-['Cinzel']">
+                        Enroll Now
+                      </a>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="glass-panel p-12 rounded-3xl text-center">
+              <p className="text-zinc-500 font-['Playfair_Display'] text-lg">No active courses published yet. Check back soon for our new curriculum rollout!</p>
+            </div>
+          )}
+        </div>
 
         {/* Asymmetrical Layout for Classes */}
         <div className="space-y-32">
