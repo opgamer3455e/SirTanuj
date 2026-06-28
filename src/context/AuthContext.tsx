@@ -21,9 +21,25 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+const getStoredUser = () => {
+  const stored = localStorage.getItem('nexus_user_ticket');
+  if (stored) {
+    try {
+      const data = JSON.parse(stored);
+      // Check if ticket is less than 24 hours old
+      if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
+        return data.user;
+      } else {
+        localStorage.removeItem('nexus_user_ticket');
+      }
+    } catch (e) {}
+  }
+  return null;
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [appUser, setAppUser] = useState<AppUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [appUser, setAppUser] = useState<AppUser | null>(getStoredUser);
+  const [isLoading, setIsLoading] = useState(() => !getStoredUser());
   const [sessionError, setSessionError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -38,11 +54,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (response.ok) {
           const data = await response.json();
           if (isMounted) {
+            localStorage.setItem('nexus_user_ticket', JSON.stringify({ user: data.user, timestamp: Date.now() }));
             setAppUser(data.user);
             setSessionError(null);
           }
         } else {
-          if (isMounted) setAppUser(null);
+          if (isMounted) {
+            localStorage.removeItem('nexus_user_ticket');
+            setAppUser(null);
+          }
         }
       } catch (err) {
         if (isMounted) setAppUser(null);
@@ -56,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = (user: AppUser) => {
+    localStorage.setItem('nexus_user_ticket', JSON.stringify({ user, timestamp: Date.now() }));
     setAppUser(user);
     setSessionError(null);
   };
@@ -63,8 +84,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     try {
       await fetch(`${API_BASE_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
-    } catch (e) { /* ignore */ }
-    setAppUser(null);
+    } catch (err) {
+      console.error('Logout error', err);
+    } finally {
+      localStorage.removeItem('nexus_user_ticket');
+      setAppUser(null);
+    }
   };
 
   const refreshAuth = () => {
