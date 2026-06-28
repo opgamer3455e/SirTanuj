@@ -29,10 +29,15 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, etc.)
-    if (!origin || allowedOrigins.includes(origin)) {
+    console.log('[CORS] Origin check:', origin);
+    // Allow localhost, any netlify frontend, or the exact env variable
+    if (!origin || 
+        origin.includes('localhost') || 
+        origin.includes('netlify.app') || 
+        origin === process.env.FRONTEND_URL) {
       callback(null, true);
     } else {
+      console.error(`[CORS] Blocked origin: ${origin}`);
       callback(new Error(`CORS: Origin not allowed: ${origin}`));
     }
   },
