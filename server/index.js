@@ -1,4 +1,7 @@
 require('dotenv').config();
+if (!global.crypto) {
+  global.crypto = require('crypto').webcrypto || require('crypto');
+}
 process.on('uncaughtException', (err) => {
   console.error('UNCAUGHT EXCEPTION:', err);
 });

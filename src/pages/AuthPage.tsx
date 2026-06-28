@@ -44,11 +44,8 @@ export default function AuthPage() {
 
       login(data.user);
       
-      if (data.user.role === 'TEACHER' || data.user.role === 'ADMIN') {
-         navigate('/cms');
-      } else {
-         navigate('/dashboard');
-      }
+      const nextPath = (data.user.role === 'TEACHER' || data.user.role === 'ADMIN') ? '/cms' : '/dashboard';
+      navigate('/login-success', { state: { next: nextPath } });
       
     } catch (err: any) {
       setErrorMsg(err.message || 'An error occurred.');
@@ -80,11 +77,8 @@ export default function AuthPage() {
       console.log('Google Success:', data.user);
       login(data.user);
       
-      if (data.user.role === 'TEACHER' || data.user.role === 'ADMIN') {
-         navigate('/cms');
-      } else {
-         navigate('/dashboard');
-      }
+      const nextPath = (data.user.role === 'TEACHER' || data.user.role === 'ADMIN') ? '/cms' : '/dashboard';
+      navigate('/login-success', { state: { next: nextPath } });
       
     } catch (err: any) {
       setErrorMsg(err.message || 'An error occurred.');

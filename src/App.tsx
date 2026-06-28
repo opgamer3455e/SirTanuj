@@ -18,6 +18,7 @@ const StudyMaterialsPage = lazy(() => import('./pages/StudyMaterialsPage'));
 const PaymentPage = lazy(() => import('./pages/PaymentPage'));
 const StudentDashboard = lazy(() => import('./pages/StudentDashboard'));
 const ParentPortal = lazy(() => import('./pages/ParentPortal'));
+const LoginSuccessPage = lazy(() => import('./pages/LoginSuccessPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const FAQPage = lazy(() => import('./pages/FAQPage'));
 const BlogPage = lazy(() => import('./pages/BlogPage'));
@@ -54,6 +55,7 @@ function AppRoutes() {
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/login-success" element={<LoginSuccessPage />} />
       </Route>
 
       {/* Protected CMS Routes with Sidebar */}
